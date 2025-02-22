@@ -2,16 +2,11 @@
 
 `godoc-lint` is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. While `gofmt` handles formatting and correct usage of godocs, still it does not enforce particular restrictions/stylings to godocs. Here is where `godoc-lint` comes into play by adding a set of extra rules to enhance readability, consistency, and developer experience.
 
-## List of rules
+## rules
 
-Table below shows the rules that `godoc-lint` can enforce.
+- `max-length`: Limits maximum godoc line length. The default length is 80 characters.
 
-*(\* denotes the rule is enabled by default)*
-
-| Rule name       | Type  | Default | Description               |
-| --------------- | ----- | ------- | ------------------------- |
-| `max-length` \* | `int` | 80      | Maximum godoc line length |
-
+For more configuration details see the [Configuration](#Configuration) section.
 
 ## Disabling rules
 
