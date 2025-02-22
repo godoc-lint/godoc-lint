@@ -15,7 +15,7 @@ type Inspector interface {
 // InspectorResult represents the result of the inspector analysis.
 type InspectorResult struct {
 	// Files provides extracted information per AST file.
-	Files map[*ast.File]FileInspection
+	Files map[*ast.File]*FileInspection
 }
 
 type FileInspection struct {

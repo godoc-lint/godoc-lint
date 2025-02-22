@@ -1,11 +1,8 @@
 package rule
 
 import (
-	"go/token"
-
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/godoc-lint/godoc-lint/pkg/model"
+	"github.com/godoc-lint/godoc-lint/pkg/util"
 )
 
 // MaxLengthRuleName is the corresponding rule name/identifier.
@@ -25,16 +22,9 @@ func (r *MaxLengthRule) GetName() string {
 }
 
 // Apply checks for the rule.
-func (r *MaxLengthRule) Apply(actx *model.AnalysisContext, pass *analysis.Pass) error {
-	for _, f := range pass.Files {
-		if f.Pos() == token.NoPos {
-			continue
-		}
-		ft := pass.Fset.File(f.Pos())
-		if ft == nil {
-			continue
-		}
-		if !actx.Config.IsPathApplicable(ft.Name()) {
+func (r *MaxLengthRule) Apply(actx *model.AnalysisContext) error {
+	for _, f := range actx.Pass.Files {
+		if !util.IsFileApplicable(actx, f) {
 			continue
 		}
 	}

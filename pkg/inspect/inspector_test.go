@@ -87,7 +87,7 @@ func TestInspector(t *testing.T) {
 	}
 }
 
-func simplifyResultEntry(entry model.FileInspection) any {
+func simplifyResultEntry(entry *model.FileInspection) any {
 	keys := func(m map[string]struct{}) []string {
 		ks := make([]string, 0, len(m))
 		for k := range m {

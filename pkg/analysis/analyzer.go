@@ -110,6 +110,7 @@ func (a *Analyzer) run(pass *analysis.Pass) (any, error) {
 	actx := &model.AnalysisContext{
 		Config:          a.cb.MustGetConfig(),
 		InspectorResult: pass.ResultOf[a.inspector.GetAnalyzer()].(*model.InspectorResult),
+		Pass:            pass,
 	}
 
 	for _, rule := range a.reg.Rules() {
@@ -118,7 +119,7 @@ func (a *Analyzer) run(pass *analysis.Pass) (any, error) {
 			continue
 		}
 
-		if err := rule.Apply(actx, pass); err != nil {
+		if err := rule.Apply(actx); err != nil {
 			return nil, fmt.Errorf("error applying rule (%s): %w", ruleName, err)
 		}
 	}

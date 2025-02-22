@@ -11,6 +11,9 @@ type AnalysisContext struct {
 
 	// InspectorResult is the analysis result of the pre-run inspector.
 	InspectorResult *InspectorResult
+
+	// Pass is the analysis Pass instance.
+	Pass *analysis.Pass
 }
 
 // Rule defines a linter rule.
@@ -19,5 +22,5 @@ type Rule interface {
 	GetName() string
 
 	// Apply checks for the rule.
-	Apply(actx *AnalysisContext, pass *analysis.Pass) error
+	Apply(actx *AnalysisContext) error
 }

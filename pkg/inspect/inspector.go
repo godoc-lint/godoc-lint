@@ -227,14 +227,11 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 	}
 
 	result := &model.InspectorResult{
-		Files: make(map[*ast.File]model.FileInspection, len(pass.Files)),
+		Files: make(map[*ast.File]*model.FileInspection, len(pass.Files)),
 	}
 
 	for _, f := range pass.Files {
-		if f.Pos() == token.NoPos {
-			continue
-		}
-		ft := pass.Fset.File(f.Pos())
+		ft := util.GetPassFileToken(f, pass)
 		if ft == nil {
 			continue
 		}
@@ -245,7 +242,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 		if fi, err := inspect(f); err != nil {
 			return nil, fmt.Errorf("inspector failed: %w", err)
 		} else {
-			result.Files[f] = *fi
+			result.Files[f] = fi
 		}
 	}
 	return result, nil
