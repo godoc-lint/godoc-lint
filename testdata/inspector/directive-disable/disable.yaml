@@ -1,0 +1,63 @@
+disabled-rules:
+  all: true
+  rules:
+    - bar
+    - baz
+    - foo
+    - foo-at-end
+symbol-decl:
+  - disabled-rules:
+      all: false
+      rules:
+        - yolo
+    doc: ""
+    is-type-alias: false
+    kind: var
+    multi-name-decl: false
+    name: Foo
+    parent-doc: null
+  - disabled-rules:
+      all: false
+      rules:
+        - yolo
+    doc: |
+      some godoc
+    is-type-alias: false
+    kind: var
+    multi-name-decl: false
+    name: Bar
+    parent-doc: null
+  - disabled-rules:
+      all: true
+      rules:
+        - yolo
+    doc: |
+      some godoc
+    is-type-alias: false
+    kind: var
+    multi-name-decl: false
+    name: Baz
+    parent-doc: null
+  - disabled-rules:
+      all: true
+      rules:
+        - foo
+    doc: |
+      first godoc
+    is-type-alias: false
+    kind: var
+    multi-name-decl: false
+    name: MultiFoo
+    parent-doc: |
+      parent godoc
+  - disabled-rules:
+      all: true
+      rules: []
+    doc: |
+      second godoc
+    is-type-alias: false
+    kind: var
+    multi-name-decl: false
+    name: MultiBar
+    parent-doc: |
+      parent godoc

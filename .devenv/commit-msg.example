@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# Git commit-msg hook script to validate the given commit message against
+# conventional commits rules.
+#
+# See https://www.conventionalcommits.org/en/v1.0.0/
+
+_pattern='^(?:build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(?:\(.*?\))?!?: .+$'
+grep -qE "$_pattern" "$1" || ( echo "invalid commit message format" && exit 1 )

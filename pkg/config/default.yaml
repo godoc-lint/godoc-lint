@@ -1,0 +1,6 @@
+# Default configuration
+enable:
+  - max-length
+options:
+  max-length:
+    length: 80
