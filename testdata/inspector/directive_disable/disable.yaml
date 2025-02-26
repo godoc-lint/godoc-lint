@@ -5,6 +5,7 @@ disabled-rules:
     - baz
     - foo
     - foo-at-end
+package-doc: null
 symbol-decl:
   - disabled-rules:
       all: false

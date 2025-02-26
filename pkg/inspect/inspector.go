@@ -3,6 +3,7 @@ package inspect
 import (
 	"fmt"
 	"go/ast"
+	gdc "go/doc/comment"
 	"go/token"
 	"reflect"
 	"regexp"
@@ -26,6 +27,7 @@ type Inspector struct {
 	cb model.ConfigBuilder
 
 	analyzer *analysis.Analyzer
+	parser   gdc.Parser
 }
 
 // NewInspector returns a new instance of the inspector.
@@ -65,6 +67,9 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 			return nil, fmt.Errorf("cannot read file %q: %v", ft.Name(), err)
 		}
 
+		// Extract package godoc, if any.
+		packageDoc := i.extractCommentGroup(f.Doc)
+
 		// Extract top-level //godoclint:disable directives.
 		disabledRules := model.InspectorResultDisableRules{}
 		for _, match := range topLevelOrphanCommentGroupPattern.FindAll(raw, -1) {
@@ -92,7 +97,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 					Decl: d,
 					Kind: model.SymbolDeclKindFunc,
 					Name: dt.Name.Name,
-					Doc:  dt.Doc,
+					Doc:  i.extractCommentGroup(dt.Doc),
 				})
 			case *ast.BadDecl:
 				decls = append(decls, model.SymbolDecl{
@@ -120,7 +125,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 								Decl: d,
 								Kind: kind,
 								Name: spec.Names[0].Name,
-								Doc:  dt.Doc,
+								Doc:  i.extractCommentGroup(dt.Doc),
 							})
 						} else {
 							// cases:
@@ -131,7 +136,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 									Decl:          d,
 									Kind:          kind,
 									Name:          n.Name,
-									Doc:           dt.Doc,
+									Doc:           i.extractCommentGroup(dt.Doc),
 									MultiNameDecl: true,
 								})
 							}
@@ -151,6 +156,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 						//     foo, bar = 0, 0
 						// )
 
+						parentDoc := i.extractCommentGroup(dt.Doc)
 						for _, s := range dt.Specs {
 							spec := s.(*ast.ValueSpec)
 							for _, n := range spec.Names {
@@ -158,8 +164,8 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 									Decl:          d,
 									Kind:          kind,
 									Name:          n.Name,
-									Doc:           spec.Doc,
-									ParentDoc:     dt.Doc,
+									Doc:           i.extractCommentGroup(spec.Doc),
+									ParentDoc:     parentDoc,
 									MultiNameDecl: len(spec.Names) > 1,
 								})
 							}
@@ -176,7 +182,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 							Kind:        model.SymbolDeclKindType,
 							IsTypeAlias: spec.Assign != token.NoPos,
 							Name:        spec.Name.Name,
-							Doc:         dt.Doc,
+							Doc:         i.extractCommentGroup(dt.Doc),
 						})
 					} else {
 						// case:
@@ -184,6 +190,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 						//     foo int
 						// )
 
+						parentDoc := i.extractCommentGroup(dt.Doc)
 						for _, s := range dt.Specs {
 							spec := s.(*ast.TypeSpec)
 							decls = append(decls, model.SymbolDecl{
@@ -191,8 +198,8 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 								Kind:        model.SymbolDeclKindType,
 								IsTypeAlias: spec.Assign != token.NoPos,
 								Name:        spec.Name.Name,
-								Doc:         spec.Doc,
-								ParentDoc:   dt.Doc,
+								Doc:         i.extractCommentGroup(spec.Doc),
+								ParentDoc:   parentDoc,
 							})
 						}
 					}
@@ -207,10 +214,10 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 			var docs []*ast.Comment
 
 			if decl.Doc != nil {
-				docs = slices.Concat(docs, decl.Doc.List)
+				docs = slices.Concat(docs, decl.Doc.CG.List)
 			}
 			if decl.ParentDoc != nil {
-				docs = slices.Concat(docs, decl.ParentDoc.List)
+				docs = slices.Concat(docs, decl.ParentDoc.CG.List)
 			}
 			lines := make([]string, 0, len(docs))
 			for _, l := range docs {
@@ -222,6 +229,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 
 		return &model.FileInspection{
 			DisabledRules: disabledRules,
+			PackageDoc:    packageDoc,
 			SymbolDecl:    decls,
 		}, nil
 	}
@@ -246,6 +254,16 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 		}
 	}
 	return result, nil
+}
+
+func (i *Inspector) extractCommentGroup(cg *ast.CommentGroup) *model.CommentGroup {
+	if cg == nil {
+		return nil
+	}
+	return &model.CommentGroup{
+		CG:     *cg,
+		Parsed: *i.parser.Parse(cg.Text()),
+	}
 }
 
 func extractDisableDirectivesInComment(s string) model.InspectorResultDisableRules {

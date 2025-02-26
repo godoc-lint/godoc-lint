@@ -2,7 +2,6 @@ package inspect_test
 
 import (
 	"bytes"
-	"go/ast"
 	"os"
 	"path/filepath"
 	"slices"
@@ -28,7 +27,7 @@ func TestInspector(t *testing.T) {
 	require := require.New(t)
 
 	wd, err := os.Getwd()
-	require.Nil(err, "failed to get wd: %s", err)
+	require.Nil(err, "failed to get wd")
 
 	exitFunc := func(code int) {}
 
@@ -38,12 +37,7 @@ func TestInspector(t *testing.T) {
 	cb := config.NewConfigBuilder(testdir, reg.Names(), exitFunc)
 	inspector := inspect.NewInspector(cb)
 
-	ars := analysistest.Run(
-		&testing.T{},
-		testdir,
-		inspector.GetAnalyzer(),
-		"./...",
-	)
+	ars := analysistest.Run(t, testdir, inspector.GetAnalyzer(), "./...")
 
 	for _, ar := range ars {
 		result, ok := ar.Result.(*model.InspectorResult)
@@ -97,18 +91,20 @@ func simplifyResultEntry(entry *model.FileInspection) any {
 		return ks
 	}
 
-	doc := func(cg *ast.CommentGroup) *string {
-		if cg == nil {
+	doc := func(doc *model.CommentGroup) *string {
+		if doc == nil {
 			return nil
 		}
-		text := cg.Text()
+		text := doc.CG.Text()
 		return &text
 	}
 
-	m := map[string]any{}
-	m["disabled-rules"] = map[string]any{
-		"all":   entry.DisabledRules.All,
-		"rules": keys(entry.DisabledRules.Rules),
+	m := map[string]any{
+		"disabled-rules": map[string]any{
+			"all":   entry.DisabledRules.All,
+			"rules": keys(entry.DisabledRules.Rules),
+		},
+		"package-doc": doc(entry.PackageDoc),
 	}
 	if entry.SymbolDecl != nil {
 		sds := make([]any, 0, len(entry.SymbolDecl))

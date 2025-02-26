@@ -1,6 +1,7 @@
 disabled-rules:
   all: false
   rules: []
+package-doc: null
 symbol-decl:
   - disabled-rules:
       all: false

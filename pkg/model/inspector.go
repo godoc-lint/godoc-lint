@@ -2,6 +2,7 @@ package model
 
 import (
 	"go/ast"
+	"go/doc/comment"
 
 	"golang.org/x/tools/go/analysis"
 )
@@ -21,6 +22,9 @@ type InspectorResult struct {
 type FileInspection struct {
 	// DisabledRulesMap contains information about rules disabled at top level.
 	DisabledRules InspectorResultDisableRules
+
+	// PackageDoc represents the package godoc, if any.
+	PackageDoc *CommentGroup
 
 	// SymbolDecl represents symbols declared in the package file.
 	SymbolDecl []SymbolDecl
@@ -75,7 +79,7 @@ type SymbolDecl struct {
 	MultiNameDecl bool
 
 	// Doc is the comment group associated to the symbol.
-	Doc *ast.CommentGroup
+	Doc *CommentGroup
 
 	// Doc is the comment group associated to the parent declaration. For
 	// instance:
@@ -85,8 +89,14 @@ type SymbolDecl struct {
 	//      // godoc
 	//      Foo = 0
 	//  )
-	ParentDoc *ast.CommentGroup
+	ParentDoc *CommentGroup
 
 	// DisabledRules is the set of rules disabled via inline directives.
 	DisabledRules InspectorResultDisableRules
+}
+
+// CommentGroup represents an ast.CommentGroup and its parsed godoc instance.
+type CommentGroup struct {
+	CG     ast.CommentGroup
+	Parsed comment.Doc
 }

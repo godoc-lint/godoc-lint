@@ -1,0 +1,6 @@
+disabled-rules:
+  all: false
+  rules: []
+package-doc: |
+  package godoc
+symbol-decl: []
