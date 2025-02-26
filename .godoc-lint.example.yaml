@@ -42,6 +42,7 @@ disable:
 # All sub-keys and their fields are optional, unless stated otherwise.
 options:
   max-length:
-    # (Default 80)
-    # Maximum line length for godocs.
-    length: 120
+    # (Default 77)
+    # Maximum line length for godocs, not including the `// `, or `/*` or `*/`
+    # tokens.
+    length: 117

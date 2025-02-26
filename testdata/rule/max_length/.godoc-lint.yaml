@@ -1,4 +1,7 @@
-# Default configuration
+include:
+  - /testdata/rule/
+exclude:
+  - /.cache/go-build/
 enable:
   - max-length
 options:

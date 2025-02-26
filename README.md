@@ -4,7 +4,7 @@
 
 ## rules
 
-- `max-length`: Limits maximum godoc line length. The default length is 80 characters.
+- `max-length`: Limits maximum godoc line length. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens).
 
 For more configuration details see the [Configuration](#Configuration) section.
 

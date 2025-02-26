@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
+	max_length "github.com/godoc-lint/godoc-lint/pkg/rule/max_length"
 )
 
 // Registry implements a registry of rules.
@@ -26,7 +27,7 @@ func NewRegistry(rule ...model.Rule) *Registry {
 // NewPopulatedRegistry returns a registry with all supported rules registered.
 func NewPopulatedRegistry() *Registry {
 	return NewRegistry(
-		NewMaxLengthRule(),
+		max_length.NewMaxLengthRule(),
 	)
 }
 
