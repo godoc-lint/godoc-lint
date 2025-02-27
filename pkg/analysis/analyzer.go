@@ -113,14 +113,15 @@ func (a *Analyzer) run(pass *analysis.Pass) (any, error) {
 		Pass:            pass,
 	}
 
-	for _, rule := range a.reg.Rules() {
-		ruleName := rule.GetName()
-		if !actx.Config.IsRuleApplicable(ruleName) {
+	for _, checker := range a.reg.List() {
+		// TODO(babakks): This can be done once to improve performance.
+		ruleSet := checker.GetCoveredRules()
+		if !actx.Config.IsAnyRuleApplicable(ruleSet) {
 			continue
 		}
 
-		if err := rule.Apply(actx); err != nil {
-			return nil, fmt.Errorf("error applying rule (%s): %w", ruleName, err)
+		if err := checker.Apply(actx); err != nil {
+			return nil, fmt.Errorf("checker error: %w", err)
 		}
 	}
 	return nil, nil

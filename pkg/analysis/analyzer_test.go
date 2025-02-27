@@ -73,7 +73,7 @@ func TestRules(t *testing.T) {
 			exitFunc := func(code int) {}
 
 			reg := rule.NewPopulatedRegistry()
-			cb := config.NewConfigBuilder(td.configDir, reg.Names(), exitFunc)
+			cb := config.NewConfigBuilder(td.configDir, reg.GetCoveredRules(), exitFunc)
 			inspector := inspect.NewInspector(cb)
 			analyzer := analysis.NewAnalyzer(cb, reg, inspector)
 
