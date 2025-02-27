@@ -9,24 +9,26 @@ import (
 	"github.com/godoc-lint/godoc-lint/pkg/util"
 )
 
-// MaxLengthRuleName is the corresponding rule name/identifier.
-const MaxLengthRuleName = "max-length"
+// MaxLengthRule is the corresponding rule name.
+const MaxLengthRule = "max-length"
 
-// MaxLengthRule is a rule that checks maximum line length of godocs.
-type MaxLengthRule struct{}
+var ruleSet = model.RuleSet{}.Add(MaxLengthRule)
 
-// NewMaxLengthRule returns a new instance of the corresponding rule.
-func NewMaxLengthRule() *MaxLengthRule {
-	return &MaxLengthRule{}
+// MaxLengthChecker checks maximum line length of godocs.
+type MaxLengthChecker struct{}
+
+// NewMaxLengthChecker returns a new instance of the corresponding checker.
+func NewMaxLengthChecker() *MaxLengthChecker {
+	return &MaxLengthChecker{}
 }
 
-// GetName returns the name of the rule.
-func (r *MaxLengthRule) GetName() string {
-	return MaxLengthRuleName
+// GetCoveredRules implements the corresponding interface method.
+func (r *MaxLengthChecker) GetCoveredRules() model.RuleSet {
+	return ruleSet
 }
 
-// Apply checks for the rule.
-func (r *MaxLengthRule) Apply(actx *model.AnalysisContext) error {
+// Apply implements the corresponding interface method.
+func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
 	ro := actx.Config.GetRuleOptions()
 	if ro == nil || ro.MaxLength == nil {
 		panic("missing rule options")
@@ -39,10 +41,7 @@ func (r *MaxLengthRule) Apply(actx *model.AnalysisContext) error {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All {
-			continue
-		}
-		if _, ok := ir.DisabledRules.Rules[MaxLengthRuleName]; ok {
+		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(MaxLengthRule) {
 			continue
 		}
 
@@ -52,10 +51,7 @@ func (r *MaxLengthRule) Apply(actx *model.AnalysisContext) error {
 
 		processedParents := make(map[*model.CommentGroup]struct{}, len(ir.SymbolDecl))
 		for _, sd := range ir.SymbolDecl {
-			if sd.DisabledRules.All {
-				continue
-			}
-			if _, ok := sd.DisabledRules.Rules[MaxLengthRuleName]; ok {
+			if sd.DisabledRules.All || sd.DisabledRules.Rules.Has(MaxLengthRule) {
 				continue
 			}
 
