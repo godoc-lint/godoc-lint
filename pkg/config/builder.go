@@ -13,9 +13,9 @@ import (
 
 // ConfigBuilder implements a configuration builder.
 type ConfigBuilder struct {
-	cwd       string
-	ruleNames []string
-	exitFunc  func(int)
+	cwd          string
+	coveredRules model.RuleSet
+	exitFunc     func(int)
 
 	override *model.ConfigOverride
 
@@ -26,11 +26,11 @@ type ConfigBuilder struct {
 }
 
 // NewConfigBuilder crates a new instance of the corresponding struct.
-func NewConfigBuilder(cwd string, ruleNames []string, exitFunc func(int)) *ConfigBuilder {
+func NewConfigBuilder(cwd string, coveredRules model.RuleSet, exitFunc func(int)) *ConfigBuilder {
 	return &ConfigBuilder{
-		cwd:       cwd,
-		ruleNames: ruleNames,
-		exitFunc:  exitFunc,
+		cwd:          cwd,
+		coveredRules: coveredRules,
+		exitFunc:     exitFunc,
 	}
 }
 
@@ -123,25 +123,21 @@ func (cb *ConfigBuilder) build() {
 		return
 	}
 
-	ruleNamesMap := make(map[string]struct{}, len(cb.ruleNames))
-	for _, r := range cb.ruleNames {
-		ruleNamesMap[r] = struct{}{}
-	}
-
-	toValidRuleSet := func(s []string) (map[string]struct{}, []string) {
+	toValidRuleSet := func(s []string) (*model.RuleSet, []string) {
 		if s == nil {
 			return nil, nil
 		}
-		var invalids []string
-		set := make(map[string]struct{}, len(s))
+		invalids := make([]string, 0, len(s))
+		rules := make([]string, 0, len(s))
 		for _, v := range s {
-			if _, ok := ruleNamesMap[v]; !ok {
+			if !cb.coveredRules.Has(v) {
 				invalids = append(invalids, v)
 				continue
 			}
-			set[v] = struct{}{}
+			rules = append(rules, v)
 		}
-		return set, invalids
+		set := model.RuleSet{}.Add(rules...)
+		return &set, invalids
 	}
 
 	toValidRegexpSlice := func(s []string) ([]*regexp.Regexp, []string) {
@@ -170,7 +166,7 @@ func (cb *ConfigBuilder) build() {
 	if resolvedEnable == nil {
 		resolvedEnable = def.Enable
 	}
-	resolvedEnableAsMap, invalids := toValidRuleSet(resolvedEnable)
+	resolvedEnabledRuleSet, invalids := toValidRuleSet(resolvedEnable)
 	if len(invalids) > 0 {
 		errs = errors.Join(errs, fmt.Errorf("config error: invalid rule(s) name to enable: %q", invalids))
 	}
@@ -182,7 +178,7 @@ func (cb *ConfigBuilder) build() {
 	if resolvedDisable == nil {
 		resolvedDisable = def.Disable
 	}
-	resolvedDisableAsMap, invalids := toValidRuleSet(resolvedDisable)
+	resolvedDisabledRuleSet, invalids := toValidRuleSet(resolvedDisable)
 	if len(invalids) > 0 {
 		errs = errors.Join(errs, fmt.Errorf("config error: invalid rule(s) to disable: %q", invalids))
 	}
@@ -218,8 +214,8 @@ func (cb *ConfigBuilder) build() {
 	}
 
 	built := &config{
-		enableAsMap:     resolvedEnableAsMap,
-		disableAsMap:    resolvedDisableAsMap,
+		enabledRules:    resolvedEnabledRuleSet,
+		disabledRules:   resolvedDisabledRuleSet,
 		includeAsRegexp: resolvedIncludeAsRegexp,
 		excludeAsRegexp: resolvedExcludeAsRegexp,
 		options:         pcfg.extractRuleOptions(),

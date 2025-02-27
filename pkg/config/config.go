@@ -10,21 +10,17 @@ import (
 type config struct {
 	includeAsRegexp []*regexp.Regexp
 	excludeAsRegexp []*regexp.Regexp
-	enableAsMap     map[string]struct{}
-	disableAsMap    map[string]struct{}
+	enabledRules    *model.RuleSet
+	disabledRules   *model.RuleSet
 	options         *model.RuleOptions
 }
 
-// IsRuleApplicable implements the corresponding interface method.
-func (c *config) IsRuleApplicable(ruleName string) bool {
-	if _, ok := c.disableAsMap[ruleName]; ok {
+// IsAnyRuleApplicable implements the corresponding interface method.
+func (c *config) IsAnyRuleApplicable(rs model.RuleSet) bool {
+	if c.disabledRules != nil && c.disabledRules.IsSupersetOf(rs) {
 		return false
 	}
-	if c.enableAsMap == nil {
-		return true
-	}
-	_, ok := c.enableAsMap[ruleName]
-	return ok
+	return c.enabledRules == nil || c.enabledRules.HasCommonsWith(rs)
 }
 
 // IsPathApplicable implements the corresponding interface method.
