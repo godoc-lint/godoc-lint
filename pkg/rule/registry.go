@@ -1,25 +1,23 @@
 package rule
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 	max_length "github.com/godoc-lint/godoc-lint/pkg/rule/max_length"
 )
 
 // Registry implements a registry of rules.
 type Registry struct {
-	m map[string]model.Rule
+	checkers     map[model.Checker]struct{}
+	coveredRules model.RuleSet
 }
 
 // NewRegistry returns a new rule registry instance.
-func NewRegistry(rule ...model.Rule) *Registry {
+func NewRegistry(checkers ...model.Checker) *Registry {
 	registry := Registry{
-		m: make(map[string]model.Rule),
+		checkers: make(map[model.Checker]struct{}, len(checkers)+10),
 	}
-	for _, r := range rule {
-		registry.Add(r)
+	for _, c := range checkers {
+		registry.Add(c)
 	}
 	return &registry
 }
@@ -27,42 +25,29 @@ func NewRegistry(rule ...model.Rule) *Registry {
 // NewPopulatedRegistry returns a registry with all supported rules registered.
 func NewPopulatedRegistry() *Registry {
 	return NewRegistry(
-		max_length.NewMaxLengthRule(),
+		max_length.NewMaxLengthChecker(),
 	)
 }
 
-// Add registers a new rule.
-func (r *Registry) Add(rule model.Rule) {
-	name := rule.GetName()
-	if _, ok := r.m[name]; ok {
-		panic(fmt.Sprintf("rule already registered: %s", name))
+// Add implements the corresponding interface method.
+func (r *Registry) Add(checker model.Checker) {
+	if _, ok := r.checkers[checker]; ok {
+		panic("checker already registered")
 	}
-	r.m[name] = rule
+	r.coveredRules = r.coveredRules.Merge(checker.GetCoveredRules())
+	r.checkers[checker] = struct{}{}
 }
 
-// Get returns the rule with the given name.
-func (r *Registry) Get(ruleName string) (model.Rule, error) {
-	if rule, ok := r.m[ruleName]; !ok {
-		return nil, errors.New("rule not found")
-	} else {
-		return rule, nil
-	}
-}
-
-// Rules returns a slice of the registered rules.
-func (r *Registry) Rules() []model.Rule {
-	all := make([]model.Rule, 0, len(r.m))
-	for _, rule := range r.m {
-		all = append(all, rule)
+// List implements the corresponding interface method.
+func (r *Registry) List() []model.Checker {
+	all := make([]model.Checker, 0, len(r.checkers))
+	for c := range r.checkers {
+		all = append(all, c)
 	}
 	return all
 }
 
-// Names returns a slice of the registered rules' names.
-func (r *Registry) Names() []string {
-	all := make([]string, 0, len(r.m))
-	for _, rule := range r.m {
-		all = append(all, rule.GetName())
-	}
-	return all
+// GetCoveredRules implements the corresponding interface method.
+func (r *Registry) GetCoveredRules() model.RuleSet {
+	return r.coveredRules
 }
