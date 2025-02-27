@@ -1,8 +1,6 @@
 package model
 
-import (
-	"golang.org/x/tools/go/analysis"
-)
+import "golang.org/x/tools/go/analysis"
 
 // AnalysisContext provides contextual information about the running analysis.
 type AnalysisContext struct {
@@ -16,11 +14,11 @@ type AnalysisContext struct {
 	Pass *analysis.Pass
 }
 
-// Rule defines a linter rule.
-type Rule interface {
-	// GetName returns the name of the rule.
-	GetName() string
+// Checker defines a rule checker.
+type Checker interface {
+	// GetCoveredRules returns the set of rules applied by the checker.
+	GetCoveredRules() RuleSet
 
-	// Apply checks for the rule.
+	// Apply checks for the rule(s).
 	Apply(actx *AnalysisContext) error
 }

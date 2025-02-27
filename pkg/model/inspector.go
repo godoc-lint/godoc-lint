@@ -36,9 +36,7 @@ type InspectorResultDisableRules struct {
 	All bool
 
 	// Rules is the set of rules disabled.
-	//
-	// If all rules are disable, this will be nil.
-	Rules map[string]struct{}
+	Rules RuleSet
 }
 
 // SymbolDeclKind is the enum type for the symbol declarations.

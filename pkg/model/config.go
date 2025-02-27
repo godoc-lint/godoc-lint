@@ -51,9 +51,9 @@ func NewConfigOverride() *ConfigOverride {
 
 // Config defines an analyzer configuration.
 type Config interface {
-	// IsRuleEnabled determines if the given rule name is among enabled rules
-	// or not among disabled rules.
-	IsRuleApplicable(ruleName string) bool
+	// IsAnyRuleEnabled determines if any of the given rule names is among
+	// enabled rules, or not among disabled rules.
+	IsAnyRuleApplicable(RuleSet) bool
 
 	// IsPathApplicable determines if the given path matches the included path
 	// patterns, or does not match the excluded path patterns.

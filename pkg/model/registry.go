@@ -1,16 +1,14 @@
 package model
 
-// Registry defines a registry of rules.
+// Registry defines a registry of checkers.
 type Registry interface {
-	// Add registers a new rule.
-	Add(rule Rule)
+	// Add registers a new checker.
+	Add(Checker)
 
-	// Get returns the rule with the given name.
-	Get(ruleName string) (Rule, error)
+	// List returns a slice of the registered checkers.
+	List() []Checker
 
-	// Rules returns a slice of the registered rules.
-	Rules() []Rule
-
-	// Names returns a slice of the registered rules' names.
-	Names() []string
+	// GetCoveredRules returns the set of rules covered by the registered
+	// checkers.
+	GetCoveredRules() RuleSet
 }
