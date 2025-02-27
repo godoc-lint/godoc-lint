@@ -11,7 +11,7 @@ import (
 
 func main() {
 	reg := rule.NewPopulatedRegistry()
-	cb := config.NewConfigBuilder("", reg.Names(), nil)
+	cb := config.NewConfigBuilder("", reg.GetCoveredRules(), nil)
 	inspector := inspect.NewInspector(cb)
 	analyzer := analysis.NewAnalyzer(cb, reg, inspector)
 	singlechecker.Main(analyzer.GetAnalyzer())
