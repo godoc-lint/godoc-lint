@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
-	"slices"
 	"strings"
 	"testing"
 
@@ -34,7 +33,7 @@ func TestInspector(t *testing.T) {
 	testdir := filepath.Join(wd, "../../testdata/inspector")
 
 	reg := rule.NewPopulatedRegistry()
-	cb := config.NewConfigBuilder(testdir, reg.Names(), exitFunc)
+	cb := config.NewConfigBuilder(testdir, reg.GetCoveredRules(), exitFunc)
 	inspector := inspect.NewInspector(cb)
 
 	ars := analysistest.Run(t, testdir, inspector.GetAnalyzer(), "./...")
@@ -82,15 +81,6 @@ func TestInspector(t *testing.T) {
 }
 
 func simplifyResultEntry(entry *model.FileInspection) any {
-	keys := func(m map[string]struct{}) []string {
-		ks := make([]string, 0, len(m))
-		for k := range m {
-			ks = append(ks, k)
-		}
-		slices.Sort(ks)
-		return ks
-	}
-
 	doc := func(doc *model.CommentGroup) *string {
 		if doc == nil {
 			return nil
@@ -102,7 +92,7 @@ func simplifyResultEntry(entry *model.FileInspection) any {
 	m := map[string]any{
 		"disabled-rules": map[string]any{
 			"all":   entry.DisabledRules.All,
-			"rules": keys(entry.DisabledRules.Rules),
+			"rules": entry.DisabledRules.Rules.List(),
 		},
 		"package-doc": doc(entry.PackageDoc),
 	}
@@ -118,7 +108,7 @@ func simplifyResultEntry(entry *model.FileInspection) any {
 				"doc":             doc(sd.Doc),
 				"disabled-rules": map[string]any{
 					"all":   sd.DisabledRules.All,
-					"rules": keys(sd.DisabledRules.Rules),
+					"rules": sd.DisabledRules.Rules.List(),
 				},
 			})
 		}

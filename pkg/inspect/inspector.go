@@ -74,18 +74,8 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 		disabledRules := model.InspectorResultDisableRules{}
 		for _, match := range topLevelOrphanCommentGroupPattern.FindAll(raw, -1) {
 			d := extractDisableDirectivesInComment(string(match))
-			if d.All {
-				disabledRules.All = true
-			}
-
-			if len(d.Rules) > 0 {
-				if disabledRules.Rules == nil {
-					disabledRules.Rules = make(map[string]struct{}, len(d.Rules))
-				}
-				for r := range d.Rules {
-					disabledRules.Rules[r] = struct{}{}
-				}
-			}
+			disabledRules.All = disabledRules.All || d.All
+			disabledRules.Rules = disabledRules.Rules.Merge(d.Rules)
 		}
 
 		// Extract top-level symbol declarations.
@@ -274,13 +264,7 @@ func extractDisableDirectivesInComment(s string) model.InspectorResultDisableRul
 			result.All = true
 			continue
 		}
-		ruleNames := strings.Split(strings.TrimSpace(args), " ")
-		if result.Rules == nil {
-			result.Rules = make(map[string]struct{}, len(ruleNames))
-		}
-		for _, r := range ruleNames {
-			result.Rules[r] = struct{}{}
-		}
+		result.Rules = result.Rules.Add(strings.Split(strings.TrimSpace(args), " ")...)
 	}
 	return result
 }
