@@ -44,3 +44,15 @@ func TestDefaultConfigYAMLIsValid(t *testing.T) {
 		require.False(f.IsNil(), "value of %q must be non-nil", ft.Name)
 	}
 }
+
+func TestDefaultConfigYAMLEqualsTheExample(t *testing.T) {
+	require := require.New(t)
+
+	def, err := config.FromYAML(config.DefaultConfigYAML)
+	require.Nil(err)
+
+	example, err := config.FromYAMLFile("../../.godoc-lint.example.yaml")
+	require.Nil(err)
+
+	require.Equal(def, example, "default config does not match the example file")
+}
