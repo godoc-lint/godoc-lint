@@ -1,4 +1,5 @@
 # Default configuration
+version: "1.0"
 enable:
   - max-length
 options:
