@@ -47,10 +47,6 @@ func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
 
 		processedParents := make(map[*model.CommentGroup]struct{}, len(ir.SymbolDecl))
 		for _, sd := range ir.SymbolDecl {
-			if sd.DisabledRules.All || sd.DisabledRules.Rules.Has(MaxLengthRule) {
-				continue
-			}
-
 			if sd.ParentDoc != nil {
 				if _, ok := processedParents[sd.ParentDoc]; !ok {
 					processedParents[sd.ParentDoc] = struct{}{}
@@ -67,6 +63,10 @@ func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
 }
 
 func checkMaxLength(actx *model.AnalysisContext, doc *model.CommentGroup, maxLength int) {
+	if doc.DisabledRules.All || doc.DisabledRules.Rules.IsSupersetOf(ruleSet) {
+		return
+	}
+
 	linkDefsMap := make(map[string]struct{}, len(doc.Parsed.Links))
 	for _, linkDef := range doc.Parsed.Links {
 		linkDefLine := fmt.Sprintf("[%s]: %s", linkDef.Text, linkDef.URL)

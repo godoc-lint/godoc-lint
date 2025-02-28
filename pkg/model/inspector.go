@@ -20,7 +20,7 @@ type InspectorResult struct {
 }
 
 type FileInspection struct {
-	// DisabledRulesMap contains information about rules disabled at top level.
+	// DisabledRules contains information about rules disabled at top level.
 	DisabledRules InspectorResultDisableRules
 
 	// PackageDoc represents the package godoc, if any.
@@ -88,14 +88,20 @@ type SymbolDecl struct {
 	//      Foo = 0
 	//  )
 	ParentDoc *CommentGroup
-
-	// DisabledRules is the set of rules disabled via inline directives.
-	DisabledRules InspectorResultDisableRules
 }
 
 // CommentGroup represents an ast.CommentGroup and its parsed godoc instance.
 type CommentGroup struct {
-	CG     ast.CommentGroup
+	// CG represents the AST comment group.
+	CG ast.CommentGroup
+
+	// Parsed represents the comment group parsed into a godoc.
 	Parsed comment.Doc
-	Text   string
+
+	// Test is the comment group text.
+	Text string
+
+	// DisabledRules contains information about rules disabled in the comment
+	// group.
+	DisabledRules InspectorResultDisableRules
 }

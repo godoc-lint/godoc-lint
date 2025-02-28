@@ -85,37 +85,68 @@ func TestInspector(t *testing.T) {
 }
 
 func simplifyResultEntry(entry *model.FileInspection) any {
-	doc := func(doc *model.CommentGroup) *string {
+	disabledRules := func(dr model.InspectorResultDisableRules) map[string]any {
+		m := map[string]any{}
+		if dr.All {
+			m["all"] = true
+		}
+		if len(dr.Rules.List()) > 0 {
+			m["rules"] = dr.Rules.List()
+		}
+		if len(m) == 0 {
+			return nil
+		}
+		return m
+	}
+
+	doc := func(doc *model.CommentGroup) map[string]any {
 		if doc == nil {
 			return nil
 		}
-		return &doc.Text
+		m := map[string]any{}
+		if doc.Text != "" {
+			m["text"] = doc.Text
+		}
+		if subm := disabledRules(doc.DisabledRules); subm != nil {
+			m["disabled-rules"] = subm
+		}
+		if len(m) == 0 {
+			return nil
+		}
+		return m
 	}
 
-	m := map[string]any{
-		"disabled-rules": map[string]any{
-			"all":   entry.DisabledRules.All,
-			"rules": entry.DisabledRules.Rules.List(),
-		},
-		"package-doc": doc(entry.PackageDoc),
+	m := map[string]any{}
+	if subm := disabledRules(entry.DisabledRules); subm != nil {
+		m["disabled-rules"] = subm
+	}
+	if subm := doc(entry.PackageDoc); subm != nil {
+		m["package-doc"] = subm
 	}
 	if entry.SymbolDecl != nil {
 		sds := make([]any, 0, len(entry.SymbolDecl))
 		for _, sd := range entry.SymbolDecl {
-			sds = append(sds, map[string]any{
-				"kind":            sd.Kind,
-				"name":            sd.Name,
-				"is-type-alias":   sd.IsTypeAlias,
-				"multi-name-decl": sd.MultiNameDecl,
-				"parent-doc":      doc(sd.ParentDoc),
-				"doc":             doc(sd.Doc),
-				"disabled-rules": map[string]any{
-					"all":   sd.DisabledRules.All,
-					"rules": sd.DisabledRules.Rules.List(),
-				},
-			})
+			item := map[string]any{
+				"kind": sd.Kind,
+				"name": sd.Name,
+			}
+			if sd.IsTypeAlias {
+				item["is-type-alias"] = sd.IsTypeAlias
+			}
+			if sd.MultiNameDecl {
+				item["multi-name-decl"] = sd.MultiNameDecl
+			}
+			if subm := doc(sd.ParentDoc); subm != nil {
+				item["parent-doc"] = subm
+			}
+			if subm := doc(sd.Doc); subm != nil {
+				item["doc"] = subm
+			}
+			sds = append(sds, item)
 		}
-		m["symbol-decl"] = sds
+		if len(sds) > 0 {
+			m["symbol-decl"] = sds
+		}
 	}
 	return m
 }

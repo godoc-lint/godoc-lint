@@ -8,7 +8,6 @@ import (
 	"go/token"
 	"reflect"
 	"regexp"
-	"slices"
 	"strings"
 	"sync"
 
@@ -217,24 +216,6 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 			}
 		}
 
-		// Extract declaration-scope disable directives.
-		for ix, decl := range decls {
-			var docs []*ast.Comment
-
-			if decl.Doc != nil {
-				docs = slices.Concat(docs, decl.Doc.CG.List)
-			}
-			if decl.ParentDoc != nil {
-				docs = slices.Concat(docs, decl.ParentDoc.CG.List)
-			}
-			lines := make([]string, 0, len(docs))
-			for _, l := range docs {
-				lines = append(lines, l.Text)
-			}
-			text := strings.Join(lines, "\n")
-			decls[ix].DisabledRules = extractDisableDirectivesInComment(text)
-		}
-
 		return &model.FileInspection{
 			DisabledRules: disabledRules,
 			PackageDoc:    packageDoc,
@@ -268,11 +249,19 @@ func (i *Inspector) extractCommentGroup(cg *ast.CommentGroup) *model.CommentGrou
 	if cg == nil {
 		return nil
 	}
+
+	lines := make([]string, 0, len(cg.List))
+	for _, l := range cg.List {
+		lines = append(lines, l.Text)
+	}
+	rawText := strings.Join(lines, "\n")
+
 	text := cg.Text()
 	return &model.CommentGroup{
-		CG:     *cg,
-		Parsed: *i.parser.Parse(text),
-		Text:   text,
+		CG:            *cg,
+		Parsed:        *i.parser.Parse(text),
+		Text:          text,
+		DisabledRules: extractDisableDirectivesInComment(rawText),
 	}
 }
 
