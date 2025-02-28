@@ -5,60 +5,56 @@ disabled-rules:
     - baz
     - foo
     - foo-at-end
-package-doc: null
+package-doc:
+  disabled-rules:
+    all: true
+    rules:
+      - bar
+      - foo
 symbol-decl:
-  - disabled-rules:
-      all: false
-      rules:
-        - yolo
-    doc: ""
-    is-type-alias: false
+  - doc:
+      disabled-rules:
+        rules:
+          - yolo
     kind: var
-    multi-name-decl: false
     name: Foo
-    parent-doc: null
-  - disabled-rules:
-      all: false
-      rules:
-        - yolo
-    doc: |
-      some godoc
-    is-type-alias: false
+  - doc:
+      disabled-rules:
+        rules:
+          - yolo
+      text: |
+        some godoc
     kind: var
-    multi-name-decl: false
     name: Bar
-    parent-doc: null
-  - disabled-rules:
-      all: true
-      rules:
-        - yolo
-    doc: |
-      some godoc
-    is-type-alias: false
+  - doc:
+      disabled-rules:
+        all: true
+        rules:
+          - yolo
+      text: |
+        some godoc
     kind: var
-    multi-name-decl: false
     name: Baz
-    parent-doc: null
-  - disabled-rules:
-      all: true
-      rules:
-        - foo
-    doc: |
-      first godoc
-    is-type-alias: false
+  - doc:
+      disabled-rules:
+        rules:
+          - foo
+      text: |
+        first godoc
     kind: var
-    multi-name-decl: false
     name: MultiFoo
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: true
-      rules: []
-    doc: |
-      second godoc
-    is-type-alias: false
+    parent-doc:
+      disabled-rules:
+        all: true
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        second godoc
     kind: var
-    multi-name-decl: false
     name: MultiBar
-    parent-doc: |
-      parent godoc
+    parent-doc:
+      disabled-rules:
+        all: true
+      text: |
+        parent godoc

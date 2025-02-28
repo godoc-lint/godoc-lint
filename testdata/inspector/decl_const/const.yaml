@@ -1,281 +1,172 @@
-disabled-rules:
-  all: false
-  rules: []
-package-doc: null
 symbol-decl:
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      some godoc
-    is-type-alias: false
+  - doc:
+      text: |
+        some godoc
     kind: const
-    multi-name-decl: false
     name: SingleSingleFoo
-    parent-doc: null
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
-    multi-name-decl: false
+  - kind: const
     name: SingleSingleFooNG
-    parent-doc: null
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      some godoc
-    is-type-alias: false
+  - doc:
+      text: |
+        some godoc
     kind: const
     multi-name-decl: true
     name: SingleDoubleFoo
-    parent-doc: null
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      some godoc
-    is-type-alias: false
+  - doc:
+      text: |
+        some godoc
     kind: const
     multi-name-decl: true
     name: SingleDoubleBar
-    parent-doc: null
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+  - kind: const
     multi-name-decl: true
     name: SingleDoubleFooNG
-    parent-doc: null
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+  - kind: const
     multi-name-decl: true
     name: SingleDoubleBarNG
-    parent-doc: null
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      some godoc
-    is-type-alias: false
+  - doc:
+      text: |
+        some godoc
     kind: const
-    multi-name-decl: false
     name: SingleSingleFooMultiline
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
-    multi-name-decl: false
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     name: SingleSingleFooMultilineNG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      first godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        first godoc
     kind: const
-    multi-name-decl: false
     name: MultiSingleFooMultiline
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      second godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        second godoc
     kind: const
-    multi-name-decl: false
     name: MultiSingleFooMultiline2
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
-    multi-name-decl: false
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     name: MultiSingleFooMultiline3NG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
-    multi-name-decl: false
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     name: MultiSingleFooMultilineNG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
-    multi-name-decl: false
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     name: MultiSingleFooMultiline2NG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      some godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        some godoc
     kind: const
     multi-name-decl: true
     name: SingleDoubleFooMultiline
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      some godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        some godoc
     kind: const
     multi-name-decl: true
     name: SingleDoubleBarMultiline
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: SingleDoubleFooMultilineNG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: SingleDoubleBarMultilineNG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      first godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        first godoc
     kind: const
     multi-name-decl: true
     name: MultiDoubleFooMultiline
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      first godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        first godoc
     kind: const
     multi-name-decl: true
     name: MultiDoubleBarMultiline
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      second godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        second godoc
     kind: const
     multi-name-decl: true
     name: MultiDoubleFooMultiline2
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: |
-      second godoc
-    is-type-alias: false
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        second godoc
     kind: const
     multi-name-decl: true
     name: MultiDoubleBarMultiline2
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: MultiDoubleFooMultiline3NG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: MultiDoubleBarMultiline3NG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: MultiDoubleFooMultilineNG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: MultiDoubleBarMultilineNG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: MultiDoubleFooMultiline2NG
-    parent-doc: |
-      parent godoc
-  - disabled-rules:
-      all: false
-      rules: []
-    doc: null
-    is-type-alias: false
-    kind: const
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
     multi-name-decl: true
     name: MultiDoubleBarMultiline2NG
-    parent-doc: |
-      parent godoc
+    parent-doc:
+      text: |
+        parent godoc

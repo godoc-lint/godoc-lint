@@ -1,3 +1,7 @@
+// some header
+
+//godoclint:disable
+//godoclint:disable foo bar
 package directive_disable
 
 //godoclint:disable

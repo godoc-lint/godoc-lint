@@ -1,6 +1,3 @@
-disabled-rules:
-  all: false
-  rules: []
-package-doc: |
-  package godoc
-symbol-decl: []
+package-doc:
+  text: |
+    package godoc
