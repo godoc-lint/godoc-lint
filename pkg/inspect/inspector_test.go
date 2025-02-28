@@ -2,6 +2,7 @@ package inspect_test
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -28,13 +29,16 @@ func TestInspector(t *testing.T) {
 	wd, err := os.Getwd()
 	require.Nil(err, "failed to get wd")
 
-	exitFunc := func(code int) {}
+	exitFunc := func(code int, err error) {
+		panic(fmt.Sprintf("exit code %d: %v", code, err))
+	}
 
 	testdir := filepath.Join(wd, "../../testdata/inspector")
 
 	reg := rule.NewPopulatedRegistry()
-	cb := config.NewConfigBuilder(testdir, reg.GetCoveredRules(), exitFunc)
-	inspector := inspect.NewInspector(cb)
+	cb := config.NewConfigBuilder(testdir, reg.GetCoveredRules())
+	ocb := config.NewOnceConfigBuilder(cb)
+	inspector := inspect.NewInspector(ocb, exitFunc)
 
 	ars := analysistest.Run(t, testdir, inspector.GetAnalyzer(), "./...")
 

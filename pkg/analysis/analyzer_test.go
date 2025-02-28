@@ -1,6 +1,7 @@
 package analysis_test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
@@ -70,12 +71,15 @@ func TestRules(t *testing.T) {
 		require.Nil(err, "cannot convert to relative path")
 
 		t.Run(relativePath, func(t *testing.T) {
-			exitFunc := func(code int) {}
+			exitFunc := func(code int, err error) {
+				panic(fmt.Sprintf("exit code %d: %v", code, err))
+			}
 
 			reg := rule.NewPopulatedRegistry()
-			cb := config.NewConfigBuilder(td.configDir, reg.GetCoveredRules(), exitFunc)
-			inspector := inspect.NewInspector(cb)
-			analyzer := analysis.NewAnalyzer(cb, reg, inspector)
+			cb := config.NewConfigBuilder(td.configDir, reg.GetCoveredRules())
+			ocb := config.NewOnceConfigBuilder(cb)
+			inspector := inspect.NewInspector(ocb, exitFunc)
+			analyzer := analysis.NewAnalyzer(ocb, reg, inspector, exitFunc)
 
 			analysistest.Run(t, td.path, analyzer.GetAnalyzer(), "./")
 		})

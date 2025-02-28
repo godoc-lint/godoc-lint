@@ -1,6 +1,7 @@
 package inspect
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	gdc "go/doc/comment"
@@ -9,6 +10,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"sync"
 
 	"golang.org/x/tools/go/analysis"
 
@@ -24,16 +26,21 @@ const (
 
 // Inspector implements the godoc-lint pre-run inspector.
 type Inspector struct {
-	cb model.ConfigBuilder
+	cb       model.ConfigBuilder
+	exitFunc func(int, error)
 
 	analyzer *analysis.Analyzer
 	parser   gdc.Parser
+
+	once sync.Once
+	cfg  model.Config
 }
 
 // NewInspector returns a new instance of the inspector.
-func NewInspector(cb model.ConfigBuilder) *Inspector {
+func NewInspector(cb model.ConfigBuilder, exitFunc func(int, error)) *Inspector {
 	result := &Inspector{
-		cb: cb,
+		cb:       cb,
+		exitFunc: exitFunc,
 		analyzer: &analysis.Analyzer{
 			Name:       metaName,
 			Doc:        metaDoc,
@@ -54,7 +61,18 @@ var topLevelOrphanCommentGroupPattern = regexp.MustCompile(`(?m)(?:^//.*\r?\n)+(
 var disableDirectivePattern = regexp.MustCompile(`(?m)//godoclint:disable(?: *(.+))?$`)
 
 func (i *Inspector) run(pass *analysis.Pass) (any, error) {
-	cfg := i.cb.MustGetConfig()
+	i.once.Do(func() {
+		cfg, err := i.cb.GetConfig()
+		if err != nil {
+			i.exitFunc(2, err)
+		} else {
+			i.cfg = cfg
+		}
+	})
+
+	if i.cfg == nil {
+		return nil, errors.New("nil config")
+	}
 
 	inspect := func(f *ast.File) (*model.FileInspection, error) {
 		ft := util.GetPassFileToken(f, pass)
@@ -233,7 +251,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 		if ft == nil {
 			continue
 		}
-		if !cfg.IsPathApplicable(ft.Name()) {
+		if !i.cfg.IsPathApplicable(ft.Name()) {
 			continue
 		}
 

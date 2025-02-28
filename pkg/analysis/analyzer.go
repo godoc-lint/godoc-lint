@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 
 	"golang.org/x/tools/go/analysis"
 
@@ -23,16 +24,21 @@ type Analyzer struct {
 	cb        model.ConfigBuilder
 	inspector model.Inspector
 	reg       model.Registry
+	exitFunc  func(int, error)
 
 	analyzer *analysis.Analyzer
+
+	once sync.Once
+	cfg  model.Config
 }
 
 // NewAnalyzer returns a new instance of the corresponding analyzer.
-func NewAnalyzer(cb model.ConfigBuilder, reg model.Registry, inspector model.Inspector) *Analyzer {
+func NewAnalyzer(cb model.ConfigBuilder, reg model.Registry, inspector model.Inspector, exitFunc func(int, error)) *Analyzer {
 	result := &Analyzer{
 		cb:        cb,
 		reg:       reg,
 		inspector: inspector,
+		exitFunc:  exitFunc,
 		analyzer: &analysis.Analyzer{
 			Name:     metaName,
 			Doc:      metaDoc,
@@ -107,8 +113,21 @@ func (a *Analyzer) GetAnalyzer() *analysis.Analyzer {
 }
 
 func (a *Analyzer) run(pass *analysis.Pass) (any, error) {
+	a.once.Do(func() {
+		cfg, err := a.cb.GetConfig()
+		if err != nil {
+			a.exitFunc(2, err)
+		} else {
+			a.cfg = cfg
+		}
+	})
+
+	if a.cfg == nil {
+		return nil, errors.New("nil config")
+	}
+
 	actx := &model.AnalysisContext{
-		Config:          a.cb.MustGetConfig(),
+		Config:          a.cfg,
 		InspectorResult: pass.ResultOf[a.inspector.GetAnalyzer()].(*model.InspectorResult),
 		Pass:            pass,
 	}
