@@ -50,10 +50,10 @@ Sometimes, it is not possible/preferred to add the inline `//godoclint:disable` 
 
 ## Configuration
 
-To have a customized experience, users can define their configuration in a file named `.godoc-lint.yaml` (or `.godoclint.yaml`). `godoc-lint` looks for this file in the current directory where it is invoked. Alternatively, one can pass the path to the configuration file via the `-config` command line option:
+To have a customized experience, users can define their configuration in a file named `.godoc-lint.yaml` (or `.godoclint.yaml`). The linter looks for this file in the current directory where it is invoked. Alternatively, one can pass the path to the configuration file via the `-config` command line option:
 
 ```sh
-godoc-lint -config /path/to/config.yaml ./...
+godoclint -config /path/to/config.yaml ./...
 ```
 
 Check out [`.godoc-lint.example.yaml`](./.godoc-lint.example.yaml) for an example of the configuration file.
