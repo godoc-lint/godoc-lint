@@ -13,10 +13,10 @@ import (
 	"golang.org/x/tools/go/analysis/analysistest"
 	"gopkg.in/yaml.v3"
 
+	"github.com/godoc-lint/godoc-lint/pkg/check"
 	"github.com/godoc-lint/godoc-lint/pkg/config"
 	"github.com/godoc-lint/godoc-lint/pkg/inspect"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
-	"github.com/godoc-lint/godoc-lint/pkg/rule"
 	"github.com/godoc-lint/godoc-lint/pkg/util"
 )
 
@@ -35,7 +35,7 @@ func TestInspector(t *testing.T) {
 
 	testdir := filepath.Join(wd, "../../testdata/inspector")
 
-	reg := rule.NewPopulatedRegistry()
+	reg := check.NewPopulatedRegistry()
 	cb := config.NewConfigBuilder(testdir, reg.GetCoveredRules())
 	ocb := config.NewOnceConfigBuilder(cb)
 	inspector := inspect.NewInspector(ocb, exitFunc)

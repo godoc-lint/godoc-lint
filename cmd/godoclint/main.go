@@ -7,9 +7,9 @@ import (
 	"golang.org/x/tools/go/analysis/singlechecker"
 
 	"github.com/godoc-lint/godoc-lint/pkg/analysis"
+	"github.com/godoc-lint/godoc-lint/pkg/check"
 	"github.com/godoc-lint/godoc-lint/pkg/config"
 	"github.com/godoc-lint/godoc-lint/pkg/inspect"
-	"github.com/godoc-lint/godoc-lint/pkg/rule"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v\n", err.Error())
 		os.Exit(code)
 	}
-	reg := rule.NewPopulatedRegistry()
+	reg := check.NewPopulatedRegistry()
 	cb := config.NewConfigBuilder("", reg.GetCoveredRules())
 	ocb := config.NewOnceConfigBuilder(cb)
 	inspector := inspect.NewInspector(ocb, exitFunc)

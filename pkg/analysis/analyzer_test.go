@@ -12,9 +12,9 @@ import (
 	"golang.org/x/tools/go/analysis/analysistest"
 
 	"github.com/godoc-lint/godoc-lint/pkg/analysis"
+	"github.com/godoc-lint/godoc-lint/pkg/check"
 	"github.com/godoc-lint/godoc-lint/pkg/config"
 	"github.com/godoc-lint/godoc-lint/pkg/inspect"
-	"github.com/godoc-lint/godoc-lint/pkg/rule"
 )
 
 func TestRules(t *testing.T) {
@@ -75,7 +75,7 @@ func TestRules(t *testing.T) {
 				panic(fmt.Sprintf("exit code %d: %v", code, err))
 			}
 
-			reg := rule.NewPopulatedRegistry()
+			reg := check.NewPopulatedRegistry()
 			cb := config.NewConfigBuilder(td.configDir, reg.GetCoveredRules())
 			ocb := config.NewOnceConfigBuilder(cb)
 			inspector := inspect.NewInspector(ocb, exitFunc)

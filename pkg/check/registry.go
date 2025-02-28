@@ -1,8 +1,8 @@
-package rule
+package check
 
 import (
+	max_length "github.com/godoc-lint/godoc-lint/pkg/check/max_length"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
-	max_length "github.com/godoc-lint/godoc-lint/pkg/rule/max_length"
 )
 
 // Registry implements a registry of rules.
