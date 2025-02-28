@@ -56,7 +56,7 @@ To have a customized experience, users can define their configuration in a file 
 godoc-lint -config /path/to/config.yaml ./...
 ```
 
-Check out [`.godoc-lint-example.yaml`](./.godoc-lint.example.yaml) for an example of the configuration file.
+Check out [`.godoc-lint.example.yaml`](./.godoc-lint.example.yaml) for an example of the configuration file.
 
 ## Contributing
 
