@@ -1,7 +1,7 @@
 # Default configuration
 version: "1.0"
 enable:
-  - max-length
+  - single-package-doc
 options:
   max-length: 77
   package-doc/start-with: Package

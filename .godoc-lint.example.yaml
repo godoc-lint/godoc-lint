@@ -22,8 +22,10 @@ include: null
 exclude: null
 
 # List of rules to enable.
+#
+# See the linter docs for the list of supported rules.
 enable:
-  - max-length
+  - single-package-doc
 
 # List of rules to disable.
 disable: null
