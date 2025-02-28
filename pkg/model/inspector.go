@@ -97,4 +97,5 @@ type SymbolDecl struct {
 type CommentGroup struct {
 	CG     ast.CommentGroup
 	Parsed comment.Doc
+	Text   string
 }

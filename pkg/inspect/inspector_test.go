@@ -89,8 +89,7 @@ func simplifyResultEntry(entry *model.FileInspection) any {
 		if doc == nil {
 			return nil
 		}
-		text := doc.CG.Text()
-		return &text
+		return &doc.Text
 	}
 
 	m := map[string]any{

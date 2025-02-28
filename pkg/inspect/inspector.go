@@ -268,9 +268,11 @@ func (i *Inspector) extractCommentGroup(cg *ast.CommentGroup) *model.CommentGrou
 	if cg == nil {
 		return nil
 	}
+	text := cg.Text()
 	return &model.CommentGroup{
 		CG:     *cg,
-		Parsed: *i.parser.Parse(cg.Text()),
+		Parsed: *i.parser.Parse(text),
+		Text:   text,
 	}
 }
 
