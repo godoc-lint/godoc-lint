@@ -84,11 +84,10 @@ func checkMaxLength(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen
 		}
 		nonCodeBlocks = append(nonCodeBlocks, b)
 	}
-	docWithoutCodeBlocks := &gdc.Doc{
+	strippedCodeAndLinks := &gdc.Doc{
 		Content: nonCodeBlocks,
-		Links:   doc.Parsed.Links,
 	}
-	text := string((&gdc.Printer{}).Comment(docWithoutCodeBlocks))
+	text := string((&gdc.Printer{}).Comment(strippedCodeAndLinks))
 	lines := strings.Split(removeCarriageReturn(text), "\n")
 
 	for _, l := range lines {
