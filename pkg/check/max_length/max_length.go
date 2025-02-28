@@ -37,7 +37,7 @@ func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(MaxLengthRule) {
+		if ir.DisabledRules.All || ir.DisabledRules.Rules.IsSupersetOf(ruleSet) {
 			continue
 		}
 
