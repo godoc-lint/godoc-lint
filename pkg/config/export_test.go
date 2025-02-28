@@ -2,4 +2,7 @@ package config
 
 type Config = config
 
-var DefaultConfigYAML = defaultConfigYAML
+var (
+	DefaultConfigYAML = defaultConfigYAML
+	TransferOptions   = transferOptions
+)

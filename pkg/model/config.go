@@ -47,20 +47,13 @@ type Config interface {
 	// patterns, or does not match the excluded path patterns.
 	IsPathApplicable(path string) bool
 
-	// Returns the rule-specific options
+	// Returns the rule-specific options.
+	//
+	// It never returns a nil pointer.
 	GetRuleOptions() *RuleOptions
 }
 
 // RuleOptions represents individual linter rule configurations.
-//
-// Nil value indicate that the corresponding options are not assigned.
 type RuleOptions struct {
-	// MaxLength is the options for the `max-length` rule.
-	MaxLength *MaxLengthRuleOptions
-}
-
-// MaxLengthRuleOptions represents options for the `max-length` rule.
-type MaxLengthRuleOptions struct {
-	// Length is the maximum line length.
-	Length uint
+	MaxLength uint `option:"max-length"`
 }

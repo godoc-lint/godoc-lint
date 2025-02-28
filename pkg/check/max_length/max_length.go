@@ -29,11 +29,7 @@ func (r *MaxLengthChecker) GetCoveredRules() model.RuleSet {
 
 // Apply implements the corresponding interface method.
 func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
-	ro := actx.Config.GetRuleOptions()
-	if ro == nil || ro.MaxLength == nil {
-		panic("missing rule options")
-	}
-	maxLength := int(ro.MaxLength.Length)
+	maxLength := int(actx.Config.GetRuleOptions().MaxLength)
 
 	for _, f := range actx.Pass.Files {
 		if !util.IsFileApplicable(actx, f) {

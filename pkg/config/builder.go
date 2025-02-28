@@ -170,12 +170,18 @@ func (cb *ConfigBuilder) build() (*config, error) {
 		return nil, errs
 	}
 
+	resolvedOptions := &model.RuleOptions{}
+	transferOptions(resolvedOptions, def.Options) // def.Options is never nil
+	if pcfg.Options != nil {
+		transferOptions(resolvedOptions, pcfg.Options)
+	}
+
 	return &config{
 		enabledRules:    resolvedEnabledRuleSet,
 		disabledRules:   resolvedDisabledRuleSet,
 		includeAsRegexp: resolvedIncludeAsRegexp,
 		excludeAsRegexp: resolvedExcludeAsRegexp,
-		options:         pcfg.extractRuleOptions(),
+		options:         resolvedOptions,
 	}, nil
 }
 

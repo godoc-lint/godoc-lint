@@ -5,5 +5,4 @@ exclude:
 enable:
   - max-length
 options:
-  max-length:
-    length: 77
+  max-length: 77
