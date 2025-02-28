@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"sync"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
@@ -15,50 +14,20 @@ import (
 type ConfigBuilder struct {
 	cwd          string
 	coveredRules model.RuleSet
-	exitFunc     func(int)
-
-	override *model.ConfigOverride
-
-	mu          sync.RWMutex
-	built       bool
-	builtConfig model.Config
-	builtErr    error
+	override     *model.ConfigOverride
 }
 
 // NewConfigBuilder crates a new instance of the corresponding struct.
-func NewConfigBuilder(cwd string, coveredRules model.RuleSet, exitFunc func(int)) *ConfigBuilder {
+func NewConfigBuilder(cwd string, coveredRules model.RuleSet) *ConfigBuilder {
 	return &ConfigBuilder{
 		cwd:          cwd,
 		coveredRules: coveredRules,
-		exitFunc:     exitFunc,
 	}
 }
 
 // GetConfig implements the corresponding interface method.
 func (cb *ConfigBuilder) GetConfig() (model.Config, error) {
-	cb.mu.Lock()
-	defer cb.mu.Unlock()
-
-	if !cb.built {
-		cb.build()
-	}
-	return cb.builtConfig, cb.builtErr
-}
-
-// MustGetConfig implements the corresponding interface method.
-func (cb *ConfigBuilder) MustGetConfig() model.Config {
-	cb.mu.Lock()
-	defer cb.mu.Unlock()
-
-	if !cb.built {
-		cb.build()
-	}
-
-	if cb.builtErr != nil {
-		fmt.Fprintln(os.Stderr, cb.builtErr.Error())
-		cb.exit(2)
-	}
-	return cb.builtConfig
+	return cb.build()
 }
 
 func (cb *ConfigBuilder) resolvePlainConfig() (*PlainConfig, *PlainConfig, error) {
@@ -98,8 +67,6 @@ func (cb *ConfigBuilder) resolvePlainConfig() (*PlainConfig, *PlainConfig, error
 
 // build creates the configuration struct.
 //
-// If the provided inputs are not valid it will terminate the process.
-//
 // It checks a sequence of sources:
 //  1. Custom config file path
 //  2. Default configuration files (e.g., `.godoc-lint.yaml`)
@@ -109,18 +76,10 @@ func (cb *ConfigBuilder) resolvePlainConfig() (*PlainConfig, *PlainConfig, error
 // The method also does the following:
 //   - Applies override flags (e.g., enable, or disable).
 //   - Validates the final configuration.
-//
-// Caller should use a mutex to avoid concurrent calls.
-func (cb *ConfigBuilder) build() {
-	defer func() {
-		cb.built = true
-	}()
-
+func (cb *ConfigBuilder) build() (*config, error) {
 	pcfg, def, err := cb.resolvePlainConfig()
 	if err != nil {
-		cb.builtConfig = nil
-		cb.builtErr = fmt.Errorf("config error: %w", err)
-		return
+		return nil, fmt.Errorf("config error: %w", err)
 	}
 
 	toValidRuleSet := func(s []string) (*model.RuleSet, []string) {
@@ -208,38 +167,19 @@ func (cb *ConfigBuilder) build() {
 	}
 
 	if errs != nil {
-		cb.builtConfig = nil
-		cb.builtErr = errs
-		return
+		return nil, errs
 	}
 
-	built := &config{
+	return &config{
 		enabledRules:    resolvedEnabledRuleSet,
 		disabledRules:   resolvedDisabledRuleSet,
 		includeAsRegexp: resolvedIncludeAsRegexp,
 		excludeAsRegexp: resolvedExcludeAsRegexp,
 		options:         pcfg.extractRuleOptions(),
-	}
-
-	cb.builtConfig = built
-	cb.builtErr = nil
-}
-
-func (cb *ConfigBuilder) exit(code int) {
-	if cb.exitFunc != nil {
-		cb.exitFunc(code)
-		panic(fmt.Sprintf("exit code %d", code))
-	}
-	os.Exit(code)
+	}, nil
 }
 
 // SetOverride implements the corresponding interface method.
 func (cb *ConfigBuilder) SetOverride(override *model.ConfigOverride) {
-	cb.mu.Lock()
-	defer cb.mu.Unlock()
-
-	if cb.built {
-		panic("config builder already sealed")
-	}
 	cb.override = override
 }

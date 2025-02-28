@@ -1,24 +1,12 @@
 package model
 
 // ConfigBuilder defines a configuration builder.
-//
-// A ConfigBuilder is a single-use object. That is, once either of the GetConfig
-// or MustGetConfig methods is called, the object is sealed to further changes
-// and will panic if one attempts to alter its state.
 type ConfigBuilder interface {
 	// SetOverride sets the configuration override.
 	SetOverride(override *ConfigOverride)
 
 	// GetConfig builds and returns the configuration object.
-	//
-	// Further calls to this method will return the same result.
 	GetConfig() (Config, error)
-
-	// MustGetConfig builds and returns the configuration object. It terminates
-	// the process if there is an error.
-	//
-	// Further calls to this method will return the same result.
-	MustGetConfig() Config
 }
 
 // ConfigOverride represents a configuration override.
