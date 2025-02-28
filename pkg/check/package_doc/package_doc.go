@@ -43,6 +43,10 @@ func (r *PackageDocChecker) Apply(actx *model.AnalysisContext) error {
 			continue
 		}
 
+		if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(PackageDocRule) {
+			continue
+		}
+
 		expectedPrefix := f.Name.Name
 		if startWith != "" {
 			expectedPrefix = startWith + " " + f.Name.Name
