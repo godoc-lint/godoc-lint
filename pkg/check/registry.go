@@ -1,7 +1,7 @@
 package check
 
 import (
-	max_length "github.com/godoc-lint/godoc-lint/pkg/check/max_length"
+	"github.com/godoc-lint/godoc-lint/pkg/check/max_length"
 	"github.com/godoc-lint/godoc-lint/pkg/check/package_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
