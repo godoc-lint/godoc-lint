@@ -27,6 +27,15 @@ func (r *PackageDocChecker) GetCoveredRules() model.RuleSet {
 
 // Apply implements the corresponding interface method.
 func (r *PackageDocChecker) Apply(actx *model.AnalysisContext) error {
+	checkPackageDocRule(actx)
+	return nil
+}
+
+func checkPackageDocRule(actx *model.AnalysisContext) {
+	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(PackageDocRule)) {
+		return
+	}
+
 	startWith := strings.TrimSpace(actx.Config.GetRuleOptions().PackageDocStartWith)
 
 	for _, f := range actx.Pass.Files {
@@ -56,5 +65,4 @@ func (r *PackageDocChecker) Apply(actx *model.AnalysisContext) error {
 			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package godoc should start with %q", expectedPrefix)
 		}
 	}
-	return nil
 }
