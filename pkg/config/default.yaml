@@ -4,3 +4,4 @@ enable:
   - max-length
 options:
   max-length: 77
+  package-doc/start-with: Package

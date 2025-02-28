@@ -1,0 +1,8 @@
+include:
+  - /testdata/rule/
+exclude:
+  - /.cache/go-build/
+enable:
+  - package-doc
+options:
+  package-doc/start-with: Package
