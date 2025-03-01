@@ -9,11 +9,16 @@ import (
 )
 
 const (
-	PkgDocRule       = "pkg-doc"
-	SinglePkgDocRule = "single-pkg-doc"
+	PkgDocRule        = "pkg-doc"
+	SinglePkgDocRule  = "single-pkg-doc"
+	RequirePkgDocRule = "require-pkg-doc"
 )
 
-var ruleSet = model.RuleSet{}.Add(PkgDocRule, SinglePkgDocRule)
+var ruleSet = model.RuleSet{}.Add(
+	PkgDocRule,
+	SinglePkgDocRule,
+	RequirePkgDocRule,
+)
 
 // PkgDocChecker checks package godocs.
 type PkgDocChecker struct{}
@@ -32,6 +37,7 @@ func (r *PkgDocChecker) GetCoveredRules() model.RuleSet {
 func (r *PkgDocChecker) Apply(actx *model.AnalysisContext) error {
 	checkPkgDocRule(actx)
 	checkSinglePkgDocRule(actx)
+	checkRequirePkgDocRule(actx)
 	return nil
 }
 
@@ -121,5 +127,64 @@ func checkSinglePkgDocRule(actx *model.AnalysisContext) {
 			ir := actx.InspectorResult.Files[f]
 			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package should have a single godoc (%d found)", len(fs))
 		}
+	}
+}
+
+func checkRequirePkgDocRule(actx *model.AnalysisContext) {
+	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(RequirePkgDocRule)) {
+		return
+	}
+
+	skipTests := actx.Config.GetRuleOptions().RequirePkgDocSkipTests
+
+	pkgFiles := make(map[string][]*ast.File, 2)
+
+	for _, f := range actx.Pass.Files {
+		if !util.IsFileApplicable(actx, f) {
+			continue
+		}
+
+		ir := actx.InspectorResult.Files[f]
+		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequirePkgDocRule) {
+			continue
+		}
+
+		if skipTests {
+			ft := util.GetPassFileToken(f, actx.Pass)
+			if ft == nil || strings.HasSuffix(ft.Name(), "_test.go") {
+				continue
+			}
+		}
+
+		pkg := f.Name.Name
+		if _, ok := pkgFiles[pkg]; !ok {
+			pkgFiles[pkg] = make([]*ast.File, 0, len(actx.Pass.Files))
+		}
+		pkgFiles[pkg] = append(pkgFiles[pkg], f)
+	}
+
+	for _, fs := range pkgFiles {
+		pkgHasGodoc := false
+		for _, f := range fs {
+			ir := actx.InspectorResult.Files[f]
+
+			if ir.PackageDoc == nil || ir.PackageDoc.Text == "" {
+				continue
+			}
+
+			if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(RequirePkgDocRule) {
+				continue
+			}
+
+			pkgHasGodoc = true
+			break
+		}
+
+		if pkgHasGodoc {
+			continue
+		}
+
+		// Add a diagnostic message to the first file of the package.
+		actx.Pass.Reportf(fs[0].Name.Pos(), "package should have a godoc")
 	}
 }

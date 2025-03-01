@@ -18,8 +18,9 @@ type PlainConfig struct {
 }
 
 type PlainRuleOptions struct {
-	MaxLen          *uint   `option:"max-len" yaml:"max-len" mapstructure:"max-len"`
-	PkgDocStartWith *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
+	MaxLen                 *uint   `option:"max-len" yaml:"max-len" mapstructure:"max-len"`
+	PkgDocStartWith        *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
+	RequirePkgDocSkipTests *bool   `option:"require-pkg-doc/skip-tests" yaml:"require-pkg-doc/skip-tests" mapstructure:"require-pkg-doc/skip-tests"`
 }
 
 func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {

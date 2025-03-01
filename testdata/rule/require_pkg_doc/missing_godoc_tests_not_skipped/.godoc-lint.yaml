@@ -1,0 +1,8 @@
+include:
+  - /testdata/rule/
+exclude:
+  - /.cache/go-build/
+enable:
+  - require-pkg-doc
+options:
+  require-pkg-doc/skip-tests: false

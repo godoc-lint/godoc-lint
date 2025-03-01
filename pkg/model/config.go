@@ -55,6 +55,7 @@ type Config interface {
 
 // RuleOptions represents individual linter rule configurations.
 type RuleOptions struct {
-	MaxLen          uint   `option:"max-len"`
-	PkgDocStartWith string `option:"pkg-doc/start-with"`
+	MaxLen                 uint   `option:"max-len"`
+	PkgDocStartWith        string `option:"pkg-doc/start-with"`
+	RequirePkgDocSkipTests bool   `option:"require-pkg-doc/skip-tests"`
 }

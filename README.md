@@ -18,6 +18,10 @@ Ensures all package godocs start with "Package \[NAME\]". The "Package" word can
 
 Technically, every Go file in a package can have a godoc above the `package` statement. This rule enforces only one godoc, if any, for any package.
 
+### `require-pkg-doc`
+
+Ensures that every Go package has godoc(s). By default test files (i.e., `*_test.go`) and therefore test packages (i.e., `*_test`) are ignored. To include them in the check, the `require-pkg-doc/skip-tests` should be set to `false`.
+
 ## Disabling rules
 
 `godoc-lint` supports inline directives to temporarily skip enforcing given set of rules. The directive must be formatted as:

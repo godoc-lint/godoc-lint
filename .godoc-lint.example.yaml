@@ -40,3 +40,7 @@ options:
 
   # The start of a valid package godoc (e.g., "Package {package-name}...").
   pkg-doc/start-with: Package
+
+  # Skip test files (i.e., "*_test" packages) when applying the
+  # `require-pkg-doc` rule.
+  require-pkg-doc/skip-tests: true
