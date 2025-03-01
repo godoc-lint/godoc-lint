@@ -139,13 +139,15 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 							// cases:
 							// const foo, bar = 0, 0
 							// var foo, bar = 0, 0
+							doc := i.extractCommentGroup(dt.Doc)
+							trailingDoc := i.extractCommentGroup(spec.Comment)
 							for ix, n := range spec.Names {
 								decls = append(decls, model.SymbolDecl{
 									Decl:           d,
 									Kind:           kind,
 									Name:           n.Name,
-									Doc:            i.extractCommentGroup(dt.Doc),
-									TrailingDoc:    i.extractCommentGroup(spec.Comment),
+									Doc:            doc,
+									TrailingDoc:    trailingDoc,
 									MultiNameDecl:  true,
 									MultiNameIndex: ix,
 								})
@@ -169,13 +171,14 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 						parentDoc := i.extractCommentGroup(dt.Doc)
 						for spix, s := range dt.Specs {
 							spec := s.(*ast.ValueSpec)
+							doc := i.extractCommentGroup(spec.Doc)
 							trailingDoc := i.extractCommentGroup(spec.Comment)
 							for ix, n := range spec.Names {
 								decls = append(decls, model.SymbolDecl{
 									Decl:           d,
 									Kind:           kind,
 									Name:           n.Name,
-									Doc:            i.extractCommentGroup(spec.Doc),
+									Doc:            doc,
 									TrailingDoc:    trailingDoc,
 									ParentDoc:      parentDoc,
 									MultiNameDecl:  len(spec.Names) > 1,
