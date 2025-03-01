@@ -76,6 +76,53 @@ type SymbolDecl struct {
 	// This field is only valid for const, var, or type declarations.
 	MultiNameDecl bool
 
+	// MultiNameIndex is the index of the declared symbol within the spec. For
+	// example, in the below declaration, the index of "foo" and "bar" are 0 and
+	// 1, respectively:
+	//
+	//   const foo, bar = 0, 0
+	//
+	// In single-name specs, this will be 0.
+	MultiNameIndex int
+
+	// MultiSpecDecl determines whether the symbol is declared as part of a
+	// multi-spec declaration. A multi spec declaration is const/var/type
+	// declaration with a pair of grouping brackets, even if there is only one
+	// spec between the brackets. For example, these are multi-spec
+	// declarations:
+	//
+	//   const (
+	//       foo = 0
+	//   )
+	//
+	//   const (
+	//       foo, bar = 0, 0
+	//   )
+	//
+	//   const (
+	//       foo = 0
+	//       bar = 0
+	//   )
+	//
+	//   const (
+	//       foo, bar = 0, 0
+	//       baz = 0
+	//   )
+	//
+	MultiSpecDecl bool
+
+	// SpecIndex is the index of the spec where the symbol is declared. For
+	// example, in the below declaration, the index of "foo" and "bar" are 0 and
+	// 1, respectively:
+	//
+	//   const (
+	//       foo = 0
+	//       bar = 0
+	//   )
+	//
+	// In single-spec declarations, this will be 0.
+	MultiSpecIndex int
+
 	// Doc is the comment group associated to the symbol.
 	Doc *CommentGroup
 

@@ -42,6 +42,8 @@ symbol-decl:
       text: |
         first godoc
     kind: var
+    multi-spec-decl: true
+    multi-spec-index: 0
     name: MultiFoo
     parent-doc:
       disabled-rules:
@@ -52,6 +54,8 @@ symbol-decl:
       text: |
         second godoc
     kind: var
+    multi-spec-decl: true
+    multi-spec-index: 1
     name: MultiBar
     parent-doc:
       disabled-rules:

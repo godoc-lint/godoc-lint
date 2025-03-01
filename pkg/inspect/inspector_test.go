@@ -131,10 +131,15 @@ func simplifyResultEntry(entry *model.FileInspection) any {
 				"name": sd.Name,
 			}
 			if sd.IsTypeAlias {
-				item["is-type-alias"] = sd.IsTypeAlias
+				item["is-type-alias"] = true
+			}
+			if sd.MultiSpecDecl {
+				item["multi-spec-decl"] = true
+				item["multi-spec-index"] = sd.MultiSpecIndex
 			}
 			if sd.MultiNameDecl {
-				item["multi-name-decl"] = sd.MultiNameDecl
+				item["multi-name-decl"] = true
+				item["multi-name-index"] = sd.MultiNameIndex
 			}
 			if subm := doc(sd.ParentDoc); subm != nil {
 				item["parent-doc"] = subm

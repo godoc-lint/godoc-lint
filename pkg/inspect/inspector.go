@@ -138,13 +138,14 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 							// cases:
 							// const foo, bar = 0, 0
 							// var foo, bar = 0, 0
-							for _, n := range spec.Names {
+							for ix, n := range spec.Names {
 								decls = append(decls, model.SymbolDecl{
-									Decl:          d,
-									Kind:          kind,
-									Name:          n.Name,
-									Doc:           i.extractCommentGroup(dt.Doc),
-									MultiNameDecl: true,
+									Decl:           d,
+									Kind:           kind,
+									Name:           n.Name,
+									Doc:            i.extractCommentGroup(dt.Doc),
+									MultiNameDecl:  true,
+									MultiNameIndex: ix,
 								})
 							}
 						}
@@ -164,16 +165,19 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 						// )
 
 						parentDoc := i.extractCommentGroup(dt.Doc)
-						for _, s := range dt.Specs {
+						for spix, s := range dt.Specs {
 							spec := s.(*ast.ValueSpec)
-							for _, n := range spec.Names {
+							for ix, n := range spec.Names {
 								decls = append(decls, model.SymbolDecl{
-									Decl:          d,
-									Kind:          kind,
-									Name:          n.Name,
-									Doc:           i.extractCommentGroup(spec.Doc),
-									ParentDoc:     parentDoc,
-									MultiNameDecl: len(spec.Names) > 1,
+									Decl:           d,
+									Kind:           kind,
+									Name:           n.Name,
+									Doc:            i.extractCommentGroup(spec.Doc),
+									ParentDoc:      parentDoc,
+									MultiNameDecl:  len(spec.Names) > 1,
+									MultiNameIndex: ix,
+									MultiSpecDecl:  true,
+									MultiSpecIndex: spix,
 								})
 							}
 						}
@@ -198,15 +202,17 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 						// )
 
 						parentDoc := i.extractCommentGroup(dt.Doc)
-						for _, s := range dt.Specs {
+						for spix, s := range dt.Specs {
 							spec := s.(*ast.TypeSpec)
 							decls = append(decls, model.SymbolDecl{
-								Decl:        d,
-								Kind:        model.SymbolDeclKindType,
-								IsTypeAlias: spec.Assign != token.NoPos,
-								Name:        spec.Name.Name,
-								Doc:         i.extractCommentGroup(spec.Doc),
-								ParentDoc:   parentDoc,
+								Decl:           d,
+								Kind:           model.SymbolDeclKindType,
+								IsTypeAlias:    spec.Assign != token.NoPos,
+								Name:           spec.Name.Name,
+								Doc:            i.extractCommentGroup(spec.Doc),
+								ParentDoc:      parentDoc,
+								MultiSpecDecl:  true,
+								MultiSpecIndex: spix,
 							})
 						}
 					}
