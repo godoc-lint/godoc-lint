@@ -20,16 +20,22 @@ Technically, every Go file in a package can have a godoc above the `package` sta
 
 ## Disabling rules
 
-`godoc-lint` supports inline disable hints to temporarily skip enforcing given set of rules. To do so, one needs to add a comment formatted as below in the symbol declaration godoc:
+`godoc-lint` supports inline directives to temporarily skip enforcing given set of rules. The directive must be formatted as:
+
+```go
+//godoclint:disable [[RULE] ...]
+```
+
+ For example, this will temporarily disable the `max-len` rule for the `Foo` symbol's godoc:
 
 ```go
 // Foo is a constant.
 //
-//godoclint:disable [[RULE] ...]
+//godoclint:disable max-len
 const Foo = 0
 ```
 
-Any number of rules can be listed (separated with a single whitespace). If no rule is provided, all rules will be disabled. For example, this will disable `max-len` and `name-prefix` rules for the symbol `Foo`:
+Any number of rules can be listed, separated with whitespaces. If no rule is provided, all rules will be disabled. For example, this will disable `max-len` and `name-prefix` rules for the `Foo` symbol's godoc:
 
 ```go
 // Foo is a function.
@@ -48,7 +54,7 @@ It is also possible to use multiple `//godoclint:disable` directives:
 func Foo() {}
 ```
 
-Rules can be disabled for an entire file. To do this, the `//godoclint:disable` comment should be added at any position at the root-level of the file, in a *non-godoc* comment group. For example, this will disable all rules for the entire file:
+Rules can be disabled for an entire file. To do this, the `//godoclint:disable` comment should be added at any position at the root-level of the file, in a *non-godoc* comment group. For instance, this will disable all rules for the entire file:
 
 ```go
 package foo
@@ -56,7 +62,7 @@ package foo
 //godoclint:disable
 ```
 
-Sometimes, it is not possible/preferred to add the inline `//godoclint:disable` directives to a file (e.g., an auto-generated file, or a legacy file that should not be altered in any way). In such cases, the configuration file is the right place to instruct `godoc-lint`. All one needs to do is to add the files under the `disable` key. More about this in the [Configuration](#Configuration) file section.
+Sometimes, it is not possible/preferred to add the inline `//godoclint:disable` directives to a file (e.g., an auto-generated file, or a legacy file that should not be altered in any way). In such cases, the configuration file is the right place to instruct the linter. All one needs to do is to add the files under the `exclude` key. More about this in the [Configuration](#Configuration) file section.
 
 ## Configuration
 
