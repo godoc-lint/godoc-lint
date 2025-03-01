@@ -68,6 +68,9 @@ type SymbolDecl struct {
 	// Name is the name of the declared symbol.
 	Name string
 
+	// Ident is the symbol identifier node.
+	Ident *ast.Ident
+
 	// MultiNameDecl determines whether the symbol is declared as part of a
 	// multi-name declaration spec; For example:
 	//
