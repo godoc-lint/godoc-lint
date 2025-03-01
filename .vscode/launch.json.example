@@ -11,8 +11,8 @@
                 // "-config", "config.yaml",
                 // "-include", "/foo/",
                 // "-exclude", "/bar/",
-                // "-enable", "max-length",
-                // "-disable", "max-length",
+                // "-enable", "max-len",
+                // "-disable", "max-len",
                 "./..."
             ],
         },

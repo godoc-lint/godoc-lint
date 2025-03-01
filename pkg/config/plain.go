@@ -18,7 +18,7 @@ type PlainConfig struct {
 }
 
 type PlainRuleOptions struct {
-	MaxLength       *uint   `option:"max-length" yaml:"max-length" mapstructure:"max-length"`
+	MaxLen          *uint   `option:"max-len" yaml:"max-len" mapstructure:"max-len"`
 	PkgDocStartWith *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
 }
 

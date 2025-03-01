@@ -3,6 +3,6 @@ include:
 exclude:
   - /.cache/go-build/
 enable:
-  - max-length
+  - max-len
 options:
-  max-length: 77
+  max-len: 77

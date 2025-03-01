@@ -36,7 +36,7 @@ disable: null
 options:
   # Maximum line length for godocs, not including the `// `, or `/*` or `*/`
   # tokens.
-  max-length: 77
+  max-len: 77
 
   # The start of a valid package godoc (e.g., "Package {package-name}...").
   pkg-doc/start-with: Package

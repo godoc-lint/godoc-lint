@@ -3,5 +3,5 @@ version: "1.0"
 enable:
   - single-pkg-doc
 options:
-  max-length: 77
+  max-len: 77
   pkg-doc/start-with: Package

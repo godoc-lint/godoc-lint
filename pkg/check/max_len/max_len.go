@@ -1,4 +1,4 @@
-package max_length
+package max_len
 
 import (
 	"fmt"
@@ -9,27 +9,27 @@ import (
 	"github.com/godoc-lint/godoc-lint/pkg/util"
 )
 
-// MaxLengthRule is the corresponding rule name.
-const MaxLengthRule = "max-length"
+// MaxLenRule is the corresponding rule name.
+const MaxLenRule = "max-len"
 
-var ruleSet = model.RuleSet{}.Add(MaxLengthRule)
+var ruleSet = model.RuleSet{}.Add(MaxLenRule)
 
-// MaxLengthChecker checks maximum line length of godocs.
-type MaxLengthChecker struct{}
+// MaxLenChecker checks maximum line length of godocs.
+type MaxLenChecker struct{}
 
-// NewMaxLengthChecker returns a new instance of the corresponding checker.
-func NewMaxLengthChecker() *MaxLengthChecker {
-	return &MaxLengthChecker{}
+// NewMaxLenChecker returns a new instance of the corresponding checker.
+func NewMaxLenChecker() *MaxLenChecker {
+	return &MaxLenChecker{}
 }
 
 // GetCoveredRules implements the corresponding interface method.
-func (r *MaxLengthChecker) GetCoveredRules() model.RuleSet {
+func (r *MaxLenChecker) GetCoveredRules() model.RuleSet {
 	return ruleSet
 }
 
 // Apply implements the corresponding interface method.
-func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
-	maxLength := int(actx.Config.GetRuleOptions().MaxLength)
+func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
+	maxLen := int(actx.Config.GetRuleOptions().MaxLen)
 
 	for _, f := range actx.Pass.Files {
 		if !util.IsFileApplicable(actx, f) {
@@ -42,7 +42,7 @@ func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		if ir.PackageDoc != nil {
-			checkMaxLength(actx, ir.PackageDoc, maxLength)
+			checkMaxLen(actx, ir.PackageDoc, maxLen)
 		}
 
 		processedParents := make(map[*model.CommentGroup]struct{}, len(ir.SymbolDecl))
@@ -50,19 +50,19 @@ func (r *MaxLengthChecker) Apply(actx *model.AnalysisContext) error {
 			if sd.ParentDoc != nil {
 				if _, ok := processedParents[sd.ParentDoc]; !ok {
 					processedParents[sd.ParentDoc] = struct{}{}
-					checkMaxLength(actx, sd.ParentDoc, maxLength)
+					checkMaxLen(actx, sd.ParentDoc, maxLen)
 				}
 			}
 			if sd.Doc == nil {
 				continue
 			}
-			checkMaxLength(actx, sd.Doc, maxLength)
+			checkMaxLen(actx, sd.Doc, maxLen)
 		}
 	}
 	return nil
 }
 
-func checkMaxLength(actx *model.AnalysisContext, doc *model.CommentGroup, maxLength int) {
+func checkMaxLen(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen int) {
 	if doc.DisabledRules.All || doc.DisabledRules.Rules.IsSupersetOf(ruleSet) {
 		return
 	}
@@ -87,10 +87,10 @@ func checkMaxLength(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen
 	lines := strings.Split(removeCarriageReturn(text), "\n")
 
 	for _, l := range lines {
-		if len(l) <= maxLength {
+		if len(l) <= maxLen {
 			continue
 		}
-		actx.Pass.ReportRangef(&doc.CG, "godoc exceeds max length (%d > %d)", len(l), maxLength)
+		actx.Pass.ReportRangef(&doc.CG, "godoc exceeds max length (%d > %d)", len(l), maxLen)
 		break
 	}
 }

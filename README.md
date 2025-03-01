@@ -2,9 +2,9 @@
 
 `godoc-lint` is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. While `gofmt` handles formatting and correct usage of godocs, still it does not enforce particular restrictions/stylings to godocs. Here is where `godoc-lint` comes into play by adding a set of extra rules to enhance readability, consistency, and developer experience.
 
-## rules
+## Rules
 
-- `max-length`: Limits maximum godoc line length. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens).
+- `max-len`: Limits maximum godoc line length. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens).
 
 For more configuration details see the [Configuration](#Configuration) section.
 
@@ -19,12 +19,12 @@ For more configuration details see the [Configuration](#Configuration) section.
 const Foo = 0
 ```
 
-Any number of rules can be listed (separated with a single whitespace). If no rule is provided, all rules will be disabled. For example, this will disable `max-length` and `name-prefix` rules for the symbol `Foo`:
+Any number of rules can be listed (separated with a single whitespace). If no rule is provided, all rules will be disabled. For example, this will disable `max-len` and `name-prefix` rules for the symbol `Foo`:
 
 ```go
 // Foo is a function.
 //
-//godoclint:disable max-length name-prefix
+//godoclint:disable max-len name-prefix
 func Foo() {}
 ```
 
@@ -33,7 +33,7 @@ It is also possible to use multiple `//godoclint:disable` directives:
 ```go
 // Foo is a function.
 //
-//godoclint:disable max-length
+//godoclint:disable max-len
 //godoclint:disable name-prefix
 func Foo() {}
 ```
