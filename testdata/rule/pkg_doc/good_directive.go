@@ -1,4 +1,4 @@
 // some header
 
 //foo:bar
-package package_doc
+package pkg_doc

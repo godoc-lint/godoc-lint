@@ -1,7 +1,7 @@
 # Default configuration
 version: "1.0"
 enable:
-  - single-package-doc
+  - single-pkg-doc
 options:
   max-length: 77
-  package-doc/start-with: Package
+  pkg-doc/start-with: Package

@@ -3,6 +3,6 @@ include:
 exclude:
   - /.cache/go-build/
 enable:
-  - package-doc
+  - pkg-doc
 options:
-  package-doc/start-with: Package
+  pkg-doc/start-with: Package

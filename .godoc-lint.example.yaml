@@ -25,7 +25,7 @@ exclude: null
 #
 # See the linter docs for the list of supported rules.
 enable:
-  - single-package-doc
+  - single-pkg-doc
 
 # List of rules to disable.
 disable: null
@@ -39,4 +39,4 @@ options:
   max-length: 77
 
   # The start of a valid package godoc (e.g., "Package {package-name}...").
-  package-doc/start-with: Package
+  pkg-doc/start-with: Package

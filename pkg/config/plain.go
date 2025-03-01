@@ -18,8 +18,8 @@ type PlainConfig struct {
 }
 
 type PlainRuleOptions struct {
-	MaxLength           *uint   `option:"max-length" yaml:"max-length" mapstructure:"max-length"`
-	PackageDocStartWith *string `option:"package-doc/start-with" yaml:"package-doc/start-with" mapstructure:"package-doc/start-with"`
+	MaxLength       *uint   `option:"max-length" yaml:"max-length" mapstructure:"max-length"`
+	PkgDocStartWith *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
 }
 
 func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {

@@ -55,8 +55,8 @@ func TestTransferOptions(t *testing.T) {
 		name:    "default",
 		sources: []*config.PlainRuleOptions{def.Options},
 		expected: &model.RuleOptions{
-			MaxLength:           77,
-			PackageDocStartWith: "Package",
+			MaxLength:       77,
+			PkgDocStartWith: "Package",
 		},
 	},
 	}

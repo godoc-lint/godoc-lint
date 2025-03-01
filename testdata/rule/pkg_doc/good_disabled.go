@@ -2,5 +2,5 @@
 
 // godoc does not start with a name.
 //
-//godoclint:disable
-package package_doc
+//godoclint:disable pkg-doc
+package pkg_doc

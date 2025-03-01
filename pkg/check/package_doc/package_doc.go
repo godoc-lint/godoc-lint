@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	PackageDocRule       = "package-doc"
-	SinglePackageDocRule = "single-package-doc"
+	PkgDocRule       = "pkg-doc"
+	SinglePkgDocRule = "single-pkg-doc"
 )
 
-var ruleSet = model.RuleSet{}.Add(PackageDocRule, SinglePackageDocRule)
+var ruleSet = model.RuleSet{}.Add(PkgDocRule, SinglePkgDocRule)
 
 // PackageDocChecker checks package godocs.
 type PackageDocChecker struct{}
@@ -36,11 +36,11 @@ func (r *PackageDocChecker) Apply(actx *model.AnalysisContext) error {
 }
 
 func checkPackageDocRule(actx *model.AnalysisContext) {
-	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(PackageDocRule)) {
+	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(PkgDocRule)) {
 		return
 	}
 
-	startWith := strings.TrimSpace(actx.Config.GetRuleOptions().PackageDocStartWith)
+	startWith := strings.TrimSpace(actx.Config.GetRuleOptions().PkgDocStartWith)
 
 	for _, f := range actx.Pass.Files {
 		if !util.IsFileApplicable(actx, f) {
@@ -56,7 +56,7 @@ func checkPackageDocRule(actx *model.AnalysisContext) {
 			continue
 		}
 
-		if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(PackageDocRule) {
+		if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(PkgDocRule) {
 			continue
 		}
 
@@ -72,7 +72,7 @@ func checkPackageDocRule(actx *model.AnalysisContext) {
 }
 
 func checkSinglePackageDocRule(actx *model.AnalysisContext) {
-	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(SinglePackageDocRule)) {
+	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(SinglePkgDocRule)) {
 		return
 	}
 
@@ -92,7 +92,7 @@ func checkSinglePackageDocRule(actx *model.AnalysisContext) {
 			continue
 		}
 
-		if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(SinglePackageDocRule) {
+		if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(SinglePkgDocRule) {
 			continue
 		}
 
