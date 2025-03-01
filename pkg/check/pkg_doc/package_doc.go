@@ -52,7 +52,7 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 			continue
 		}
 
-		if ir.PackageDoc == nil || ir.PackageDoc.Text == "" {
+		if ir.PackageDoc == nil {
 			continue
 		}
 
@@ -60,15 +60,25 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 			continue
 		}
 
-		expectedPrefix := f.Name.Name
-		if startWith != "" {
-			expectedPrefix = startWith + " " + f.Name.Name
-		}
-
-		if !strings.HasPrefix(ir.PackageDoc.Text, expectedPrefix) {
-			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package godoc should start with %q", expectedPrefix)
+		if expectedPrefix, ok := checkPkgDocPrefix(ir.PackageDoc.Text, startWith, f.Name.Name); !ok {
+			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package godoc should start with %q", expectedPrefix+" ")
 		}
 	}
+}
+
+func checkPkgDocPrefix(text string, startWith string, packageName string) (string, bool) {
+	if text == "" {
+		return "", true
+	}
+	expectedPrefix := packageName
+	if startWith != "" {
+		expectedPrefix = startWith + " " + packageName
+	}
+	if !strings.HasPrefix(text, expectedPrefix) {
+		return expectedPrefix, false
+	}
+	rest := text[len(expectedPrefix):]
+	return expectedPrefix, rest == "" || rest[0] == ' ' || rest[0] == '\t' || rest[0] == '\r' || rest[0] == '\n'
 }
 
 func checkSinglePkgDocRule(actx *model.AnalysisContext) {
