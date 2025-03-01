@@ -48,7 +48,7 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.IsSupersetOf(ruleSet) {
+		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(PkgDocRule) {
 			continue
 		}
 
@@ -94,7 +94,7 @@ func checkSinglePkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.IsSupersetOf(ruleSet) {
+		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(SinglePkgDocRule) {
 			continue
 		}
 

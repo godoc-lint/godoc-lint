@@ -37,7 +37,7 @@ func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.IsSupersetOf(ruleSet) {
+		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(MaxLenRule) {
 			continue
 		}
 
@@ -63,7 +63,7 @@ func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
 }
 
 func checkMaxLen(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen int) {
-	if doc.DisabledRules.All || doc.DisabledRules.Rules.IsSupersetOf(ruleSet) {
+	if doc.DisabledRules.All || doc.DisabledRules.Rules.Has(MaxLenRule) {
 		return
 	}
 
