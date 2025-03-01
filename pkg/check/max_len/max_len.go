@@ -31,6 +31,8 @@ func (r *MaxLenChecker) GetCoveredRules() model.RuleSet {
 func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
 	maxLen := int(actx.Config.GetRuleOptions().MaxLen)
 
+	docs := make(map[*model.CommentGroup]struct{}, 10*len(actx.InspectorResult.Files))
+
 	for _, f := range actx.Pass.Files {
 		if !util.IsFileApplicable(actx, f) {
 			continue
@@ -42,22 +44,22 @@ func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		if ir.PackageDoc != nil {
-			checkMaxLen(actx, ir.PackageDoc, maxLen)
+			docs[ir.PackageDoc] = struct{}{}
 		}
 
-		processedParents := make(map[*model.CommentGroup]struct{}, len(ir.SymbolDecl))
 		for _, sd := range ir.SymbolDecl {
 			if sd.ParentDoc != nil {
-				if _, ok := processedParents[sd.ParentDoc]; !ok {
-					processedParents[sd.ParentDoc] = struct{}{}
-					checkMaxLen(actx, sd.ParentDoc, maxLen)
-				}
+				docs[sd.ParentDoc] = struct{}{}
 			}
 			if sd.Doc == nil {
 				continue
 			}
-			checkMaxLen(actx, sd.Doc, maxLen)
+			docs[sd.Doc] = struct{}{}
 		}
+	}
+
+	for doc := range docs {
+		checkMaxLen(actx, doc, maxLen)
 	}
 	return nil
 }
