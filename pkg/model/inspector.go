@@ -126,6 +126,15 @@ type SymbolDecl struct {
 	// Doc is the comment group associated to the symbol.
 	Doc *CommentGroup
 
+	// TrailingDoc is the comment group that is following the symbol
+	// declaration. For example, this is a trailing comment group:
+	//
+	//   const (
+	//       foo = 0  // trailing comment group.
+	//   )
+	//
+	TrailingDoc *CommentGroup
+
 	// Doc is the comment group associated to the parent declaration. For
 	// instance:
 	//

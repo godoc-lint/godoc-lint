@@ -4,14 +4,14 @@ package decl_type
 // (Here NG symbols are defined as type aliases)
 
 // some godoc
-type SingleFoo int
+type SingleFoo int // trailing doc
 
 type SingleFooNG = int
 
 // parent godoc
 type (
 	// some godoc
-	SingleFooMultiline int
+	SingleFooMultiline int // trailing doc
 )
 
 // parent godoc
@@ -22,9 +22,9 @@ type (
 // parent godoc
 type (
 	// first godoc
-	MultiFooMultiline int
+	MultiFooMultiline int // trailing doc
 	// second godoc
-	MultiFooMultiline2   int
+	MultiFooMultiline2   int // trailing doc
 	MultiFooMultiline3NG = int
 )
 

@@ -4,6 +4,9 @@ symbol-decl:
         some godoc
     kind: type
     name: SingleFoo
+    trailing-doc:
+      text: |
+        trailing doc
   - is-type-alias: true
     kind: type
     name: SingleFooNG
@@ -17,6 +20,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - is-type-alias: true
     kind: type
     multi-spec-decl: true
@@ -35,6 +41,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - doc:
       text: |
         second godoc
@@ -45,6 +54,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - is-type-alias: true
     kind: type
     multi-spec-decl: true

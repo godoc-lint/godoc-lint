@@ -141,11 +141,14 @@ func simplifyResultEntry(entry *model.FileInspection) any {
 				item["multi-name-decl"] = true
 				item["multi-name-index"] = sd.MultiNameIndex
 			}
-			if subm := doc(sd.ParentDoc); subm != nil {
-				item["parent-doc"] = subm
-			}
 			if subm := doc(sd.Doc); subm != nil {
 				item["doc"] = subm
+			}
+			if subm := doc(sd.TrailingDoc); subm != nil {
+				item["trailing-doc"] = subm
+			}
+			if subm := doc(sd.ParentDoc); subm != nil {
+				item["parent-doc"] = subm
 			}
 			sds = append(sds, item)
 		}

@@ -4,6 +4,9 @@ symbol-decl:
         some godoc
     kind: var
     name: SingleSingleFoo
+    trailing-doc:
+      text: |
+        trailing doc
   - kind: var
     name: SingleSingleFooNG
   - doc:
@@ -13,6 +16,9 @@ symbol-decl:
     multi-name-decl: true
     multi-name-index: 0
     name: SingleDoubleFoo
+    trailing-doc:
+      text: |
+        trailing doc
   - doc:
       text: |
         some godoc
@@ -20,6 +26,9 @@ symbol-decl:
     multi-name-decl: true
     multi-name-index: 1
     name: SingleDoubleBar
+    trailing-doc:
+      text: |
+        trailing doc
   - kind: var
     multi-name-decl: true
     multi-name-index: 0
@@ -38,6 +47,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - kind: var
     multi-spec-decl: true
     multi-spec-index: 0
@@ -55,6 +67,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - doc:
       text: |
         second godoc
@@ -65,6 +80,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - kind: var
     multi-spec-decl: true
     multi-spec-index: 2
@@ -98,6 +116,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - doc:
       text: |
         some godoc
@@ -110,6 +131,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - kind: var
     multi-name-decl: true
     multi-name-index: 0
@@ -140,6 +164,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - doc:
       text: |
         first godoc
@@ -152,6 +179,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - doc:
       text: |
         second godoc
@@ -164,6 +194,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - doc:
       text: |
         second godoc
@@ -176,6 +209,9 @@ symbol-decl:
     parent-doc:
       text: |
         parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
   - kind: var
     multi-name-decl: true
     multi-name-index: 0
