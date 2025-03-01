@@ -2,7 +2,7 @@ package check
 
 import (
 	"github.com/godoc-lint/godoc-lint/pkg/check/max_len"
-	"github.com/godoc-lint/godoc-lint/pkg/check/package_doc"
+	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
 
@@ -27,7 +27,7 @@ func NewRegistry(checkers ...model.Checker) *Registry {
 func NewPopulatedRegistry() *Registry {
 	return NewRegistry(
 		max_len.NewMaxLenChecker(),
-		package_doc.NewPackageDocChecker(),
+		pkg_doc.NewPkgDocChecker(),
 	)
 }
 

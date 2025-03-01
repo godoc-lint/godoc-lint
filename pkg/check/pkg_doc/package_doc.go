@@ -1,4 +1,4 @@
-package package_doc
+package pkg_doc
 
 import (
 	"go/ast"
@@ -15,27 +15,27 @@ const (
 
 var ruleSet = model.RuleSet{}.Add(PkgDocRule, SinglePkgDocRule)
 
-// PackageDocChecker checks package godocs.
-type PackageDocChecker struct{}
+// PkgDocChecker checks package godocs.
+type PkgDocChecker struct{}
 
-// NewPackageDocChecker returns a new instance of the corresponding checker.
-func NewPackageDocChecker() *PackageDocChecker {
-	return &PackageDocChecker{}
+// NewPkgDocChecker returns a new instance of the corresponding checker.
+func NewPkgDocChecker() *PkgDocChecker {
+	return &PkgDocChecker{}
 }
 
 // GetCoveredRules implements the corresponding interface method.
-func (r *PackageDocChecker) GetCoveredRules() model.RuleSet {
+func (r *PkgDocChecker) GetCoveredRules() model.RuleSet {
 	return ruleSet
 }
 
 // Apply implements the corresponding interface method.
-func (r *PackageDocChecker) Apply(actx *model.AnalysisContext) error {
-	checkPackageDocRule(actx)
-	checkSinglePackageDocRule(actx)
+func (r *PkgDocChecker) Apply(actx *model.AnalysisContext) error {
+	checkPkgDocRule(actx)
+	checkSinglePkgDocRule(actx)
 	return nil
 }
 
-func checkPackageDocRule(actx *model.AnalysisContext) {
+func checkPkgDocRule(actx *model.AnalysisContext) {
 	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(PkgDocRule)) {
 		return
 	}
@@ -71,7 +71,7 @@ func checkPackageDocRule(actx *model.AnalysisContext) {
 	}
 }
 
-func checkSinglePackageDocRule(actx *model.AnalysisContext) {
+func checkSinglePkgDocRule(actx *model.AnalysisContext) {
 	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(SinglePkgDocRule)) {
 		return
 	}
