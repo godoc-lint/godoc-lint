@@ -4,9 +4,19 @@
 
 ## Rules
 
-- `max-len`: Limits maximum godoc line length. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens).
+Below is a brief description of the linter's rules. Some rules are configurable via the `options` key in the configuration file (See [Configuration](#Configuration) for more details).
 
-For more configuration details see the [Configuration](#Configuration) section.
+### `max-len`
+
+Limits maximum line length for godocs. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens). The maximum line length can be configured via the `max-len` option.
+
+### `pkg-doc`
+
+Ensures all package godocs start with "Package \[NAME\]". The "Package" word can be configured to any other value via the `pkg-doc/start-with` option.
+
+### `single-pkg-doc`
+
+Technically, every Go file in a package can have a godoc above the `package` statement. This rule enforces only one godoc, if any, for any package.
 
 ## Disabling rules
 
