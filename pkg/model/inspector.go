@@ -126,7 +126,20 @@ type SymbolDecl struct {
 	// In single-spec declarations, this will be 0.
 	MultiSpecIndex int
 
-	// Doc is the comment group associated to the symbol.
+	// Doc is the comment group associated to the symbol. For example:
+	//
+	//   // godoc
+	//   const foo = 0
+	//
+	//   const (
+	//       // godoc
+	//       foo = 0
+	//   )
+	//
+	// Note that, as in the first example above, for single-spec declarations
+	// (i.e., single line declarations), the godoc above the const/var/type
+	// keyword is considered as the declaration doc, and the parent doc will be
+	// nil.
 	Doc *CommentGroup
 
 	// TrailingDoc is the comment group that is following the symbol
@@ -146,6 +159,10 @@ type SymbolDecl struct {
 	//      // godoc
 	//      Foo = 0
 	//  )
+	//
+	// Note that for single-spec declarations (i.e., single line declarations),
+	// the godoc above the const/var/type keyword is considered as the
+	// declaration doc, and the parent doc will be nil.
 	ParentDoc *CommentGroup
 }
 
