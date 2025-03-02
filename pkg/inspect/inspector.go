@@ -101,10 +101,11 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 			switch dt := d.(type) {
 			case *ast.FuncDecl:
 				decls = append(decls, model.SymbolDecl{
-					Decl: d,
-					Kind: model.SymbolDeclKindFunc,
-					Name: dt.Name.Name,
-					Doc:  i.extractCommentGroup(dt.Doc),
+					Decl:  d,
+					Kind:  model.SymbolDeclKindFunc,
+					Name:  dt.Name.Name,
+					Ident: dt.Name,
+					Doc:   i.extractCommentGroup(dt.Doc),
 				})
 			case *ast.BadDecl:
 				decls = append(decls, model.SymbolDecl{
