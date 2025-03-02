@@ -1,0 +1,13 @@
+symbol-decl:
+  - doc:
+      text: |
+        godoc
+    kind: func
+    name: Foo
+  - kind: type
+    name: Bar
+  - doc:
+      text: |
+        godoc
+    kind: func
+    name: BarFoo
