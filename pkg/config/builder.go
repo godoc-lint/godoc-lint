@@ -13,22 +13,22 @@ import (
 
 // ConfigBuilder implements a configuration builder.
 type ConfigBuilder struct {
-	cwd          string
+	baseDir      string
 	coveredRules model.RuleSet
 	override     *model.ConfigOverride
 }
 
 // NewConfigBuilder crates a new instance of the corresponding struct.
-func NewConfigBuilder(cwd string, coveredRules model.RuleSet) *ConfigBuilder {
+func NewConfigBuilder(baseDir string, coveredRules model.RuleSet) *ConfigBuilder {
 	return &ConfigBuilder{
-		cwd:          cwd,
+		baseDir:      baseDir,
 		coveredRules: coveredRules,
 	}
 }
 
 // GetConfig implements the corresponding interface method.
-func (cb *ConfigBuilder) GetConfig(path string) (model.Config, error) {
-	return cb.build(path)
+func (cb *ConfigBuilder) GetConfig(cwd string) (model.Config, error) {
+	return cb.build(cwd)
 }
 
 func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainConfig, string, error) {
@@ -38,50 +38,71 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 		panic("cannot parse default config")
 	}
 
-	rel, err := filepath.Rel(cb.cwd, cwd)
+	rel, err := filepath.Rel(cb.baseDir, cwd)
 	if err != nil {
 		return nil, nil, "", fmt.Errorf("cannot find relative path to base dir: %w", err)
 	}
 
-	// The config file path override should only be applied to the root config
-	// or if the given path is not under the original CWD.
-	if rel == "." && cb.override != nil && cb.override.ConfigFilePath != nil {
-		pcfg, err := FromYAMLFile(*cb.override.ConfigFilePath)
-		if err != nil {
-			return nil, nil, "", fmt.Errorf("cannot read config file (%q): %w", *cb.override.ConfigFilePath, err)
+	isUnderBaseDir := rel != ".." && !strings.HasPrefix(filepath.ToSlash(rel), "../")
+	if !isUnderBaseDir {
+		if pcfg, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
+			return nil, nil, "", err
+		} else if pcfg != nil {
+			return pcfg, def, cb.baseDir, nil
 		}
-		return pcfg, def, cb.cwd, nil
-	}
-
-	if rel == ".." || strings.HasPrefix(filepath.ToSlash(rel), "../") {
-		// The given CWD is outside the original CWD. So, we apply the default.
-		return def, def, cwd, nil
+		return def, def, cb.baseDir, nil
 	}
 
 	path := cwd
 	for {
-		for _, dcf := range defaultConfigFiles {
-			p := filepath.Join(path, dcf)
-			if fi, err := os.Stat(p); err != nil || fi.IsDir() {
-				continue
+		rel, err := filepath.Rel(cb.baseDir, path)
+		if err != nil {
+			return nil, nil, "", fmt.Errorf("cannot find relative path to base dir: %w", err)
+		}
+
+		if rel == "." {
+			if pcfg, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
+				return nil, nil, "", err
+			} else if pcfg != nil {
+				return pcfg, def, cb.baseDir, nil
 			}
-			pcfg, err := FromYAMLFile(p)
-			if err != nil {
-				return nil, nil, "", fmt.Errorf("malformed configuration file (at %q): %w", p, err)
-			}
+			return def, def, cb.baseDir, nil
+		}
+
+		if pcfg, err := findConventionalConfigFile(path); err != nil {
+			return nil, nil, "", err
+		} else if pcfg != nil {
 			return pcfg, def, path, nil
 		}
 
-		if rel, err := filepath.Rel(cb.cwd, path); err != nil {
-			return nil, nil, "", fmt.Errorf("cannot find relative path to base dir: %w", err)
-		} else if rel == "." {
-			break
-		} else if rel == ".." || strings.HasPrefix(filepath.ToSlash(rel), "../") {
-			break
-		}
 		path = filepath.Dir(path)
 	}
-	return def, def, cb.cwd, nil
+}
+
+func (cb *ConfigBuilder) resolvePlainConfigAtBaseDir() (*PlainConfig, error) {
+	if cb.override == nil || cb.override.ConfigFilePath == nil {
+		return findConventionalConfigFile(cb.baseDir)
+	}
+	pcfg, err := FromYAMLFile(*cb.override.ConfigFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("cannot read config file (%q): %w", *cb.override.ConfigFilePath, err)
+	}
+	return pcfg, nil
+}
+
+func findConventionalConfigFile(dir string) (*PlainConfig, error) {
+	for _, dcf := range defaultConfigFiles {
+		path := filepath.Join(dir, dcf)
+		if fi, err := os.Stat(path); err != nil || fi.IsDir() {
+			continue
+		}
+		pcfg, err := FromYAMLFile(path)
+		if err != nil {
+			return nil, fmt.Errorf("malformed configuration file (at %q): %w", path, err)
+		}
+		return pcfg, nil
+	}
+	return nil, nil
 }
 
 // build creates the configuration struct.
