@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
@@ -26,18 +27,25 @@ func NewConfigBuilder(cwd string, coveredRules model.RuleSet) *ConfigBuilder {
 }
 
 // GetConfig implements the corresponding interface method.
-func (cb *ConfigBuilder) GetConfig() (model.Config, error) {
-	return cb.build()
+func (cb *ConfigBuilder) GetConfig(path string) (model.Config, error) {
+	return cb.build(path)
 }
 
-func (cb *ConfigBuilder) resolvePlainConfig() (*PlainConfig, *PlainConfig, error) {
+func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainConfig, error) {
 	def, err := FromYAML(defaultConfigYAML)
 	if err != nil {
 		// This should never happen.
 		panic("cannot parse default config")
 	}
 
-	if cb.override != nil && cb.override.ConfigFilePath != nil {
+	rel, err := filepath.Rel(cb.cwd, cwd)
+	if err != nil {
+		return nil, nil, fmt.Errorf("cannot find relative path to base dir: %w", err)
+	}
+
+	// The config file path override should only be applied to the root config
+	// or if the given path is not under the original CWD.
+	if rel == "." && cb.override != nil && cb.override.ConfigFilePath != nil {
 		pcfg, err := FromYAMLFile(*cb.override.ConfigFilePath)
 		if err != nil {
 			return nil, nil, fmt.Errorf("cannot read config file (%q): %w", *cb.override.ConfigFilePath, err)
@@ -45,22 +53,31 @@ func (cb *ConfigBuilder) resolvePlainConfig() (*PlainConfig, *PlainConfig, error
 		return pcfg, def, nil
 	}
 
-	for _, dcf := range defaultConfigFiles {
-		path := dcf
-		if cb.cwd != "" {
-			path = filepath.Join(cb.cwd, dcf)
+	if rel == ".." || strings.HasPrefix(filepath.ToSlash(rel), "../") {
+		// The given CWD is outside the original CWD. So, we apply the default.
+		return def, def, nil
+	}
+
+	path := cwd
+	for {
+		for _, dcf := range defaultConfigFiles {
+			p := filepath.Join(path, dcf)
+			if fi, err := os.Stat(p); err != nil || fi.IsDir() {
+				continue
+			}
+			pcfg, err := FromYAMLFile(p)
+			if err != nil {
+				return nil, nil, fmt.Errorf("malformed configuration file (at %q): %w", p, err)
+			}
+			return pcfg, def, nil
 		}
 
-		fi, err := os.Stat(path)
-		if err != nil || fi.IsDir() {
-			continue
+		if rel, err := filepath.Rel(cb.cwd, path); err != nil {
+			return nil, nil, fmt.Errorf("cannot find relative path to base dir: %w", err)
+		} else if rel[0] == '.' {
+			break
 		}
-
-		pcfg, err := FromYAMLFile(path)
-		if err != nil {
-			return nil, nil, fmt.Errorf("malformed configuration file (%q): %w", path, err)
-		}
-		return pcfg, def, nil
+		path = filepath.Dir(path)
 	}
 	return def, def, nil
 }
@@ -76,8 +93,8 @@ func (cb *ConfigBuilder) resolvePlainConfig() (*PlainConfig, *PlainConfig, error
 // The method also does the following:
 //   - Applies override flags (e.g., enable, or disable).
 //   - Validates the final configuration.
-func (cb *ConfigBuilder) build() (*config, error) {
-	pcfg, def, err := cb.resolvePlainConfig()
+func (cb *ConfigBuilder) build(cwd string) (*config, error) {
+	pcfg, def, err := cb.resolvePlainConfig(cwd)
 	if err != nil {
 		return nil, fmt.Errorf("config error: %w", err)
 	}

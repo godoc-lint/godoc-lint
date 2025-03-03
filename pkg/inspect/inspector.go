@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	gdc "go/doc/comment"
 	"go/token"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"strings"
@@ -31,8 +32,7 @@ type Inspector struct {
 	analyzer *analysis.Analyzer
 	parser   gdc.Parser
 
-	once sync.Once
-	cfg  model.Config
+	mu sync.Mutex
 }
 
 // NewInspector returns a new instance of the inspector.
@@ -60,16 +60,30 @@ var topLevelOrphanCommentGroupPattern = regexp.MustCompile(`(?m)(?:^//.*\r?\n)+(
 var disableDirectivePattern = regexp.MustCompile(`(?m)//godoclint:disable(?: *(.+))?$`)
 
 func (i *Inspector) run(pass *analysis.Pass) (any, error) {
-	i.once.Do(func() {
-		cfg, err := i.cb.GetConfig()
-		if err != nil {
+	if len(pass.Files) == 0 {
+		return nil, nil
+	}
+
+	var cfg model.Config
+	func() {
+		i.mu.Lock()
+		defer i.mu.Unlock()
+
+		ft := util.GetPassFileToken(pass.Files[0], pass)
+		if ft == nil {
+			i.exitFunc(2, errors.New("cannot prepare config"))
+		}
+
+		pkgDir := filepath.Dir(ft.Name())
+		if c, err := i.cb.GetConfig(pkgDir); err != nil {
 			i.exitFunc(2, err)
 		} else {
-			i.cfg = cfg
+			cfg = c
 		}
-	})
+	}()
 
-	if i.cfg == nil {
+	if cfg == nil {
+		// This should never happen.
 		return nil, errors.New("nil config")
 	}
 
@@ -253,7 +267,7 @@ func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 		if ft == nil {
 			continue
 		}
-		if !i.cfg.IsPathApplicable(ft.Name()) {
+		if !cfg.IsPathApplicable(ft.Name()) {
 			continue
 		}
 

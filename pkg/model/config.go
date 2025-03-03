@@ -5,8 +5,8 @@ type ConfigBuilder interface {
 	// SetOverride sets the configuration override.
 	SetOverride(override *ConfigOverride)
 
-	// GetConfig builds and returns the configuration object.
-	GetConfig() (Config, error)
+	// GetConfig builds and returns the configuration object for the given path.
+	GetConfig(cwd string) (Config, error)
 }
 
 // ConfigOverride represents a configuration override.

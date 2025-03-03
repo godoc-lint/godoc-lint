@@ -4,12 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
+	"github.com/godoc-lint/godoc-lint/pkg/util"
 	"github.com/godoc-lint/godoc-lint/pkg/version"
 )
 
@@ -28,8 +30,7 @@ type Analyzer struct {
 
 	analyzer *analysis.Analyzer
 
-	once sync.Once
-	cfg  model.Config
+	mu sync.Mutex
 }
 
 // NewAnalyzer returns a new instance of the corresponding analyzer.
@@ -113,21 +114,35 @@ func (a *Analyzer) GetAnalyzer() *analysis.Analyzer {
 }
 
 func (a *Analyzer) run(pass *analysis.Pass) (any, error) {
-	a.once.Do(func() {
-		cfg, err := a.cb.GetConfig()
-		if err != nil {
+	if len(pass.Files) == 0 {
+		return nil, nil
+	}
+
+	var cfg model.Config
+	func() {
+		a.mu.Lock()
+		defer a.mu.Unlock()
+
+		ft := util.GetPassFileToken(pass.Files[0], pass)
+		if ft == nil {
+			a.exitFunc(2, errors.New("cannot prepare config"))
+		}
+
+		pkgDir := filepath.Dir(ft.Name())
+		if c, err := a.cb.GetConfig(pkgDir); err != nil {
 			a.exitFunc(2, err)
 		} else {
-			a.cfg = cfg
+			cfg = c
 		}
-	})
+	}()
 
-	if a.cfg == nil {
+	if cfg == nil {
+		// This should never happen.
 		return nil, errors.New("nil config")
 	}
 
 	actx := &model.AnalysisContext{
-		Config:          a.cfg,
+		Config:          cfg,
 		InspectorResult: pass.ResultOf[a.inspector.GetAnalyzer()].(*model.InspectorResult),
 		Pass:            pass,
 	}

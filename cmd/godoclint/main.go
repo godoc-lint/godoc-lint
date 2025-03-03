@@ -17,8 +17,15 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v\n", err.Error())
 		os.Exit(code)
 	}
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to get current working directory: %v\n", err)
+		os.Exit(1)
+	}
+
 	reg := check.NewPopulatedRegistry()
-	cb := config.NewConfigBuilder("", reg.GetCoveredRules())
+	cb := config.NewConfigBuilder(cwd, reg.GetCoveredRules())
 	ocb := config.NewOnceConfigBuilder(cb)
 	inspector := inspect.NewInspector(ocb, exitFunc)
 	analyzer := analysis.NewAnalyzer(ocb, reg, inspector, exitFunc)

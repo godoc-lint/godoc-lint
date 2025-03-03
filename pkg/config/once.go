@@ -13,10 +13,13 @@ import (
 type OnceConfigBuilder struct {
 	builder model.ConfigBuilder
 
-	mu          sync.Mutex
-	isBuilt     bool
-	buildResult model.Config
-	buildErr    error
+	mu sync.Mutex
+	m  map[string]built
+}
+
+type built struct {
+	value model.Config
+	err   error
 }
 
 // NewOnceConfigBuilder crates a new instance of the corresponding struct.
@@ -27,15 +30,21 @@ func NewOnceConfigBuilder(builder model.ConfigBuilder) *OnceConfigBuilder {
 }
 
 // GetConfig implements the corresponding interface method.
-func (ocb *OnceConfigBuilder) GetConfig() (model.Config, error) {
+func (ocb *OnceConfigBuilder) GetConfig(cwd string) (model.Config, error) {
 	ocb.mu.Lock()
 	defer ocb.mu.Unlock()
 
-	if !ocb.isBuilt {
-		ocb.buildResult, ocb.buildErr = ocb.builder.GetConfig()
-		ocb.isBuilt = true
+	if b, ok := ocb.m[cwd]; ok {
+		return b.value, b.err
 	}
-	return ocb.buildResult, ocb.buildErr
+
+	b := built{}
+	b.value, b.err = ocb.builder.GetConfig(cwd)
+	if ocb.m == nil {
+		ocb.m = make(map[string]built, 10)
+	}
+	ocb.m[cwd] = b
+	return b.value, b.err
 }
 
 // SetOverride implements the corresponding interface method.
@@ -43,7 +52,7 @@ func (ocb *OnceConfigBuilder) SetOverride(override *model.ConfigOverride) {
 	ocb.mu.Lock()
 	defer ocb.mu.Unlock()
 
-	if ocb.isBuilt {
+	if len(ocb.m) > 0 {
 		return
 	}
 	ocb.builder.SetOverride(override)
