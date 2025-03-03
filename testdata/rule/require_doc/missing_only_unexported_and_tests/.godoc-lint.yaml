@@ -1,0 +1,10 @@
+include:
+  - /testdata/rule/
+exclude:
+  - /.cache/go-build/
+enable:
+  - require-doc
+options:
+  require-doc/skip-tests: false
+  require-doc/ignore-exported: true
+  require-doc/ignore-unexported: false

@@ -41,6 +41,14 @@ options:
   # The start of a valid package godoc (e.g., "Package {package-name}...").
   pkg-doc/start-with: Package
 
-  # Skip test files (i.e., "*_test" packages) when applying the
-  # `require-pkg-doc` rule.
+  # Skip test files when applying the `require-pkg-doc` rule.
   require-pkg-doc/skip-tests: true
+
+  # Skip test files when applying the `require-doc` rule.
+  require-doc/skip-tests: true
+
+  # Ignore exported (public) symbols when applying the `require-doc` rule.
+  require-doc/ignore-exported: false
+
+  # Ignore unexported (private) symbols when applying the `require-doc` rule.
+  require-doc/ignore-unexported: true

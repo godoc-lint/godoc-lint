@@ -6,3 +6,6 @@ options:
   max-len: 77
   pkg-doc/start-with: Package
   require-pkg-doc/skip-tests: true
+  require-doc/skip-tests: true
+  require-doc/ignore-exported: false
+  require-doc/ignore-unexported: true

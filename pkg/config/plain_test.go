@@ -55,9 +55,12 @@ func TestTransferOptions(t *testing.T) {
 		name:    "default",
 		sources: []*config.PlainRuleOptions{def.Options},
 		expected: &model.RuleOptions{
-			MaxLen:                 77,
-			PkgDocStartWith:        "Package",
-			RequirePkgDocSkipTests: true,
+			MaxLen:                     77,
+			PkgDocStartWith:            "Package",
+			RequirePkgDocSkipTests:     true,
+			RequireDocSkipTests:        true,
+			RequireDocIgnoreExported:   false,
+			RequireDocIgnoreUnexported: true,
 		},
 	},
 	}

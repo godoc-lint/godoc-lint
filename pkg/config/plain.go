@@ -18,9 +18,12 @@ type PlainConfig struct {
 }
 
 type PlainRuleOptions struct {
-	MaxLen                 *uint   `option:"max-len" yaml:"max-len" mapstructure:"max-len"`
-	PkgDocStartWith        *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
-	RequirePkgDocSkipTests *bool   `option:"require-pkg-doc/skip-tests" yaml:"require-pkg-doc/skip-tests" mapstructure:"require-pkg-doc/skip-tests"`
+	MaxLen                     *uint   `option:"max-len" yaml:"max-len" mapstructure:"max-len"`
+	PkgDocStartWith            *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
+	RequirePkgDocSkipTests     *bool   `option:"require-pkg-doc/skip-tests" yaml:"require-pkg-doc/skip-tests" mapstructure:"require-pkg-doc/skip-tests"`
+	RequireDocSkipTests        *bool   `option:"require-doc/skip-tests" yaml:"require-doc/skip-tests" mapstructure:"require-doc/skip-tests"`
+	RequireDocIgnoreExported   *bool   `option:"require-doc/ignore-exported" yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`
+	RequireDocIgnoreUnexported *bool   `option:"require-doc/ignore-unexported" yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
 }
 
 func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {

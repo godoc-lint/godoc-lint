@@ -20,7 +20,11 @@ Technically, every Go file in a package can have a godoc above the `package` sta
 
 ### `require-pkg-doc`
 
-Ensures that every Go package has godoc(s). By default test files (i.e., `*_test.go`) and therefore test packages (i.e., `*_test`) are ignored. To include them in the check, the `require-pkg-doc/skip-tests` should be set to `false`.
+Ensures that every Go package has godoc(s). By default, test files (i.e., `*_test.go`) and therefore test packages (i.e., `*_test`) are ignored. To include them in the check, the `require-pkg-doc/skip-tests` should be set to `false`.
+
+### `require-doc`
+
+Ensures all exported and/or (optionally) unexported symbols have godocs. By default, symbols declared in test files, together with any unexported symbols are ignored. To include test files or unexported symbols the `require-doc/skip-tests` or `require-doc/ignore-unexported` options should be set to `false`. Although it is a rare scenario but one may want to ignore exported symbols, for which the `require-doc/ignore-exported` should be set to `true`.
 
 ## Disabling rules
 
