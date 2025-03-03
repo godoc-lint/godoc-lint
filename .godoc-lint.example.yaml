@@ -11,14 +11,14 @@ version: "1.0"
 
 # List of regexp patterns matching files the linter should include. When
 # omitted/null, the linter includes all Go files. If assigned then only the
-# files that their absolute path matches any of the patterns will be
-# processed.
+# files that their relative path (with respect to the config file path) matches
+# any of the patterns will be processed.
 include: null
 
 # List of regexp patterns matching files the linter should skip. When
 # omitted/null, the linter excludes no Go files. If assigned then only the
-# files that their absolute path does not match any of the patterns will be
-# processed.
+# files that their relative path (with respect to the config file path) does not
+# match any of the patterns will be processed.
 exclude: null
 
 # List of rules to enable.

@@ -1,6 +1,2 @@
-include:
-  - /testdata/rule/
-exclude:
-  - /.cache/go-build/
 enable:
   - single-pkg-doc

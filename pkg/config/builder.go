@@ -31,7 +31,7 @@ func (cb *ConfigBuilder) GetConfig(path string) (model.Config, error) {
 	return cb.build(path)
 }
 
-func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainConfig, error) {
+func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainConfig, string, error) {
 	def, err := FromYAML(defaultConfigYAML)
 	if err != nil {
 		// This should never happen.
@@ -40,7 +40,7 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 
 	rel, err := filepath.Rel(cb.cwd, cwd)
 	if err != nil {
-		return nil, nil, fmt.Errorf("cannot find relative path to base dir: %w", err)
+		return nil, nil, "", fmt.Errorf("cannot find relative path to base dir: %w", err)
 	}
 
 	// The config file path override should only be applied to the root config
@@ -48,14 +48,14 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 	if rel == "." && cb.override != nil && cb.override.ConfigFilePath != nil {
 		pcfg, err := FromYAMLFile(*cb.override.ConfigFilePath)
 		if err != nil {
-			return nil, nil, fmt.Errorf("cannot read config file (%q): %w", *cb.override.ConfigFilePath, err)
+			return nil, nil, "", fmt.Errorf("cannot read config file (%q): %w", *cb.override.ConfigFilePath, err)
 		}
-		return pcfg, def, nil
+		return pcfg, def, cb.cwd, nil
 	}
 
 	if rel == ".." || strings.HasPrefix(filepath.ToSlash(rel), "../") {
 		// The given CWD is outside the original CWD. So, we apply the default.
-		return def, def, nil
+		return def, def, cwd, nil
 	}
 
 	path := cwd
@@ -67,19 +67,21 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 			}
 			pcfg, err := FromYAMLFile(p)
 			if err != nil {
-				return nil, nil, fmt.Errorf("malformed configuration file (at %q): %w", p, err)
+				return nil, nil, "", fmt.Errorf("malformed configuration file (at %q): %w", p, err)
 			}
-			return pcfg, def, nil
+			return pcfg, def, path, nil
 		}
 
 		if rel, err := filepath.Rel(cb.cwd, path); err != nil {
-			return nil, nil, fmt.Errorf("cannot find relative path to base dir: %w", err)
-		} else if rel[0] == '.' {
+			return nil, nil, "", fmt.Errorf("cannot find relative path to base dir: %w", err)
+		} else if rel == "." {
+			break
+		} else if rel == ".." || strings.HasPrefix(filepath.ToSlash(rel), "../") {
 			break
 		}
 		path = filepath.Dir(path)
 	}
-	return def, def, nil
+	return def, def, cb.cwd, nil
 }
 
 // build creates the configuration struct.
@@ -94,7 +96,7 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 //   - Applies override flags (e.g., enable, or disable).
 //   - Validates the final configuration.
 func (cb *ConfigBuilder) build(cwd string) (*config, error) {
-	pcfg, def, err := cb.resolvePlainConfig(cwd)
+	pcfg, def, configCWD, err := cb.resolvePlainConfig(cwd)
 	if err != nil {
 		return nil, fmt.Errorf("config error: %w", err)
 	}
@@ -194,6 +196,8 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	}
 
 	return &config{
+		cwd: configCWD,
+
 		enabledRules:    resolvedEnabledRuleSet,
 		disabledRules:   resolvedDisabledRuleSet,
 		includeAsRegexp: resolvedIncludeAsRegexp,

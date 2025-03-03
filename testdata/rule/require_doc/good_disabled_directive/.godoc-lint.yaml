@@ -1,7 +1,3 @@
-include:
-  - /testdata/rule/
-exclude:
-  - /.cache/go-build/
 disable:
   - require-doc
 options:

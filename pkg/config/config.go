@@ -1,6 +1,7 @@
 package config
 
 import (
+	"path/filepath"
 	"regexp"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
@@ -8,6 +9,8 @@ import (
 
 // config represents the godoc-lint analyzer configuration.
 type config struct {
+	cwd string
+
 	includeAsRegexp []*regexp.Regexp
 	excludeAsRegexp []*regexp.Regexp
 	enabledRules    *model.RuleSet
@@ -25,8 +28,13 @@ func (c *config) IsAnyRuleApplicable(rs model.RuleSet) bool {
 
 // IsPathApplicable implements the corresponding interface method.
 func (c *config) IsPathApplicable(path string) bool {
+	p, err := filepath.Rel(c.cwd, path)
+	if err != nil {
+		p = path
+	}
+
 	for _, re := range c.excludeAsRegexp {
-		if re.MatchString(path) {
+		if re.MatchString(p) {
 			return false
 		}
 	}
@@ -34,7 +42,7 @@ func (c *config) IsPathApplicable(path string) bool {
 		return true
 	}
 	for _, re := range c.includeAsRegexp {
-		if re.MatchString(path) {
+		if re.MatchString(p) {
 			return true
 		}
 	}

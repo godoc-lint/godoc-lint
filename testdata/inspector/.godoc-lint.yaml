@@ -1,5 +1,1 @@
-include:
-  - /testdata/inspector/
-exclude:
-  - /.cache/go-build/
 enable: [] # Disable all rules
