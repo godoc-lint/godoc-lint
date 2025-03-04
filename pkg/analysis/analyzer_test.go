@@ -31,7 +31,7 @@ func TestRules(t *testing.T) {
 	cb := config.NewConfigBuilder(testdir, reg.GetCoveredRules())
 	ocb := config.NewOnceConfigBuilder(cb)
 	inspector := inspect.NewInspector(ocb, exitFunc)
-	analyzer := analysis.NewAnalyzer(ocb, reg, inspector, exitFunc)
+	analyzer := analysis.NewAnalyzer(testdir, ocb, reg, inspector, exitFunc)
 
 	_ = analysistest.Run(t, testdir, analyzer.GetAnalyzer(), "./...")
 }

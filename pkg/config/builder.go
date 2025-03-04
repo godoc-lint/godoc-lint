@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
+	"github.com/godoc-lint/godoc-lint/pkg/util"
 )
 
 // ConfigBuilder implements a configuration builder.
@@ -38,13 +38,9 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 		panic("cannot parse default config")
 	}
 
-	rel, err := filepath.Rel(cb.baseDir, cwd)
-	if err != nil {
-		return nil, nil, "", fmt.Errorf("cannot find relative path to base dir: %w", err)
-	}
-
-	isUnderBaseDir := rel != ".." && !strings.HasPrefix(filepath.ToSlash(rel), "../")
-	if !isUnderBaseDir {
+	if yes, err := util.IsPathUnderBaseDir(cb.baseDir, cwd); err != nil {
+		return nil, nil, "", err
+	} else if !yes {
 		if pcfg, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
 			return nil, nil, "", err
 		} else if pcfg != nil {
@@ -57,7 +53,7 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 	for {
 		rel, err := filepath.Rel(cb.baseDir, path)
 		if err != nil {
-			return nil, nil, "", fmt.Errorf("cannot find relative path to base dir: %w", err)
+			return nil, nil, "", err
 		}
 
 		if rel == "." {
@@ -85,7 +81,7 @@ func (cb *ConfigBuilder) resolvePlainConfigAtBaseDir() (*PlainConfig, error) {
 	}
 	pcfg, err := FromYAMLFile(*cb.override.ConfigFilePath)
 	if err != nil {
-		return nil, fmt.Errorf("cannot read config file (%q): %w", *cb.override.ConfigFilePath, err)
+		return nil, err
 	}
 	return pcfg, nil
 }
@@ -98,7 +94,7 @@ func findConventionalConfigFile(dir string) (*PlainConfig, error) {
 		}
 		pcfg, err := FromYAMLFile(path)
 		if err != nil {
-			return nil, fmt.Errorf("malformed configuration file (at %q): %w", path, err)
+			return nil, err
 		}
 		return pcfg, nil
 	}
@@ -119,7 +115,7 @@ func findConventionalConfigFile(dir string) (*PlainConfig, error) {
 func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	pcfg, def, configCWD, err := cb.resolvePlainConfig(cwd)
 	if err != nil {
-		return nil, fmt.Errorf("config error: %w", err)
+		return nil, err
 	}
 
 	toValidRuleSet := func(s []string) (*model.RuleSet, []string) {
@@ -167,7 +163,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	}
 	resolvedEnabledRuleSet, invalids := toValidRuleSet(resolvedEnable)
 	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("config error: invalid rule(s) name to enable: %q", invalids))
+		errs = errors.Join(errs, fmt.Errorf("invalid rule(s) name to enable: %q", invalids))
 	}
 
 	resolvedDisable := pcfg.Disable
@@ -179,7 +175,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	}
 	resolvedDisabledRuleSet, invalids := toValidRuleSet(resolvedDisable)
 	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("config error: invalid rule(s) to disable: %q", invalids))
+		errs = errors.Join(errs, fmt.Errorf("invalid rule(s) to disable: %q", invalids))
 	}
 
 	resolvedInclude := pcfg.Include
@@ -191,7 +187,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	}
 	resolvedIncludeAsRegexp, invalids := toValidRegexpSlice(resolvedInclude)
 	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("config error: invalid path pattern(s) to include: %q", invalids))
+		errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to include: %q", invalids))
 	}
 
 	resolvedExclude := pcfg.Exclude
@@ -203,7 +199,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	}
 	resolvedExcludeAsRegexp, invalids := toValidRegexpSlice(resolvedExclude)
 	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("config error: invalid path pattern(s) to exclude: %q", invalids))
+		errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to exclude: %q", invalids))
 	}
 
 	if errs != nil {

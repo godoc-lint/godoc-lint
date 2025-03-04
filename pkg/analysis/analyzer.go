@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"golang.org/x/tools/go/analysis"
 
@@ -23,19 +22,19 @@ const (
 
 // Analyzer implements the godoc-lint analyzer.
 type Analyzer struct {
+	baseDir   string
 	cb        model.ConfigBuilder
 	inspector model.Inspector
 	reg       model.Registry
 	exitFunc  func(int, error)
 
 	analyzer *analysis.Analyzer
-
-	mu sync.Mutex
 }
 
 // NewAnalyzer returns a new instance of the corresponding analyzer.
-func NewAnalyzer(cb model.ConfigBuilder, reg model.Registry, inspector model.Inspector, exitFunc func(int, error)) *Analyzer {
+func NewAnalyzer(baseDir string, cb model.ConfigBuilder, reg model.Registry, inspector model.Inspector, exitFunc func(int, error)) *Analyzer {
 	result := &Analyzer{
+		baseDir:   baseDir,
 		cb:        cb,
 		reg:       reg,
 		inspector: inspector,
@@ -118,32 +117,43 @@ func (a *Analyzer) run(pass *analysis.Pass) (any, error) {
 		return nil, nil
 	}
 
-	var cfg model.Config
-	func() {
-		a.mu.Lock()
-		defer a.mu.Unlock()
-
-		ft := util.GetPassFileToken(pass.Files[0], pass)
-		if ft == nil {
-			a.exitFunc(2, errors.New("cannot prepare config"))
-		}
-
-		pkgDir := filepath.Dir(ft.Name())
-		if c, err := a.cb.GetConfig(pkgDir); err != nil {
+	ft := util.GetPassFileToken(pass.Files[0], pass)
+	if ft == nil {
+		err := errors.New("cannot prepare config")
+		if a.exitFunc != nil {
 			a.exitFunc(2, err)
-		} else {
-			cfg = c
 		}
-	}()
+		return nil, err
+	}
 
-	if cfg == nil {
-		// This should never happen.
-		return nil, errors.New("nil config")
+	if yes, err := util.IsPathUnderBaseDir(a.baseDir, ft.Name()); err != nil {
+		err := fmt.Errorf("cannot examine path structure: %w", err)
+		if a.exitFunc != nil {
+			a.exitFunc(2, err)
+		}
+		return nil, err
+	} else if !yes {
+		return nil, nil
+	}
+
+	pkgDir := filepath.Dir(ft.Name())
+	cfg, err := a.cb.GetConfig(pkgDir)
+	if err != nil {
+		err := fmt.Errorf("cannot prepare config: %w", err)
+		if a.exitFunc != nil {
+			a.exitFunc(2, err)
+		}
+		return nil, err
+	}
+
+	ir := pass.ResultOf[a.inspector.GetAnalyzer()].(*model.InspectorResult)
+	if ir == nil || ir.Files == nil {
+		return nil, nil
 	}
 
 	actx := &model.AnalysisContext{
 		Config:          cfg,
-		InspectorResult: pass.ResultOf[a.inspector.GetAnalyzer()].(*model.InspectorResult),
+		InspectorResult: ir,
 		Pass:            pass,
 	}
 

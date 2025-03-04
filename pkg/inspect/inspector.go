@@ -10,7 +10,6 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
-	"sync"
 
 	"golang.org/x/tools/go/analysis"
 
@@ -31,8 +30,6 @@ type Inspector struct {
 
 	analyzer *analysis.Analyzer
 	parser   gdc.Parser
-
-	mu sync.Mutex
 }
 
 // NewInspector returns a new instance of the inspector.
@@ -61,30 +58,25 @@ var disableDirectivePattern = regexp.MustCompile(`(?m)//godoclint:disable(?: *(.
 
 func (i *Inspector) run(pass *analysis.Pass) (any, error) {
 	if len(pass.Files) == 0 {
-		return nil, nil
+		return &model.InspectorResult{}, nil
 	}
 
-	var cfg model.Config
-	func() {
-		i.mu.Lock()
-		defer i.mu.Unlock()
-
-		ft := util.GetPassFileToken(pass.Files[0], pass)
-		if ft == nil {
-			i.exitFunc(2, errors.New("cannot prepare config"))
-		}
-
-		pkgDir := filepath.Dir(ft.Name())
-		if c, err := i.cb.GetConfig(pkgDir); err != nil {
+	ft := util.GetPassFileToken(pass.Files[0], pass)
+	if ft == nil {
+		err := errors.New("cannot prepare config")
+		if i.exitFunc != nil {
 			i.exitFunc(2, err)
-		} else {
-			cfg = c
 		}
-	}()
+		return nil, err
+	}
 
-	if cfg == nil {
-		// This should never happen.
-		return nil, errors.New("nil config")
+	pkgDir := filepath.Dir(ft.Name())
+	cfg, err := i.cb.GetConfig(pkgDir)
+	if err != nil {
+		if i.exitFunc != nil {
+			i.exitFunc(2, err)
+		}
+		return nil, err
 	}
 
 	inspect := func(f *ast.File) (*model.FileInspection, error) {
