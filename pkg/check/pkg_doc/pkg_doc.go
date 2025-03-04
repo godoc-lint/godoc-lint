@@ -54,7 +54,7 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(PkgDocRule) {
+		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(PkgDocRule) {
 			continue
 		}
 
@@ -100,7 +100,7 @@ func checkSinglePkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(SinglePkgDocRule) {
+		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(SinglePkgDocRule) {
 			continue
 		}
 
@@ -145,7 +145,7 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequirePkgDocRule) {
+		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequirePkgDocRule) {
 			continue
 		}
 

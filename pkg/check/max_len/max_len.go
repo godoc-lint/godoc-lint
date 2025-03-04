@@ -39,7 +39,7 @@ func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(MaxLenRule) {
+		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(MaxLenRule) {
 			continue
 		}
 

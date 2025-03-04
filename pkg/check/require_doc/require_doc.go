@@ -53,7 +53,7 @@ func (r *RequireDocChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		ir := actx.InspectorResult.Files[f]
-		if ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequireDocRule) {
+		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequireDocRule) {
 			continue
 		}
 
