@@ -43,7 +43,7 @@ options:
   # Include test files when applying the `max-len` rule.
   max-len/include-tests: false
 
-  # The start of a valid package godoc (e.g., "Package {package-name}...").
+  # The start of a valid package godoc (e.g., "Package <NAME>...").
   pkg-doc/start-with: Package
 
   # Include test files when applying the `pkg-doc` rule.
