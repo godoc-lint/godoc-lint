@@ -58,6 +58,7 @@ type RuleOptions struct {
 	MaxLenLength               uint   `option:"max-len/length"`
 	MaxLenIncludeTests         bool   `option:"max-len/include-tests"`
 	PkgDocStartWith            string `option:"pkg-doc/start-with"`
+	PkgDocIncludeTests         bool   `option:"pkg-doc/include-tests"`
 	SinglePkgDocIncludeTests   bool   `option:"single-pkg-doc/include-tests"`
 	RequirePkgDocIncludeTests  bool   `option:"require-pkg-doc/include-tests"`
 	RequireDocIncludeTests     bool   `option:"require-doc/include-tests"`

@@ -46,10 +46,20 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 		return
 	}
 
+	includeTests := actx.Config.GetRuleOptions().PkgDocIncludeTests
 	startWith := strings.TrimSpace(actx.Config.GetRuleOptions().PkgDocStartWith)
 
 	for _, f := range actx.Pass.Files {
 		if !util.IsFileApplicable(actx, f) {
+			continue
+		}
+
+		ft := util.GetPassFileToken(f, actx.Pass)
+		if ft == nil {
+			continue
+		}
+
+		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
 			continue
 		}
 

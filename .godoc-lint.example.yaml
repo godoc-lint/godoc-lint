@@ -46,6 +46,9 @@ options:
   # The start of a valid package godoc (e.g., "Package {package-name}...").
   pkg-doc/start-with: Package
 
+  # Include test files when applying the `pkg-doc` rule.
+  pkg-doc/include-tests: false
+
   # Include test files when applying the `single-pkg-doc` rule.
   single-pkg-doc/include-tests: false
 

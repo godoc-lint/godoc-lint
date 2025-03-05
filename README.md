@@ -12,7 +12,7 @@ Limits maximum line length for godocs. The default length is 77 characters (not 
 
 ### `pkg-doc`
 
-Ensures all package godocs start with "Package \[NAME\]". The "Package" word can be configured to any other value via the `pkg-doc/start-with` option.
+Ensures all package godocs start with "Package \[NAME\]". The "Package" word can be configured to any other value via the `pkg-doc/start-with` option. Test files are skipped by default. To enable the rule for them, the `pkg-doc/include-tests` option should be set to `true`.
 
 ### `single-pkg-doc`
 
