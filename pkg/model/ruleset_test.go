@@ -3,8 +3,9 @@ package model_test
 import (
 	"testing"
 
-	"github.com/godoc-lint/godoc-lint/pkg/model"
 	"github.com/stretchr/testify/require"
+
+	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
 
 func TestRuleSetListReturnsSortedSlice(t *testing.T) {

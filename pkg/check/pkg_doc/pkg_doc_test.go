@@ -3,8 +3,9 @@ package pkg_doc_test
 import (
 	"testing"
 
-	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
 )
 
 func TestCheckPkgDocPrefix(t *testing.T) {
