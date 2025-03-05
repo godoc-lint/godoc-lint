@@ -1,6 +1,7 @@
 # Default configuration
 version: "1.0"
 enable:
+  - pkg-doc
   - single-pkg-doc
   - start-with-name
 options:

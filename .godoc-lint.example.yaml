@@ -25,6 +25,7 @@ exclude: null
 #
 # See the linter docs for the list of supported rules.
 enable:
+  - pkg-doc
   - single-pkg-doc
   - start-with-name
 
