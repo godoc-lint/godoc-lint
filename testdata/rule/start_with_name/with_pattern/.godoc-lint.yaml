@@ -1,5 +1,5 @@
 enable:
   - start-with-name
 options:
-  start-with-name/skip-tests: true
+  start-with-name/include-tests: false
   start-with-name/pattern: "((A|a|An|an|THE|The|the) )?%"

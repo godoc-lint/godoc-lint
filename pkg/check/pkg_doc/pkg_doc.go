@@ -135,7 +135,7 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 		return
 	}
 
-	skipTests := actx.Config.GetRuleOptions().RequirePkgDocSkipTests
+	includeTests := actx.Config.GetRuleOptions().RequirePkgDocIncludeTests
 
 	pkgFiles := make(map[string][]*ast.File, 2)
 
@@ -144,16 +144,18 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 			continue
 		}
 
-		ir := actx.InspectorResult.Files[f]
-		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequirePkgDocRule) {
+		ft := util.GetPassFileToken(f, actx.Pass)
+		if ft == nil {
 			continue
 		}
 
-		if skipTests {
-			ft := util.GetPassFileToken(f, actx.Pass)
-			if ft == nil || strings.HasSuffix(ft.Name(), "_test.go") {
-				continue
-			}
+		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
+			continue
+		}
+
+		ir := actx.InspectorResult.Files[f]
+		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequirePkgDocRule) {
+			continue
 		}
 
 		pkg := f.Name.Name

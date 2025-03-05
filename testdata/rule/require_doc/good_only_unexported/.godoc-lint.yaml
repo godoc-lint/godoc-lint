@@ -1,6 +1,6 @@
 enable:
   - require-doc
 options:
-  require-doc/skip-tests: true
+  require-doc/include-tests: false
   require-doc/ignore-exported: true
   require-doc/ignore-unexported: false

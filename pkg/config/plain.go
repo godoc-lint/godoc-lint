@@ -20,12 +20,12 @@ type PlainConfig struct {
 type PlainRuleOptions struct {
 	MaxLen                     *uint   `option:"max-len" yaml:"max-len" mapstructure:"max-len"`
 	PkgDocStartWith            *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
-	RequirePkgDocSkipTests     *bool   `option:"require-pkg-doc/skip-tests" yaml:"require-pkg-doc/skip-tests" mapstructure:"require-pkg-doc/skip-tests"`
-	RequireDocSkipTests        *bool   `option:"require-doc/skip-tests" yaml:"require-doc/skip-tests" mapstructure:"require-doc/skip-tests"`
+	RequirePkgDocIncludeTests  *bool   `option:"require-pkg-doc/include-tests" yaml:"require-pkg-doc/include-tests" mapstructure:"require-pkg-doc/include-tests"`
+	RequireDocIncludeTests     *bool   `option:"require-doc/include-tests" yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`
 	RequireDocIgnoreExported   *bool   `option:"require-doc/ignore-exported" yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`
 	RequireDocIgnoreUnexported *bool   `option:"require-doc/ignore-unexported" yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
 	StartWithNamePattern       *string `option:"start-with-name/pattern" yaml:"start-with-name/pattern" mapstructure:"start-with-name/pattern"`
-	StartWithNameSkipTests     *bool   `option:"start-with-name/skip-tests" yaml:"start-with-name/skip-tests" mapstructure:"start-with-name/skip-tests"`
+	StartWithNameIncludeTests  *bool   `option:"start-with-name/include-tests" yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
 }
 
 func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {

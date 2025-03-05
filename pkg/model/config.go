@@ -57,10 +57,10 @@ type Config interface {
 type RuleOptions struct {
 	MaxLen                     uint   `option:"max-len"`
 	PkgDocStartWith            string `option:"pkg-doc/start-with"`
-	RequirePkgDocSkipTests     bool   `option:"require-pkg-doc/skip-tests"`
-	RequireDocSkipTests        bool   `option:"require-doc/skip-tests"`
+	RequirePkgDocIncludeTests  bool   `option:"require-pkg-doc/include-tests"`
+	RequireDocIncludeTests     bool   `option:"require-doc/include-tests"`
 	RequireDocIgnoreExported   bool   `option:"require-doc/ignore-exported"`
 	RequireDocIgnoreUnexported bool   `option:"require-doc/ignore-unexported"`
 	StartWithNamePattern       string `option:"start-with-name/pattern"`
-	StartWithNameSkipTests     bool   `option:"start-with-name/skip-tests"`
+	StartWithNameIncludeTests  bool   `option:"start-with-name/include-tests"`
 }

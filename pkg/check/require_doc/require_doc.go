@@ -30,7 +30,7 @@ func (r *RequireDocChecker) GetCoveredRules() model.RuleSet {
 
 // Apply implements the corresponding interface method.
 func (r *RequireDocChecker) Apply(actx *model.AnalysisContext) error {
-	skipTests := actx.Config.GetRuleOptions().RequireDocSkipTests
+	includeTests := actx.Config.GetRuleOptions().RequireDocIncludeTests
 	requirePublic := !actx.Config.GetRuleOptions().RequireDocIgnoreExported
 	requirePrivate := !actx.Config.GetRuleOptions().RequireDocIgnoreUnexported
 
@@ -48,7 +48,7 @@ func (r *RequireDocChecker) Apply(actx *model.AnalysisContext) error {
 			continue
 		}
 
-		if skipTests && strings.HasSuffix(ft.Name(), "_test.go") {
+		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
 			continue
 		}
 

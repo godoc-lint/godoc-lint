@@ -33,7 +33,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 		return nil
 	}
 
-	skipTests := actx.Config.GetRuleOptions().StartWithNameSkipTests
+	includeTests := actx.Config.GetRuleOptions().StartWithNameIncludeTests
 	startPattern := actx.Config.GetRuleOptions().StartWithNamePattern
 	_, matcher, err := getStartMatcher(startPattern)
 	if err != nil {
@@ -50,7 +50,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 			continue
 		}
 
-		if skipTests && strings.HasSuffix(ft.Name(), "_test.go") {
+		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
 			continue
 		}
 

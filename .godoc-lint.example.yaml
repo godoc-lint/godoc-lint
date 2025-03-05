@@ -42,11 +42,11 @@ options:
   # The start of a valid package godoc (e.g., "Package {package-name}...").
   pkg-doc/start-with: Package
 
-  # Skip test files when applying the `require-pkg-doc` rule.
-  require-pkg-doc/skip-tests: true
+  # Include test files when applying the `require-pkg-doc` rule.
+  require-pkg-doc/include-tests: false
 
-  # Skip test files when applying the `require-doc` rule.
-  require-doc/skip-tests: true
+  # Include test files when applying the `require-doc` rule.
+  require-doc/include-tests: false
 
   # Ignore exported (public) symbols when applying the `require-doc` rule.
   require-doc/ignore-exported: false
@@ -54,8 +54,8 @@ options:
   # Ignore unexported (private) symbols when applying the `require-doc` rule.
   require-doc/ignore-unexported: true
 
-  # Skip test files when applying the `start-with-name` rule.
-  start-with-name/skip-tests: true
+  # Include test files when applying the `start-with-name` rule.
+  start-with-name/include-tests: false
 
   # Acceptable start pattern (regexp) for godoc starte when applying the
   # `start-with-name` rule. The `%` placeholder is where the corresponding
