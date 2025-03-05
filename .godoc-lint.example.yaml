@@ -40,6 +40,9 @@ options:
   # tokens.
   max-len/length: 77
 
+  # Include test files when applying the `max-len` rule.
+  max-len/include-tests: false
+
   # The start of a valid package godoc (e.g., "Package {package-name}...").
   pkg-doc/start-with: Package
 

@@ -6,6 +6,7 @@ enable:
   - start-with-name
 options:
   max-len/length: 77
+  max-len/include-tests: false
   pkg-doc/start-with: Package
   require-pkg-doc/include-tests: false
   require-doc/include-tests: false

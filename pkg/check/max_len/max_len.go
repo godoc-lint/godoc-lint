@@ -29,12 +29,22 @@ func (r *MaxLenChecker) GetCoveredRules() model.RuleSet {
 
 // Apply implements the corresponding interface method.
 func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
+	includeTests := actx.Config.GetRuleOptions().MaxLenIncludeTests
 	maxLen := int(actx.Config.GetRuleOptions().MaxLenLength)
 
 	docs := make(map[*model.CommentGroup]struct{}, 10*len(actx.InspectorResult.Files))
 
 	for _, f := range actx.Pass.Files {
 		if !util.IsFileApplicable(actx, f) {
+			continue
+		}
+
+		ft := util.GetPassFileToken(f, actx.Pass)
+		if ft == nil {
+			continue
+		}
+
+		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
 			continue
 		}
 
