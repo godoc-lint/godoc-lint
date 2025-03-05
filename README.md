@@ -38,31 +38,40 @@ Godoc-Lint supports inline directives to temporarily skip enforcing given set of
 //godoclint:disable [[RULE] ...]
 ```
 
- For example, this will temporarily disable the `max-len` rule for the `Foo` symbol's godoc:
+For example, this will temporarily disable the `start-with-name` rule for the `Foo` symbol's godoc:
 
 ```go
-// Foo is a constant.
+// This is a constant.
 //
-//godoclint:disable max-len
+//godoclint:disable start-with-name
 const Foo = 0
 ```
 
-Any number of rules can be listed, separated with whitespaces. If no rule is provided, all rules will be disabled. For example, this will disable `max-len` and `name-prefix` rules for the `Foo` symbol's godoc:
+Any number of rules can be listed, separated with whitespaces. If no rule is provided, all rules will be disabled. For example, this will disable `start-with-name` and `max-len` rules for the `Foo` symbol's godoc:
 
 ```go
-// Foo is a function.
+// This is a function.
 //
-//godoclint:disable max-len name-prefix
+//godoclint:disable start-with-name max-len
 func Foo() {}
 ```
 
 It is also possible to use multiple `//godoclint:disable` directives:
 
 ```go
-// Foo is a function.
+// This is a function.
 //
+//godoclint:disable start-with-name
 //godoclint:disable max-len
-//godoclint:disable name-prefix
+func Foo() {}
+```
+
+There are cases where one would want to disable all linter rules for a specific declaration. This can be done by just omitting the rule names in the directive:
+
+```go
+// This is a function.
+//
+//godoclint:disable
 func Foo() {}
 ```
 
