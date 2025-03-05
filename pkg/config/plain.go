@@ -18,7 +18,7 @@ type PlainConfig struct {
 }
 
 type PlainRuleOptions struct {
-	MaxLen                     *uint   `option:"max-len" yaml:"max-len" mapstructure:"max-len"`
+	MaxLenLength               *uint   `option:"max-len/length" yaml:"max-len/length" mapstructure:"max-len/length"`
 	PkgDocStartWith            *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
 	RequirePkgDocIncludeTests  *bool   `option:"require-pkg-doc/include-tests" yaml:"require-pkg-doc/include-tests" mapstructure:"require-pkg-doc/include-tests"`
 	RequireDocIncludeTests     *bool   `option:"require-doc/include-tests" yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`

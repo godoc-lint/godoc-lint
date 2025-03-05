@@ -8,7 +8,7 @@ Below is a brief description of the linter's rules. Some rules are configurable 
 
 ### `max-len`
 
-Limits maximum line length for godocs. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens). The maximum line length can be configured via the `max-len` option.
+Limits maximum line length for godocs. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens). The maximum line length can be configured via the `max-len/length` option.
 
 ### `pkg-doc`
 

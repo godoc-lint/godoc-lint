@@ -28,34 +28,34 @@ func TestTransferOptions(t *testing.T) {
 	}, {
 		name: "empty and then non-empty",
 		sources: []*config.PlainRuleOptions{{}, {
-			MaxLen: uintPtr(999),
+			MaxLenLength: uintPtr(999),
 		}},
 		expected: &model.RuleOptions{
-			MaxLen: 999,
+			MaxLenLength: 999,
 		},
 	}, {
 		name: "non-empty and then empty",
 		sources: []*config.PlainRuleOptions{{
-			MaxLen: uintPtr(999),
+			MaxLenLength: uintPtr(999),
 		}, {}},
 		expected: &model.RuleOptions{
-			MaxLen: 999,
+			MaxLenLength: 999,
 		},
 	}, {
 		name: "non-empty and then non-empty",
 		sources: []*config.PlainRuleOptions{{
-			MaxLen: uintPtr(888),
+			MaxLenLength: uintPtr(888),
 		}, {
-			MaxLen: uintPtr(999),
+			MaxLenLength: uintPtr(999),
 		}},
 		expected: &model.RuleOptions{
-			MaxLen: 999,
+			MaxLenLength: 999,
 		},
 	}, {
 		name:    "default",
 		sources: []*config.PlainRuleOptions{def.Options},
 		expected: &model.RuleOptions{
-			MaxLen:                     77,
+			MaxLenLength:               77,
 			PkgDocStartWith:            "Package",
 			RequirePkgDocIncludeTests:  false,
 			RequireDocIncludeTests:     false,

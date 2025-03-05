@@ -29,7 +29,7 @@ func (r *MaxLenChecker) GetCoveredRules() model.RuleSet {
 
 // Apply implements the corresponding interface method.
 func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
-	maxLen := int(actx.Config.GetRuleOptions().MaxLen)
+	maxLen := int(actx.Config.GetRuleOptions().MaxLenLength)
 
 	docs := make(map[*model.CommentGroup]struct{}, 10*len(actx.InspectorResult.Files))
 

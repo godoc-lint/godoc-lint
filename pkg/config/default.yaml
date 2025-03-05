@@ -5,7 +5,7 @@ enable:
   - single-pkg-doc
   - start-with-name
 options:
-  max-len: 77
+  max-len/length: 77
   pkg-doc/start-with: Package
   require-pkg-doc/include-tests: false
   require-doc/include-tests: false
