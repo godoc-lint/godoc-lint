@@ -1,0 +1,4 @@
+enable:
+  - start-with-name
+options:
+  start-with-name/pattern: ""

@@ -61,6 +61,7 @@ func TestTransferOptions(t *testing.T) {
 			RequireDocSkipTests:        true,
 			RequireDocIgnoreExported:   false,
 			RequireDocIgnoreUnexported: true,
+			StartWithNamePattern:       "((A|a|An|an|THE|The|the) )?%",
 		},
 	},
 	}

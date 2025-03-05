@@ -26,6 +26,10 @@ Ensures that every Go package has godoc(s). By default, test files (i.e., `*_tes
 
 Ensures all exported and/or (optionally) unexported symbols have godocs. By default, symbols declared in test files, together with any unexported symbols are ignored. To include test files or unexported symbols the `require-doc/skip-tests` or `require-doc/ignore-unexported` options should be set to `false`. Although it is a rare scenario but one may want to ignore exported symbols, for which the `require-doc/ignore-exported` should be set to `true`.
 
+### `start-with-name`
+
+Checks godocs start with the corresponding symbol name. By default it allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `state-with-name/pattern` is set to empty, then all godocs have to start with the symbol names.
+
 ## Disabling rules
 
 `godoc-lint` supports inline directives to temporarily skip enforcing given set of rules. The directive must be formatted as:

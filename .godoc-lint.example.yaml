@@ -26,6 +26,7 @@ exclude: null
 # See the linter docs for the list of supported rules.
 enable:
   - single-pkg-doc
+  - start-with-name
 
 # List of rules to disable.
 disable: null
@@ -52,3 +53,9 @@ options:
 
   # Ignore unexported (private) symbols when applying the `require-doc` rule.
   require-doc/ignore-unexported: true
+
+  # Acceptable start pattern (regexp) for godoc starte when applying the
+  # `start-with-name` rule. The `%` placeholder is where the corresponding
+  # symbol name should should appear. An omitted placeholder means the symbol
+  # name should appear at the end of the pattern.
+  start-with-name/pattern: "((A|a|An|an|THE|The|the) )?%"
