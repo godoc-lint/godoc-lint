@@ -19,7 +19,7 @@ import (
 
 const (
 	metaName = "godoclint_inspect"
-	metaDoc  = "Pre-run inspector for godoclint."
+	metaDoc  = "Pre-run inspector for godoclint"
 	metaURL  = "https://github.com/godoc-lint/godoc-lint"
 )
 

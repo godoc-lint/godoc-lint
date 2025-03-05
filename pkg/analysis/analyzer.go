@@ -16,7 +16,7 @@ import (
 
 const (
 	metaName = "godoclint"
-	metaDoc  = "Checks Golang's documentation practice (godoc)."
+	metaDoc  = "Checks Golang's documentation practice (godoc)"
 	metaURL  = "https://github.com/godoc-lint/godoc-lint"
 )
 

@@ -1,6 +1,6 @@
-# What's `godoc-lint`?
+# What's Godoc-Lint?
 
-`godoc-lint` is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. While `gofmt` handles formatting and correct usage of godocs, still it does not enforce particular restrictions/stylings to godocs. Here is where `godoc-lint` comes into play by adding a set of extra rules to enhance readability, consistency, and developer experience.
+*Godoc-Lint* is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. While `gofmt` handles formatting and correct usage of godocs, still it does not enforce particular restrictions/stylings to godocs. Here is where Godoc-Lint comes into play by adding a set of extra rules to enhance readability, consistency, and developer experience.
 
 ## Rules
 
@@ -32,7 +32,7 @@ Checks godocs start with the corresponding symbol name. It allows English articl
 
 ## Disabling rules
 
-`godoc-lint` supports inline directives to temporarily skip enforcing given set of rules. The directive must be formatted as:
+Godoc-Lint supports inline directives to temporarily skip enforcing given set of rules. The directive must be formatted as:
 
 ```go
 //godoclint:disable [[RULE] ...]
@@ -88,4 +88,4 @@ Check out [`.godoc-lint.example.yaml`](./.godoc-lint.example.yaml) for an exampl
 
 ## Contributing
 
-`godoc-lint` loves to see developers contributing to it. So, please feel free to submit a [new issue](https://github.com/godoc-lint/godoc-lint/issues/new) for bug report, feature request, or any kind of discussion.
+Godoc-Lint loves to see developers contributing to it. So, please feel free to submit a [new issue](https://github.com/godoc-lint/godoc-lint/issues/new) for bug report, feature request, or any kind of discussion.
