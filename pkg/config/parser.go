@@ -22,7 +22,7 @@ func FromYAML(in []byte) (*PlainConfig, error) {
 	return &raw, nil
 }
 
-// FromYAML parses configuration from given file path.
+// FromYAMLFile parses configuration from given file path.
 func FromYAMLFile(path string) (*PlainConfig, error) {
 	in, err := os.ReadFile(path)
 	if err != nil {
