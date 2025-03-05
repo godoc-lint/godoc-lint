@@ -10,9 +10,12 @@ const (
 	MultiSingleFooBG = 0
 )
 
-const (
-	// This should be fine since it's a multi-name declaration.
-	MultiMultiFooBG, MultiMultiBarBG = 0, 0
+// godoc // want `godoc should start with symbol name \(pattern ""\)`
+const SingleSingleFooVarBG = 0
+
+var (
+	// godoc // want `godoc should start with symbol name \(pattern ""\)`
+	MultiSingleFooVarBG = 0
 )
 
 // godoc // want `godoc should start with symbol name \(pattern ""\)`
@@ -25,3 +28,12 @@ type (
 	// godoc // want `godoc should start with symbol name \(pattern ""\)`
 	TMultiBarBG int
 )
+
+// godoc // want `godoc should start with symbol name \(pattern ""\)`
+func FooFuncBG() {}
+
+// godoc // want `godoc should start with symbol name \(pattern ""\)`
+type TFooBG int
+
+// godoc // want `godoc should start with symbol name \(pattern ""\)`
+func (*TFooBG) FooFuncBG() {}

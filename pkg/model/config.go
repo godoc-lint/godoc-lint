@@ -62,4 +62,5 @@ type RuleOptions struct {
 	RequireDocIgnoreExported   bool   `option:"require-doc/ignore-exported"`
 	RequireDocIgnoreUnexported bool   `option:"require-doc/ignore-unexported"`
 	StartWithNamePattern       string `option:"start-with-name/pattern"`
+	StartWithNameSkipTests     bool   `option:"start-with-name/skip-tests"`
 }

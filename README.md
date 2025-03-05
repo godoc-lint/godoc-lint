@@ -28,7 +28,7 @@ Ensures all exported and/or (optionally) unexported symbols have godocs. By defa
 
 ### `start-with-name`
 
-Checks godocs start with the corresponding symbol name. By default it allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `state-with-name/pattern` is set to empty, then all godocs have to start with the symbol names.
+Checks godocs start with the corresponding symbol name. It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `start-with-name/pattern` is set to empty, then all godocs have to start with the symbol names. By default, test files are skipped. To enable the rule for test files, the `start-with-name/skip-tests` should be set to `false`.
 
 ## Disabling rules
 

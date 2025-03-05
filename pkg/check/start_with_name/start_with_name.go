@@ -33,6 +33,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 		return nil
 	}
 
+	skipTests := actx.Config.GetRuleOptions().StartWithNameSkipTests
 	startPattern := actx.Config.GetRuleOptions().StartWithNamePattern
 	_, matcher, err := getStartMatcher(startPattern)
 	if err != nil {
@@ -41,6 +42,15 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 
 	for _, f := range actx.Pass.Files {
 		if !util.IsFileApplicable(actx, f) {
+			continue
+		}
+
+		ft := util.GetPassFileToken(f, actx.Pass)
+		if ft == nil {
+			continue
+		}
+
+		if skipTests && strings.HasSuffix(ft.Name(), "_test.go") {
 			continue
 		}
 

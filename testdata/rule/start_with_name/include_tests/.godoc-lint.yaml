@@ -1,0 +1,5 @@
+enable:
+  - start-with-name
+options:
+  start-with-name/skip-tests: false
+  start-with-name/pattern: "%"
