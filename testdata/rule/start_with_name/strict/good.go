@@ -8,9 +8,8 @@ const (
 	MultiSingleFoo = 0
 )
 
-// This should be fine since it's a multi-name declaration:
-
 const (
+	// This should be fine since it's a multi-name declaration.
 	MultiMultiFoo, MultiMultiBar = 0, 0
 )
 
