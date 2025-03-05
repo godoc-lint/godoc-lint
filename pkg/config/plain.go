@@ -21,6 +21,7 @@ type PlainRuleOptions struct {
 	MaxLenLength               *uint   `option:"max-len/length" yaml:"max-len/length" mapstructure:"max-len/length"`
 	MaxLenIncludeTests         *bool   `option:"max-len/include-tests" yaml:"max-len/include-tests" mapstructure:"max-len/include-tests"`
 	PkgDocStartWith            *string `option:"pkg-doc/start-with" yaml:"pkg-doc/start-with" mapstructure:"pkg-doc/start-with"`
+	SinglePkgDocIncludeTests   *bool   `option:"single-pkg-doc/include-tests" yaml:"single-pkg-doc/include-tests" mapstructure:"single-pkg-doc/include-tests"`
 	RequirePkgDocIncludeTests  *bool   `option:"require-pkg-doc/include-tests" yaml:"require-pkg-doc/include-tests" mapstructure:"require-pkg-doc/include-tests"`
 	RequireDocIncludeTests     *bool   `option:"require-doc/include-tests" yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`
 	RequireDocIgnoreExported   *bool   `option:"require-doc/ignore-exported" yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`

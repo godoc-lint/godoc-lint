@@ -16,7 +16,7 @@ Ensures all package godocs start with "Package \[NAME\]". The "Package" word can
 
 ### `single-pkg-doc`
 
-Technically, every Go file in a package can have a godoc above the `package` statement. This rule enforces only one godoc, if any, for any package.
+Technically, every Go file in a package can have a godoc above the `package` statement. This rule enforces only one godoc, if any, for any package. Test files are skipped by default. To enable the rule for them, the `single-pkg-doc/include-tests` option should be set to `true`.
 
 ### `require-pkg-doc`
 

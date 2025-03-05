@@ -1,4 +1,4 @@
 // some header
 
-// this is a godoc. // want `package should have a single godoc \(2 found\)`
-package multiple_test
+// this is a godoc but it's ignored since this is a test file.
+package multiple

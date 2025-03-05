@@ -58,6 +58,7 @@ func TestTransferOptions(t *testing.T) {
 			MaxLenLength:               77,
 			MaxLenIncludeTests:         false,
 			PkgDocStartWith:            "Package",
+			SinglePkgDocIncludeTests:   false,
 			RequirePkgDocIncludeTests:  false,
 			RequireDocIncludeTests:     false,
 			RequireDocIgnoreExported:   false,
