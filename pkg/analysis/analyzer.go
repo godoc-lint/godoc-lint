@@ -3,7 +3,6 @@ package analysis
 import (
 	"errors"
 	"fmt"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -11,7 +10,6 @@ import (
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 	"github.com/godoc-lint/godoc-lint/pkg/util"
-	"github.com/godoc-lint/godoc-lint/pkg/version"
 )
 
 const (
@@ -46,12 +44,6 @@ func NewAnalyzer(baseDir string, cb model.ConfigBuilder, reg model.Registry, ins
 			Requires: []*analysis.Analyzer{inspector.GetAnalyzer()},
 		},
 	}
-
-	result.analyzer.Flags.BoolFunc("V", "print version and exit", func(s string) error {
-		fmt.Printf("%s %s\n", result.analyzer.Name, version.Version)
-		os.Exit(0)
-		return nil
-	})
 
 	configOverride := model.NewConfigOverride()
 	cb.SetOverride(configOverride)

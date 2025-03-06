@@ -12,6 +12,13 @@ import (
 	"github.com/godoc-lint/godoc-lint/pkg/inspect"
 )
 
+// There are intended to be populated at build time (via -ldflags option).
+var (
+	currentVersion     = "dev"
+	currentShortCommit = "0000000"
+	currentCommitDate  = "n/a"
+)
+
 func main() {
 	exitFunc := func(code int, err error) {
 		fmt.Fprintf(os.Stderr, "%v\n", err.Error())
@@ -29,5 +36,11 @@ func main() {
 	ocb := config.NewOnceConfigBuilder(cb)
 	inspector := inspect.NewInspector(ocb, exitFunc)
 	analyzer := analysis.NewAnalyzer(baseDir, ocb, reg, inspector, exitFunc)
+
+	analyzer.GetAnalyzer().Flags.BoolFunc("V", "print version and exit", func(s string) error {
+		fmt.Printf("%s %s (%s)\n", currentVersion, currentShortCommit, currentCommitDate)
+		os.Exit(0)
+		return nil
+	})
 	singlechecker.Main(analyzer.GetAnalyzer())
 }
