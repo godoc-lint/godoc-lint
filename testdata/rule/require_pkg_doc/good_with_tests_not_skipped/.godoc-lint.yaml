@@ -1,0 +1,4 @@
+enable:
+  - require-pkg-doc
+options:
+  require-pkg-doc/include-tests: true

@@ -8,6 +8,8 @@
 *.so
 *.dylib
 
+/godoclint
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -23,3 +25,11 @@ go.work.sum
 
 # env file
 .env
+
+# goreleaser
+dist/
+
+/.vscode/*
+!/.vscode/*.example
+
+/testdata/**/*.got.yaml

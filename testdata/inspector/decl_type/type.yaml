@@ -1,0 +1,83 @@
+symbol-decl:
+  - doc:
+      text: |
+        some godoc
+    kind: type
+    name: SingleFoo
+    trailing-doc:
+      text: |
+        trailing doc
+  - is-type-alias: true
+    kind: type
+    name: SingleFooNG
+  - doc:
+      text: |
+        some godoc
+    kind: type
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleFooMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - is-type-alias: true
+    kind: type
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleFooMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        first godoc
+    kind: type
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiFooMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - doc:
+      text: |
+        second godoc
+    kind: type
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiFooMultiline2
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - is-type-alias: true
+    kind: type
+    multi-spec-decl: true
+    multi-spec-index: 2
+    name: MultiFooMultiline3NG
+    parent-doc:
+      text: |
+        parent godoc
+  - is-type-alias: true
+    kind: type
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiFooMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - is-type-alias: true
+    kind: type
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiFooMultiline2NG
+    parent-doc:
+      text: |
+        parent godoc

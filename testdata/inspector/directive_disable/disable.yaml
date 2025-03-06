@@ -1,0 +1,64 @@
+disabled-rules:
+  all: true
+  rules:
+    - bar
+    - baz
+    - foo
+    - foo-at-end
+package-doc:
+  disabled-rules:
+    all: true
+    rules:
+      - bar
+      - foo
+symbol-decl:
+  - doc:
+      disabled-rules:
+        rules:
+          - yolo
+    kind: var
+    name: Foo
+  - doc:
+      disabled-rules:
+        rules:
+          - yolo
+      text: |
+        some godoc
+    kind: var
+    name: Bar
+  - doc:
+      disabled-rules:
+        all: true
+        rules:
+          - yolo
+      text: |
+        some godoc
+    kind: var
+    name: Baz
+  - doc:
+      disabled-rules:
+        rules:
+          - foo
+      text: |
+        first godoc
+    kind: var
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiFoo
+    parent-doc:
+      disabled-rules:
+        all: true
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        second godoc
+    kind: var
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiBar
+    parent-doc:
+      disabled-rules:
+        all: true
+      text: |
+        parent godoc

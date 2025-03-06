@@ -1,0 +1,268 @@
+symbol-decl:
+  - doc:
+      text: |
+        some godoc
+    kind: const
+    name: SingleSingleFoo
+    trailing-doc:
+      text: |
+        trailing doc
+  - kind: const
+    name: SingleSingleFooNG
+  - doc:
+      text: |
+        some godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    name: SingleDoubleFoo
+    trailing-doc:
+      text: |
+        trailing doc
+  - doc:
+      text: |
+        some godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    name: SingleDoubleBar
+    trailing-doc:
+      text: |
+        trailing doc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    name: SingleDoubleFooNG
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    name: SingleDoubleBarNG
+  - doc:
+      text: |
+        some godoc
+    kind: const
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleSingleFooMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - kind: const
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleSingleFooMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        first godoc
+    kind: const
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiSingleFooMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - doc:
+      text: |
+        second godoc
+    kind: const
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiSingleFooMultiline2
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - kind: const
+    multi-spec-decl: true
+    multi-spec-index: 2
+    name: MultiSingleFooMultiline3NG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiSingleFooMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiSingleFooMultiline2NG
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        some godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleDoubleFooMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - doc:
+      text: |
+        some godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleDoubleBarMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleDoubleFooMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: SingleDoubleBarMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - doc:
+      text: |
+        first godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiDoubleFooMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - doc:
+      text: |
+        first godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiDoubleBarMultiline
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - doc:
+      text: |
+        second godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiDoubleFooMultiline2
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - doc:
+      text: |
+        second godoc
+    kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiDoubleBarMultiline2
+    parent-doc:
+      text: |
+        parent godoc
+    trailing-doc:
+      text: |
+        trailing doc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    multi-spec-decl: true
+    multi-spec-index: 2
+    name: MultiDoubleFooMultiline3NG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    multi-spec-decl: true
+    multi-spec-index: 2
+    name: MultiDoubleBarMultiline3NG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiDoubleFooMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    multi-spec-decl: true
+    multi-spec-index: 0
+    name: MultiDoubleBarMultilineNG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 0
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiDoubleFooMultiline2NG
+    parent-doc:
+      text: |
+        parent godoc
+  - kind: const
+    multi-name-decl: true
+    multi-name-index: 1
+    multi-spec-decl: true
+    multi-spec-index: 1
+    name: MultiDoubleBarMultiline2NG
+    parent-doc:
+      text: |
+        parent godoc

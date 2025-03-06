@@ -1,0 +1,3 @@
+package-doc:
+  text: |
+    package godoc

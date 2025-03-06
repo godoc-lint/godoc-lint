@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch godoclint",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/godoclint",
+            "args": [
+                // "-config", "config.yaml",
+                // "-include", "/foo/",
+                // "-exclude", "/bar/",
+                // "-enable", "max-len",
+                // "-disable", "max-len",
+                "./..."
+            ],
+        },
+    ]
+}
