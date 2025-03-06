@@ -51,7 +51,7 @@ func TestDefaultConfigYAMLEqualsTheExample(t *testing.T) {
 	def, err := config.FromYAML(config.DefaultConfigYAML)
 	require.Nil(err)
 
-	example, err := config.FromYAMLFile("../../.godoc-lint.example.yaml")
+	example, err := config.FromYAMLFile("../../.godoc-lint.default.yaml")
 	require.Nil(err)
 
 	require.Equal(def, example, "default config does not match the example file")
