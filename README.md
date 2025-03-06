@@ -1,6 +1,10 @@
 # What's Godoc-Lint?
 
-*Godoc-Lint* is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. While `gofmt` handles formatting and correct usage of godocs, still it does not enforce particular restrictions/stylings to godocs. Here is where Godoc-Lint comes into play by adding a set of extra rules to enhance readability, consistency, and developer experience.
+*Godoc-Lint* is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. Godocs are well explained in this official Golang document, titled [*Go Doc Comments*](godoc-ref).
+
+[godoc-ref]: https://go.dev/doc/comment
+
+While `gofmt` handles formatting and correct usage of godocs, still it does not enforce particular restrictions/stylings to godocs. Here is where Godoc-Lint comes into play by adding a set of extra rules to enhance readability, consistency, and developer experience.
 
 > [!IMPORTANT]
 > Godoc-Lint is still under development (`v0.x.x`). So, the Go API (for using the linter as a dependency) is not fully stable until `v1.x.x` has been released. However, the CLI experience is stable enough at this stage.
