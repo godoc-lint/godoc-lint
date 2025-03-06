@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+version: 2
+project_name: godoclint
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+builds:
+  - id: godoclint
+    main: ./cmd/godoclint
+    binary: godoclint
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      # The linter is not yet available for Windows.
+      # - windows
+    ldflags:
+      - -s -w -X main.currentVersion={{.Version}} -X main.currentShortCommit={{.ShortCommit}} -X main.currentCommitDate={{.CommitDate}}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+archives:
+  - id: godoclint
+    format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
+release:
+  github:
+    owner: godoc-lint
+    name: godoc-lint
+  footer: |2-
+    ---
+    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
