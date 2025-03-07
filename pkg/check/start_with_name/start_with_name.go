@@ -40,25 +40,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 		return err
 	}
 
-	for _, f := range actx.Pass.Files {
-		if !util.IsFileApplicable(actx, f) {
-			continue
-		}
-
-		ft := util.GetPassFileToken(f, actx.Pass)
-		if ft == nil {
-			continue
-		}
-
-		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
-			continue
-		}
-
-		ir := actx.InspectorResult.Files[f]
-		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(StartWithNameRule) {
-			continue
-		}
-
+	for _, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(StartWithNameRule)) {
 		for _, decl := range ir.SymbolDecl {
 			if decl.Kind == model.SymbolDeclKindBad {
 				continue
