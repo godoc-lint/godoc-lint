@@ -18,8 +18,6 @@ builds:
       - darwin
       # The linter is not yet available for Windows.
       # - windows
-    ldflags:
-      - -s -w -X main.currentVersion={{.Version}} -X main.currentShortCommit={{.ShortCommit}} -X main.currentCommitDate={{.CommitDate}}
     mod_timestamp: "{{ .CommitTimestamp }}"
 archives:
   - id: godoclint
