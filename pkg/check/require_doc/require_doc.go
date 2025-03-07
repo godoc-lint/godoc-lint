@@ -2,7 +2,6 @@ package require_doc
 
 import (
 	"go/ast"
-	"strings"
 
 	"golang.org/x/tools/go/analysis"
 
@@ -38,25 +37,7 @@ func (r *RequireDocChecker) Apply(actx *model.AnalysisContext) error {
 		return nil
 	}
 
-	for _, f := range actx.Pass.Files {
-		if !util.IsFileApplicable(actx, f) {
-			continue
-		}
-
-		ft := util.GetPassFileToken(f, actx.Pass)
-		if ft == nil {
-			continue
-		}
-
-		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
-			continue
-		}
-
-		ir := actx.InspectorResult.Files[f]
-		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequireDocRule) {
-			continue
-		}
-
+	for _, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(RequireDocRule)) {
 		for _, decl := range ir.SymbolDecl {
 			isExported := ast.IsExported(decl.Name)
 			if isExported && !requirePublic || !isExported && !requirePrivate {

@@ -49,25 +49,7 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 	includeTests := actx.Config.GetRuleOptions().PkgDocIncludeTests
 	startWith := strings.TrimSpace(actx.Config.GetRuleOptions().PkgDocStartWith)
 
-	for _, f := range actx.Pass.Files {
-		if !util.IsFileApplicable(actx, f) {
-			continue
-		}
-
-		ft := util.GetPassFileToken(f, actx.Pass)
-		if ft == nil {
-			continue
-		}
-
-		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
-			continue
-		}
-
-		ir := actx.InspectorResult.Files[f]
-		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(PkgDocRule) {
-			continue
-		}
-
+	for f, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(PkgDocRule)) {
 		if ir.PackageDoc == nil {
 			continue
 		}
@@ -106,25 +88,7 @@ func checkSinglePkgDocRule(actx *model.AnalysisContext) {
 
 	documentedPkgs := make(map[string][]*ast.File, 2)
 
-	for _, f := range actx.Pass.Files {
-		if !util.IsFileApplicable(actx, f) {
-			continue
-		}
-
-		ft := util.GetPassFileToken(f, actx.Pass)
-		if ft == nil {
-			continue
-		}
-
-		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
-			continue
-		}
-
-		ir := actx.InspectorResult.Files[f]
-		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(SinglePkgDocRule) {
-			continue
-		}
-
+	for f, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(SinglePkgDocRule)) {
 		if ir.PackageDoc == nil || ir.PackageDoc.Text == "" {
 			continue
 		}
@@ -160,25 +124,7 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 
 	pkgFiles := make(map[string][]*ast.File, 2)
 
-	for _, f := range actx.Pass.Files {
-		if !util.IsFileApplicable(actx, f) {
-			continue
-		}
-
-		ft := util.GetPassFileToken(f, actx.Pass)
-		if ft == nil {
-			continue
-		}
-
-		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
-			continue
-		}
-
-		ir := actx.InspectorResult.Files[f]
-		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(RequirePkgDocRule) {
-			continue
-		}
-
+	for f := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(RequirePkgDocRule)) {
 		pkg := f.Name.Name
 		if _, ok := pkgFiles[pkg]; !ok {
 			pkgFiles[pkg] = make([]*ast.File, 0, len(actx.Pass.Files))
