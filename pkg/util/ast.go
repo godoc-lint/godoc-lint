@@ -3,6 +3,8 @@ package util
 import (
 	"go/ast"
 	"go/token"
+	"iter"
+	"strings"
 
 	"golang.org/x/tools/go/analysis"
 
@@ -33,4 +35,36 @@ func IsFileApplicable(actx *model.AnalysisContext, f *ast.File) bool {
 		return false
 	}
 	return actx.Config.IsPathApplicable(ft.Name())
+}
+
+// AnalysisApplicableFiles returns an iterator looping over files that are ready
+// to be analyzed.
+//
+// The yield-ed arguments are never nil.
+func AnalysisApplicableFiles(actx *model.AnalysisContext, includeTests bool, ruleSet model.RuleSet) iter.Seq2[*ast.File, *model.FileInspection] {
+	return func(yield func(*ast.File, *model.FileInspection) bool) {
+		for _, f := range actx.Pass.Files {
+			if !IsFileApplicable(actx, f) {
+				continue
+			}
+
+			ft := GetPassFileToken(f, actx.Pass)
+			if ft == nil {
+				continue
+			}
+
+			if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
+				continue
+			}
+
+			ir := actx.InspectorResult.Files[f]
+			if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.IsSupersetOf(ruleSet) {
+				continue
+			}
+
+			if !yield(f, ir) {
+				return
+			}
+		}
+	}
 }
