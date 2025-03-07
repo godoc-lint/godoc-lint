@@ -56,7 +56,17 @@ Below is a brief description of the linter's rules. Some rules are configurable 
 
 ### `pkg-doc`
 
-Ensures all package godocs start with "Package \<NAME\>". The "Package" word can be configured to any other value via the `pkg-doc/start-with` option. Test files are skipped by default. To enable the rule for them, the `pkg-doc/include-tests` option should be set to `true`.
+Ensures all package godocs start with "Package \<NAME\>":
+
+```go
+// This is an example package.  // (Bad)
+package foo
+
+// Package foo is an example.   // (Good)
+package foo
+```
+
+The "Package" word can be configured to any other value via the `pkg-doc/start-with` option. Test files are skipped by default. To enable the rule for them, the `pkg-doc/include-tests` option should be set to `true`.
 
 ### `single-pkg-doc`
 
@@ -68,7 +78,17 @@ Ensures that every Go package has godoc(s). By default, test files (i.e., `*_tes
 
 ### `start-with-name`
 
-Checks godocs start with the corresponding symbol name. It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `start-with-name/pattern` is set to empty, then all godocs have to start with the symbol names. By default, test files are skipped. To enable the rule for test files, the `start-with-name/include-tests` should be set to `true`.
+Checks godocs start with the corresponding symbol name:
+
+```go
+// This is a constant.  // (Bad)
+const foo = 0
+
+// foo is a constant.   // (Good)
+const foo = 0
+```
+
+It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `start-with-name/pattern` is set to empty, then all godocs have to start with the symbol names. By default, test files are skipped. To enable the rule for test files, the `start-with-name/include-tests` should be set to `true`.
 
 ### `require-doc`
 
@@ -76,7 +96,19 @@ Ensures all exported and/or (optionally) unexported symbols have godocs. By defa
 
 ### `max-len`
 
-Limits maximum line length for godocs. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens). The maximum line length can be configured via the `max-len/length` option. The rule skips test files by default. To enable it the `max-len/include-tests` option should be set to `true`.
+Limits maximum line length for godocs. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens):
+
+```go
+// This is a super loooooooooooooooooooooooooooooooooooooooooong godoc.  // (Bad)
+const foo = 0
+
+// This is not a super long godoc.   // (Good)
+const foo = 0
+```
+
+The pre-formatted sections (e.g., codes), or link definitions are ignored.
+
+The maximum line length can be configured via the `max-len/length` option. The rule skips test files by default. To enable it the `max-len/include-tests` option should be set to `true`.
 
 ## Disabling rules
 
