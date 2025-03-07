@@ -2,6 +2,7 @@ package check
 
 import (
 	"github.com/godoc-lint/godoc-lint/pkg/check/max_len"
+	"github.com/godoc-lint/godoc-lint/pkg/check/no_unused_link"
 	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/check/require_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/check/start_with_name"
@@ -32,6 +33,7 @@ func NewPopulatedRegistry() *Registry {
 		pkg_doc.NewPkgDocChecker(),
 		require_doc.NewRequireDocChecker(),
 		start_with_name.NewStartWithNameChecker(),
+		no_unused_link.NewNoUnusedLinkChecker(),
 	)
 }
 
