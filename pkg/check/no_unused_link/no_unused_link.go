@@ -1,8 +1,6 @@
 package no_unused_link
 
 import (
-	"strings"
-
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 	"github.com/godoc-lint/godoc-lint/pkg/util"
 )
@@ -31,25 +29,7 @@ func (r *NoUnusedLinkChecker) Apply(actx *model.AnalysisContext) error {
 
 	docs := make(map[*model.CommentGroup]struct{}, 10*len(actx.InspectorResult.Files))
 
-	for _, f := range actx.Pass.Files {
-		if !util.IsFileApplicable(actx, f) {
-			continue
-		}
-
-		ft := util.GetPassFileToken(f, actx.Pass)
-		if ft == nil {
-			continue
-		}
-
-		if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
-			continue
-		}
-
-		ir := actx.InspectorResult.Files[f]
-		if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.Has(NoUnusedLinkRule) {
-			continue
-		}
-
+	for _, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(NoUnusedLinkRule)) {
 		if ir.PackageDoc != nil {
 			docs[ir.PackageDoc] = struct{}{}
 		}
