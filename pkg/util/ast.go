@@ -24,27 +24,20 @@ func GetPassFileToken(f *ast.File, pass *analysis.Pass) *token.File {
 	return ft
 }
 
-// IsFileApplicable is a helper function to determine if the given AST file
-// should be included in analysis.
-func IsFileApplicable(actx *model.AnalysisContext, f *ast.File) bool {
-	if actx.InspectorResult == nil || actx.InspectorResult.Files[f] == nil {
-		return false
-	}
-	ft := GetPassFileToken(f, actx.Pass)
-	if ft == nil {
-		return false
-	}
-	return actx.Config.IsPathApplicable(ft.Name())
-}
-
 // AnalysisApplicableFiles returns an iterator looping over files that are ready
 // to be analyzed.
 //
 // The yield-ed arguments are never nil.
 func AnalysisApplicableFiles(actx *model.AnalysisContext, includeTests bool, ruleSet model.RuleSet) iter.Seq2[*ast.File, *model.FileInspection] {
 	return func(yield func(*ast.File, *model.FileInspection) bool) {
+		if actx.InspectorResult == nil {
+			return
+		}
+
 		for _, f := range actx.Pass.Files {
-			if !IsFileApplicable(actx, f) {
+			ir := actx.InspectorResult.Files[f]
+
+			if ir == nil {
 				continue
 			}
 
@@ -53,12 +46,15 @@ func AnalysisApplicableFiles(actx *model.AnalysisContext, includeTests bool, rul
 				continue
 			}
 
+			if !actx.Config.IsPathApplicable(ft.Name()) {
+				continue
+			}
+
 			if !includeTests && strings.HasSuffix(ft.Name(), "_test.go") {
 				continue
 			}
 
-			ir := actx.InspectorResult.Files[f]
-			if ir == nil || ir.DisabledRules.All || ir.DisabledRules.Rules.IsSupersetOf(ruleSet) {
+			if ir.DisabledRules.All || ir.DisabledRules.Rules.IsSupersetOf(ruleSet) {
 				continue
 			}
 
