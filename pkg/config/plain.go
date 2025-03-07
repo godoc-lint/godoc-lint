@@ -29,6 +29,7 @@ type PlainRuleOptions struct {
 	RequireDocIgnoreUnexported *bool   `option:"require-doc/ignore-unexported" yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
 	StartWithNamePattern       *string `option:"start-with-name/pattern" yaml:"start-with-name/pattern" mapstructure:"start-with-name/pattern"`
 	StartWithNameIncludeTests  *bool   `option:"start-with-name/include-tests" yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
+	NoUnusedLinkIncludeTests   *bool   `option:"no-unused-link/include-tests" yaml:"no-unused-link/include-tests" mapstructure:"no-unused-link/include-tests"`
 }
 
 func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {
