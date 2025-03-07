@@ -110,6 +110,16 @@ The pre-formatted sections (e.g., codes), or link definitions are ignored.
 
 The maximum line length can be configured via the `max-len/length` option. The rule skips test files by default. To enable it the `max-len/include-tests` option should be set to `true`.
 
+> [!TIP]
+> A long hyperlink in the godoc text can break this rule. In such cases, it is best to define the link at then end of the godoc and use the reference in the text:
+>
+> ```go
+> // Check this [link].
+> //
+> // [link]: https://foo.com/super/loooooooooooooooooooooooooooooooooooooooong/link
+> const foo = 0
+> ```
+
 ### `no-unused-link`
 
 Checks for unused links in the godoc text:
