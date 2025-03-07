@@ -110,6 +110,24 @@ The pre-formatted sections (e.g., codes), or link definitions are ignored.
 
 The maximum line length can be configured via the `max-len/length` option. The rule skips test files by default. To enable it the `max-len/include-tests` option should be set to `true`.
 
+### `no-unused-link`
+
+Checks for unused links in the godoc text:
+
+```go
+// This is a godoc with an unused link.  // (Bad)
+//
+// [docs]: https://foo.com/docs
+const foo = 0
+
+// Check [docs] here.                    // (Good)
+//
+// [docs]: https://foo.com/docs
+const foo = 0
+```
+
+The rule skips test files by default. To include them, the `no-unused-link/include-tests` option should be set to `true`.
+
 ## Disabling rules
 
 Godoc-Lint supports inline directives to temporarily skip enforcing given set of rules. The directive must be formatted as:
