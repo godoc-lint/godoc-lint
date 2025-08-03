@@ -41,6 +41,9 @@ func (r *PkgDocChecker) Apply(actx *model.AnalysisContext) error {
 	return nil
 }
 
+const commandPkgName = "main"
+const commandTestPkgName = "main_test"
+
 func checkPkgDocRule(actx *model.AnalysisContext) {
 	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(PkgDocRule)) {
 		return
@@ -55,6 +58,16 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(PkgDocRule) {
+			continue
+		}
+
+		if f.Name.Name == commandPkgName || f.Name.Name == commandTestPkgName {
+			// Skip command packages, as they are not required to start with
+			// "Package main" or "Package main_test".
+			//
+			// See for more details:
+			//   - https://github.com/godoc-lint/godoc-lint/issues/10
+			//   - https://go.dev/doc/comment#cmd
 			continue
 		}
 
