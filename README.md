@@ -68,6 +68,11 @@ package foo
 
 The "Package" word can be configured to any other value via the `pkg-doc/start-with` option. Test files are skipped by default. To enable the rule for them, the `pkg-doc/include-tests` option should be set to `true`.
 
+> [!NOTE]
+> As of [*Go Doc Comments*][godoc-cmd-ref], command packages (i.e., packages named `main`) are exceptions to this rule. So, Godoc-Lint ignores them and their test packages (i.e., `main_test`) by default.
+
+[godoc-cmd-ref]: https://go.dev/doc/comment#cmd
+
 ### `single-pkg-doc`
 
 Technically, every Go file in a package can have a godoc above the `package` statement. This rule enforces only one godoc, if any, for any package. Test files are skipped by default. To enable the rule for them, the `single-pkg-doc/include-tests` option should be set to `true`.
