@@ -33,8 +33,12 @@ func (c *config) IsPathApplicable(path string) bool {
 		p = path
 	}
 
+	// To ensure a consistent behavior on different platform (with the same
+	// configuration), we convert the path to a Unix-style path.
+	asUnixPath := filepath.ToSlash(p)
+
 	for _, re := range c.excludeAsRegexp {
-		if re.MatchString(p) {
+		if re.MatchString(asUnixPath) {
 			return false
 		}
 	}
@@ -42,7 +46,7 @@ func (c *config) IsPathApplicable(path string) bool {
 		return true
 	}
 	for _, re := range c.includeAsRegexp {
-		if re.MatchString(p) {
+		if re.MatchString(asUnixPath) {
 			return true
 		}
 	}
