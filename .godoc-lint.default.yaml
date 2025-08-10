@@ -48,6 +48,11 @@ enable:
   - start-with-name
 
 # List of rules to disable.
+#
+# Example:
+#   disable:
+#     - pkg-doc
+#     - single-pkg-doc
 disable: null
 
 # A map for setting individual rule options.
