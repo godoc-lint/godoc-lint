@@ -231,3 +231,7 @@ For example, in the file tree below package `foo` gets processed with the config
 ## Contributing
 
 Godoc-Lint loves to see developers contributing to it. So, please feel free to submit a [new issue](https://github.com/godoc-lint/godoc-lint/issues/new) for bug report, feature request, or any kind of discussion.
+
+## Links
+
+- [Go Doc Comments](https://go.dev/doc/comment)
