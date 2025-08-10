@@ -1,6 +1,9 @@
 # What's Godoc-Lint?
 
-*Godoc-Lint* is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. Godocs are well explained in this official Golang document, titled [*Go Doc Comments*][godoc-ref].
+[![Go Reference](https://pkg.go.dev/badge/github.com/godoc-lint/godoc-lint.svg)](https://pkg.go.dev/github.com/godoc-lint/godoc-lint)
+[![CI](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml/badge.svg)](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml)
+
+*Godoc-Lint* is a *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. Godocs are well explained in this official Golang document, titled [*Go Doc Comments*][godoc-ref].
 
 [godoc-ref]: https://go.dev/doc/comment
 
