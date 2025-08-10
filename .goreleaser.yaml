@@ -16,8 +16,7 @@ builds:
     goos:
       - linux
       - darwin
-      # The linter is not yet available for Windows.
-      # - windows
+      - windows
     mod_timestamp: "{{ .CommitTimestamp }}"
 archives:
   - id: godoclint
