@@ -19,9 +19,6 @@ However, users can also install Godoc-Lint from source:
 go install github.com/godoc-lint/godoc-lint/cmd/godoclint
 ```
 
-> [!WARNING]
-> Godoc-Lint is not fully tested on Windows yet. That is why Windows compatible binaries are not included in the current releases. Windows users should try the `go install` approach.
-
 [releases]: https://github.com/godoc-lint/godoc-lint/releases
 
 ## Usage
