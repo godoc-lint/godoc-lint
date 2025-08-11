@@ -82,10 +82,10 @@ func NewAnalyzer(baseDir string, cb model.ConfigBuilder, reg model.Registry, ins
 		}
 	}
 
-	result.analyzer.Flags.Func("include", "regexp path to include (can be used multiple times)", walkNonEmpty(func(s string) {
+	result.analyzer.Flags.Func("include", "regexp path (Unix style) to include (can be used multiple times)", walkNonEmpty(func(s string) {
 		configOverride.Include = append(configOverride.Include, s)
 	}))
-	result.analyzer.Flags.Func("exclude", "regexp path to exclude (can be used multiple times)", walkNonEmpty(func(s string) {
+	result.analyzer.Flags.Func("exclude", "regexp path (Unix style) to exclude (can be used multiple times)", walkNonEmpty(func(s string) {
 		configOverride.Exclude = append(configOverride.Exclude, s)
 	}))
 	result.analyzer.Flags.Func("enable", "comma-separated rule names to enable", walkNonEmptyCSV(func(s string) {
