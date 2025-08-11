@@ -73,12 +73,15 @@ func TestIsPathUnderBaseDir(t *testing.T) {
 		baseDir:  "C:\\foo",
 		path:     "C:\\foo\\..\\bar",
 		expected: false,
+	}, {
+		name:     "not under, different drives", // (See issue #16)
+		baseDir:  "C:\\foo",
+		path:     "D:\\bar",
+		expected: false,
 	},
 	}
 
 	for _, tt := range tests {
-		actual, err := util.IsPathUnderBaseDir(tt.baseDir, tt.path)
-		assert.Nil(err, "case %q", tt.name)
-		assert.Equal(tt.expected, actual, "case %q", tt.name)
+		assert.Equal(tt.expected, util.IsPathUnderBaseDir(tt.baseDir, tt.path), "case %q", tt.name)
 	}
 }

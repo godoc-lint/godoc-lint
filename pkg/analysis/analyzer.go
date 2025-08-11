@@ -82,10 +82,10 @@ func NewAnalyzer(baseDir string, cb model.ConfigBuilder, reg model.Registry, ins
 		}
 	}
 
-	result.analyzer.Flags.Func("include", "regexp path to include (can be used multiple times)", walkNonEmpty(func(s string) {
+	result.analyzer.Flags.Func("include", "regexp path (Unix style) to include (can be used multiple times)", walkNonEmpty(func(s string) {
 		configOverride.Include = append(configOverride.Include, s)
 	}))
-	result.analyzer.Flags.Func("exclude", "regexp path to exclude (can be used multiple times)", walkNonEmpty(func(s string) {
+	result.analyzer.Flags.Func("exclude", "regexp path (Unix style) to exclude (can be used multiple times)", walkNonEmpty(func(s string) {
 		configOverride.Exclude = append(configOverride.Exclude, s)
 	}))
 	result.analyzer.Flags.Func("enable", "comma-separated rule names to enable", walkNonEmptyCSV(func(s string) {
@@ -118,13 +118,7 @@ func (a *Analyzer) run(pass *analysis.Pass) (any, error) {
 		return nil, err
 	}
 
-	if yes, err := util.IsPathUnderBaseDir(a.baseDir, ft.Name()); err != nil {
-		err := fmt.Errorf("cannot examine path structure: %w", err)
-		if a.exitFunc != nil {
-			a.exitFunc(2, err)
-		}
-		return nil, err
-	} else if !yes {
+	if !util.IsPathUnderBaseDir(a.baseDir, ft.Name()) {
 		return nil, nil
 	}
 

@@ -25,7 +25,7 @@ on:
 
 jobs:
   build-and-test-ubuntu:
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_on_ubuntu }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.run_on_ubuntu }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
 
   build-and-test-macos:
     runs-on: macos-latest
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_on_macos }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_on_macos }}
     steps:
     - uses: actions/checkout@v4
 
@@ -64,7 +64,7 @@ jobs:
 
   build-and-test-windows:
     runs-on: windows-latest
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_on_windows }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_on_windows }}
     steps:
     - uses: actions/checkout@v4
 

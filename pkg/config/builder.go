@@ -38,9 +38,7 @@ func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainCon
 		panic("cannot parse default config")
 	}
 
-	if yes, err := util.IsPathUnderBaseDir(cb.baseDir, cwd); err != nil {
-		return nil, nil, "", err
-	} else if !yes {
+	if !util.IsPathUnderBaseDir(cb.baseDir, cwd) {
 		if pcfg, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
 			return nil, nil, "", err
 		} else if pcfg != nil {
