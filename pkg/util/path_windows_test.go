@@ -73,6 +73,11 @@ func TestIsPathUnderBaseDir(t *testing.T) {
 		baseDir:  "C:\\foo",
 		path:     "C:\\foo\\..\\bar",
 		expected: false,
+	}, {
+		name:     "not under, different drives", // (See issue #16)
+		baseDir:  "C:\\foo",
+		path:     "D:\\bar",
+		expected: false,
 	},
 	}
 
