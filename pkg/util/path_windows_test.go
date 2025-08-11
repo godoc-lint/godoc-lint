@@ -77,8 +77,6 @@ func TestIsPathUnderBaseDir(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		actual, err := util.IsPathUnderBaseDir(tt.baseDir, tt.path)
-		assert.Nil(err, "case %q", tt.name)
-		assert.Equal(tt.expected, actual, "case %q", tt.name)
+		assert.Equal(tt.expected, util.IsPathUnderBaseDir(tt.baseDir, tt.path), "case %q", tt.name)
 	}
 }
