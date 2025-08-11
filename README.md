@@ -1,6 +1,9 @@
 # What's Godoc-Lint?
 
-*Godoc-Lint* is a (little) opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. Godocs are well explained in this official Golang document, titled [*Go Doc Comments*][godoc-ref].
+[![Go Reference](https://pkg.go.dev/badge/github.com/godoc-lint/godoc-lint.svg)](https://pkg.go.dev/github.com/godoc-lint/godoc-lint)
+[![CI](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml/badge.svg)](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml)
+
+*Godoc-Lint* is a *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. Godocs are well explained in this official Golang document, titled [*Go Doc Comments*][godoc-ref].
 
 [godoc-ref]: https://go.dev/doc/comment
 
@@ -18,9 +21,6 @@ However, users can also install Godoc-Lint from source:
 ```sh
 go install github.com/godoc-lint/godoc-lint/cmd/godoclint
 ```
-
-> [!WARNING]
-> Godoc-Lint is not fully tested on Windows yet. That is why Windows compatible binaries are not included in the current releases. Windows users should try the `go install` approach.
 
 [releases]: https://github.com/godoc-lint/godoc-lint/releases
 
@@ -43,12 +43,15 @@ Godoc-Lint looks for `.godoc-lint.yaml` file in the working directory for config
 
 Although it is best to set the configuration parameters in a file, there are a number of CLI options to modify linter parameters:
 
-| Option     | Description                                                          |
-| ---------- | -------------------------------------------------------------------- |
-| `-enable`  | Comma-separated list of rules to enable (multiple usage allowed)     |
-| `-disable` | Comma-separated list of rules to disable (multiple usage allowed)    |
-| `-include` | Regexp pattern of relative paths to include (multiple usage allowed) |
-| `-exclude` | Regexp pattern of relative paths to exclude (multiple usage allowed) |
+| Option        | Description                                                          |
+| ------------- | -------------------------------------------------------------------- |
+| `-enable`     | Comma-separated list of rules to enable (multiple usage allowed)     |
+| `-disable`    | Comma-separated list of rules to disable (multiple usage allowed)    |
+| `-include`\* | Regexp pattern of relative paths to include (multiple usage allowed) |
+| `-exclude`\* | Regexp pattern of relative paths to exclude (multiple usage allowed) |
+
+> [!WARNING]
+> **(\*)** The path patterns supplied via `-include` or `-exclude` options should assume Unix-like paths (i.e. separated by forward slashes, `/`). This is to ensure a consistent behavior across different platforms.
 
 ## Rules
 
@@ -228,3 +231,7 @@ For example, in the file tree below package `foo` gets processed with the config
 ## Contributing
 
 Godoc-Lint loves to see developers contributing to it. So, please feel free to submit a [new issue](https://github.com/godoc-lint/godoc-lint/issues/new) for bug report, feature request, or any kind of discussion.
+
+## Links
+
+- [Go Doc Comments](https://go.dev/doc/comment)
