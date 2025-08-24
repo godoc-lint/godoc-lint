@@ -32,11 +32,7 @@ func (cb *ConfigBuilder) GetConfig(cwd string) (model.Config, error) {
 }
 
 func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainConfig, string, error) {
-	def, err := FromYAML(defaultConfigYAML)
-	if err != nil {
-		// This should never happen.
-		panic("cannot parse default config")
-	}
+	def := getDefaultPlainConfig()
 
 	if !util.IsPathUnderBaseDir(cb.baseDir, cwd) {
 		if pcfg, err := cb.resolvePlainConfigAtBaseDir(); err != nil {

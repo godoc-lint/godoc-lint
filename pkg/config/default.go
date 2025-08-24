@@ -2,6 +2,7 @@ package config
 
 import (
 	_ "embed"
+	"sync"
 )
 
 // defaultConfigFiles is the list of default configuration file names.
@@ -18,3 +19,13 @@ var defaultConfigFiles = []string{
 //
 //go:embed default.yaml
 var defaultConfigYAML []byte
+
+// getDefaultPlainConfig returns the parsed default configuration.
+var getDefaultPlainConfig = sync.OnceValue(func() *PlainConfig {
+	pcfg, err := FromYAML(defaultConfigYAML)
+	if err != nil {
+		// This should never happen.
+		panic("cannot parse default config")
+	}
+	return pcfg
+})
