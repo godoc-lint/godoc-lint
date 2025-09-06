@@ -12,5 +12,5 @@ func IsPathUnderBaseDir(baseDir, path string) bool {
 	if err != nil {
 		return false
 	}
-	return rel == "." || !(rel == ".." || strings.HasPrefix(filepath.ToSlash(rel), "../"))
+	return rel == "." || rel != ".." && !strings.HasPrefix(filepath.ToSlash(rel), "../")
 }
