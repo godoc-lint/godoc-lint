@@ -8,10 +8,7 @@ import (
 
 	"golang.org/x/tools/go/analysis/singlechecker"
 
-	"github.com/godoc-lint/godoc-lint/pkg/analysis"
-	"github.com/godoc-lint/godoc-lint/pkg/check"
-	"github.com/godoc-lint/godoc-lint/pkg/config"
-	"github.com/godoc-lint/godoc-lint/pkg/inspect"
+	"github.com/godoc-lint/godoc-lint/pkg/compose"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 	"github.com/godoc-lint/godoc-lint/pkg/version"
 )
@@ -28,16 +25,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	reg := check.NewPopulatedRegistry()
-	cb := config.NewConfigBuilder(baseDir, reg.GetCoveredRules())
-	ocb := config.NewOnceConfigBuilder(cb)
-	inspector := inspect.NewInspector(ocb, exitFunc)
-	analyzer := analysis.NewAnalyzer(baseDir, ocb, reg, inspector, exitFunc)
+	composition := compose.Compose(compose.CompositionConfig{
+		BaseDir:  baseDir,
+		ExitFunc: exitFunc,
+	})
 
 	configOverride := model.NewConfigOverride()
-	ocb.SetOverride(configOverride)
+	composition.ConfigBuilder.SetOverride(configOverride)
 
-	analyzer.GetAnalyzer().Flags.Func("config", "path to config file", func(s string) error {
+	composition.Analyzer.GetAnalyzer().Flags.Func("config", "path to config file", func(s string) error {
 		if configOverride.ConfigFilePath != nil {
 			return errors.New("config file is set multiple times")
 		}
@@ -71,24 +67,24 @@ func main() {
 		}
 	}
 
-	analyzer.GetAnalyzer().Flags.Func("include", "regexp path (Unix style) to include (can be used multiple times)", walkNonEmpty(func(s string) {
+	composition.Analyzer.GetAnalyzer().Flags.Func("include", "regexp path (Unix style) to include (can be used multiple times)", walkNonEmpty(func(s string) {
 		configOverride.Include = append(configOverride.Include, s)
 	}))
-	analyzer.GetAnalyzer().Flags.Func("exclude", "regexp path (Unix style) to exclude (can be used multiple times)", walkNonEmpty(func(s string) {
+	composition.Analyzer.GetAnalyzer().Flags.Func("exclude", "regexp path (Unix style) to exclude (can be used multiple times)", walkNonEmpty(func(s string) {
 		configOverride.Exclude = append(configOverride.Exclude, s)
 	}))
-	analyzer.GetAnalyzer().Flags.Func("enable", "comma-separated rule names to enable", walkNonEmptyCSV(func(s string) {
+	composition.Analyzer.GetAnalyzer().Flags.Func("enable", "comma-separated rule names to enable", walkNonEmptyCSV(func(s string) {
 		configOverride.Enable = append(configOverride.Enable, s)
 	}))
-	analyzer.GetAnalyzer().Flags.Func("disable", "comma-separated rule names to disable", walkNonEmptyCSV(func(s string) {
+	composition.Analyzer.GetAnalyzer().Flags.Func("disable", "comma-separated rule names to disable", walkNonEmptyCSV(func(s string) {
 		configOverride.Disable = append(configOverride.Disable, s)
 	}))
 
-	analyzer.GetAnalyzer().Flags.BoolFunc("V", "print version and exit", func(s string) error {
+	composition.Analyzer.GetAnalyzer().Flags.BoolFunc("V", "print version and exit", func(s string) error {
 		fmt.Println(version.Current)
 		os.Exit(0)
 		return nil
 	})
 
-	singlechecker.Main(analyzer.GetAnalyzer())
+	singlechecker.Main(composition.Analyzer.GetAnalyzer())
 }
