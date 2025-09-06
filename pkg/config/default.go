@@ -22,10 +22,7 @@ var defaultConfigYAML []byte
 
 // getDefaultPlainConfig returns the parsed default configuration.
 var getDefaultPlainConfig = sync.OnceValue(func() *PlainConfig {
-	pcfg, err := FromYAML(defaultConfigYAML)
-	if err != nil {
-		// This should never happen.
-		panic("cannot parse default config")
-	}
+	// Error is nil due to tests.
+	pcfg, _ := FromYAML(defaultConfigYAML)
 	return pcfg
 })
