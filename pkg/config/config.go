@@ -9,13 +9,31 @@ import (
 
 // config represents the godoc-lint analyzer configuration.
 type config struct {
+	// cwd holds the directory that the configuration is applied to. This is the
+	// way to find out relative paths to include/exclude based on the config
+	// file.
 	cwd string
+
+	// configFilePath holds the path to the configuration file. If there is no
+	// configuration file, which is the case when the default is used, this will
+	// be an empty string.
+	configFilePath string
 
 	includeAsRegexp []*regexp.Regexp
 	excludeAsRegexp []*regexp.Regexp
 	enabledRules    *model.RuleSet
 	disabledRules   *model.RuleSet
 	options         *model.RuleOptions
+}
+
+// GetConfigFilePath implements the corresponding interface method.
+func (c *config) GetConfigFilePath() string {
+	return c.configFilePath
+}
+
+// GetCWD implements the corresponding interface method.
+func (c *config) GetCWD() string {
+	return c.cwd
 }
 
 // IsAnyRuleApplicable implements the corresponding interface method.
