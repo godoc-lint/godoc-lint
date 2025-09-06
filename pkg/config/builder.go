@@ -16,6 +16,13 @@ type ConfigBuilder struct {
 	baseDir      string
 	coveredRules model.RuleSet
 	override     *model.ConfigOverride
+
+	// baseDirPlainConfig holds the plain config for the base directory.
+	//
+	// This is meant to be used for integrating with umbrella linters (e.g.
+	// golangci-lint) where the root config comes from a different
+	// source/format.
+	baseDirPlainConfig *PlainConfig
 }
 
 // NewConfigBuilder crates a new instance of the corresponding struct.
@@ -26,65 +33,78 @@ func NewConfigBuilder(baseDir string, coveredRules model.RuleSet) *ConfigBuilder
 	}
 }
 
+func (cb *ConfigBuilder) WithBaseDirPlainConfig(baseDirPlainConfig *PlainConfig) *ConfigBuilder {
+	cb.baseDirPlainConfig = baseDirPlainConfig
+	return cb
+}
+
 // GetConfig implements the corresponding interface method.
 func (cb *ConfigBuilder) GetConfig(cwd string) (model.Config, error) {
 	return cb.build(cwd)
 }
 
-func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainConfig, string, error) {
-	def, err := FromYAML(defaultConfigYAML)
-	if err != nil {
-		// This should never happen.
-		panic("cannot parse default config")
-	}
+func (cb *ConfigBuilder) resolvePlainConfig(cwd string) (*PlainConfig, *PlainConfig, string, string, error) {
+	def := getDefaultPlainConfig()
 
 	if !util.IsPathUnderBaseDir(cb.baseDir, cwd) {
-		if pcfg, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
-			return nil, nil, "", err
+		if pcfg, filePath, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
+			return nil, nil, "", "", err
 		} else if pcfg != nil {
-			return pcfg, def, cb.baseDir, nil
+			return pcfg, def, cb.baseDir, filePath, nil
 		}
-		return def, def, cb.baseDir, nil
+		return def, def, cb.baseDir, "", nil
 	}
 
 	path := cwd
 	for {
 		rel, err := filepath.Rel(cb.baseDir, path)
 		if err != nil {
-			return nil, nil, "", err
+			return nil, nil, "", "", err
 		}
 
 		if rel == "." {
-			if pcfg, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
-				return nil, nil, "", err
+			if pcfg, filePath, err := cb.resolvePlainConfigAtBaseDir(); err != nil {
+				return nil, nil, "", "", err
 			} else if pcfg != nil {
-				return pcfg, def, cb.baseDir, nil
+				return pcfg, def, cb.baseDir, filePath, nil
 			}
-			return def, def, cb.baseDir, nil
+			return def, def, cb.baseDir, "", nil
 		}
 
-		if pcfg, err := findConventionalConfigFile(path); err != nil {
-			return nil, nil, "", err
+		if pcfg, filePath, err := findConventionalConfigFile(path); err != nil {
+			return nil, nil, "", "", err
 		} else if pcfg != nil {
-			return pcfg, def, path, nil
+			return pcfg, def, path, filePath, nil
 		}
 
 		path = filepath.Dir(path)
 	}
 }
 
-func (cb *ConfigBuilder) resolvePlainConfigAtBaseDir() (*PlainConfig, error) {
-	if cb.override == nil || cb.override.ConfigFilePath == nil {
-		return findConventionalConfigFile(cb.baseDir)
+func (cb *ConfigBuilder) resolvePlainConfigAtBaseDir() (*PlainConfig, string, error) {
+	// TODO(babakks): refactor this to a sync.OnceValue for performance
+
+	if cb.override != nil && cb.override.ConfigFilePath != nil {
+		pcfg, err := FromYAMLFile(*cb.override.ConfigFilePath)
+		if err != nil {
+			return nil, "", err
+		}
+		return pcfg, *cb.override.ConfigFilePath, nil
 	}
-	pcfg, err := FromYAMLFile(*cb.override.ConfigFilePath)
-	if err != nil {
-		return nil, err
+
+	if pcfg, filePath, err := findConventionalConfigFile(cb.baseDir); err != nil {
+		return nil, "", err
+	} else if pcfg != nil {
+		return pcfg, filePath, nil
 	}
-	return pcfg, nil
+
+	if cb.baseDirPlainConfig != nil {
+		return cb.baseDirPlainConfig, "", nil
+	}
+	return nil, "", nil
 }
 
-func findConventionalConfigFile(dir string) (*PlainConfig, error) {
+func findConventionalConfigFile(dir string) (*PlainConfig, string, error) {
 	for _, dcf := range defaultConfigFiles {
 		path := filepath.Join(dir, dcf)
 		if fi, err := os.Stat(path); err != nil || fi.IsDir() {
@@ -92,11 +112,11 @@ func findConventionalConfigFile(dir string) (*PlainConfig, error) {
 		}
 		pcfg, err := FromYAMLFile(path)
 		if err != nil {
-			return nil, err
+			return nil, "", err
 		}
-		return pcfg, nil
+		return pcfg, path, nil
 	}
-	return nil, nil
+	return nil, "", nil
 }
 
 // build creates the configuration struct.
@@ -111,7 +131,7 @@ func findConventionalConfigFile(dir string) (*PlainConfig, error) {
 //   - Applies override flags (e.g., enable, or disable).
 //   - Validates the final configuration.
 func (cb *ConfigBuilder) build(cwd string) (*config, error) {
-	pcfg, def, configCWD, err := cb.resolvePlainConfig(cwd)
+	pcfg, def, configCWD, configFilePath, err := cb.resolvePlainConfig(cwd)
 	if err != nil {
 		return nil, err
 	}
@@ -211,7 +231,8 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	}
 
 	return &config{
-		cwd: configCWD,
+		cwd:            configCWD,
+		configFilePath: configFilePath,
 
 		enabledRules:    resolvedEnabledRuleSet,
 		disabledRules:   resolvedDisabledRuleSet,

@@ -39,6 +39,15 @@ func NewConfigOverride() *ConfigOverride {
 
 // Config defines an analyzer configuration.
 type Config interface {
+	// GetCWD returns the directory that the configuration is applied to. This
+	// is the base to compute relative paths to include/exclude files.
+	GetCWD() string
+
+	// GetConfigFilePath returns the path to the configuration file. If there is
+	// no configuration file, which is the case when the default is used, this
+	// will be an empty string.
+	GetConfigFilePath() string
+
 	// IsAnyRuleEnabled determines if any of the given rule names is among
 	// enabled rules, or not among disabled rules.
 	IsAnyRuleApplicable(RuleSet) bool
