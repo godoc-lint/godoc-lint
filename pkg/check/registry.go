@@ -40,7 +40,7 @@ func NewPopulatedRegistry() *Registry {
 // Add implements the corresponding interface method.
 func (r *Registry) Add(checker model.Checker) {
 	if _, ok := r.checkers[checker]; ok {
-		panic("checker already registered")
+		return
 	}
 	r.coveredRules = r.coveredRules.Merge(checker.GetCoveredRules())
 	r.checkers[checker] = struct{}{}
