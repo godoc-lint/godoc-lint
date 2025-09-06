@@ -25,3 +25,19 @@ jobs:
       - name: test
         shell: bash
         run: go test -v -count=1 ./...
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: latest
+      - name: tidy go.mod
+        run: go mod tidy -diff
+        shell: bash
