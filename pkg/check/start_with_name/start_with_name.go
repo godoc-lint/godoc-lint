@@ -2,6 +2,7 @@ package start_with_name
 
 import (
 	"fmt"
+	"go/ast"
 	"regexp"
 	"strings"
 
@@ -34,6 +35,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 	}
 
 	includeTests := actx.Config.GetRuleOptions().StartWithNameIncludeTests
+	includePrivate := actx.Config.GetRuleOptions().StartWithNameIncludeUnexported
 	startPattern := actx.Config.GetRuleOptions().StartWithNamePattern
 	_, matcher, err := getStartMatcher(startPattern)
 	if err != nil {
@@ -42,6 +44,11 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 
 	for _, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(StartWithNameRule)) {
 		for _, decl := range ir.SymbolDecl {
+			isExported := ast.IsExported(decl.Name)
+			if !isExported && !includePrivate {
+				continue
+			}
+
 			if decl.Kind == model.SymbolDeclKindBad {
 				continue
 			}
