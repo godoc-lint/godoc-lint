@@ -90,13 +90,15 @@ Checks godocs start with the corresponding symbol name:
 
 ```go
 // This is a constant.  // (Bad)
-const foo = 0
+const Foo = 0
 
 // foo is a constant.   // (Good)
-const foo = 0
+const Foo = 0
 ```
 
-It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `start-with-name/pattern` is set to empty, then all godocs have to start with the symbol names. By default, test files are skipped. To enable the rule for test files, the `start-with-name/include-tests` should be set to `true`.
+It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `start-with-name/pattern` is set to empty, then all godocs have to start with the symbol names. 
+
+By default, unexported symbols are skipped. To include them the `start-with-name/include-unexported` option should be set to `true`. Also test files are skipped. To enable the rule for test files, the `start-with-name/include-tests` option should be set to `true`.
 
 ### `require-doc`
 

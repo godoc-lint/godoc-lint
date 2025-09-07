@@ -2,4 +2,5 @@ enable:
   - start-with-name
 options:
   start-with-name/include-tests: true
+  start-with-name/include-unexported: true
   start-with-name/pattern: "%"

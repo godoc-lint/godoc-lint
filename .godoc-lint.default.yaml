@@ -90,6 +90,9 @@ options:
   # Include test files when applying the `start-with-name` rule.
   start-with-name/include-tests: false
 
+  # Include unexported (private) symbols when applying the `start-with-name` rule.
+  start-with-name/include-unexported: false
+
   # Acceptable start pattern (regexp) for godoc starte when applying the
   # `start-with-name` rule. The `%` placeholder is where the corresponding
   # symbol name should should appear. An omitted placeholder means the symbol
