@@ -43,17 +43,27 @@ Godoc-Lint looks for `.godoc-lint.yaml` file in the working directory for config
 
 Although it is best to set the configuration parameters in a file, there are a number of CLI options to modify linter parameters:
 
-| Option        | Description                                                          |
-| ------------- | -------------------------------------------------------------------- |
-| `-enable`     | Comma-separated list of rules to enable (multiple usage allowed)     |
-| `-disable`    | Comma-separated list of rules to disable (multiple usage allowed)    |
-| `-include`\*  | Regexp pattern of relative paths to include (multiple usage allowed) |
-| `-exclude`\*  | Regexp pattern of relative paths to exclude (multiple usage allowed) |
+| Option       | Description                                                          |
+| ------------ | -------------------------------------------------------------------- |
+| `-enable`    | Comma-separated list of rules to enable (multiple usage allowed)     |
+| `-disable`   | Comma-separated list of rules to disable (multiple usage allowed)    |
+| `-include`\* | Regexp pattern of relative paths to include (multiple usage allowed) |
+| `-exclude`\* | Regexp pattern of relative paths to exclude (multiple usage allowed) |
 
 > [!WARNING]
 > **(\*)** The path patterns supplied via `-include` or `-exclude` options should assume Unix-like paths (i.e. separated by forward slashes, `/`). This is to ensure a consistent behavior across different platforms.
 
 ## Rules
+
+The linter provides a number of rules that can be categorized as in this table:
+
+| Category          | Rules                                                    | Notes                                                              |
+| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------ |
+| Basic *(default)* | `pkg-doc` </br> `single-pkg-doc` </br> `start-with-name` | Recommended by [*Go Doc Comments*][godoc-ref], and **low-effort**  |
+| Strict            | `require-doc` </br> `require-pkg-doc`                    | Recommended by [*Go Doc Comments*][godoc-ref], and **high-effort** |
+| Extra             | `max-len` </br> `no-unused-link`                         | Extra but compatible with [*Go Doc Comments*][godoc-ref]           |
+
+**Rules under the *Basic* category are enabled by default** and do not need further configuration, unless, of course, one wants to tune their parameters. The rest has to be explicitly enabled via configuration.
 
 Below is a brief description of the linter's rules. Some rules are configurable via the `options` key in the configuration file (See [Configuration](#Configuration) for more details).
 
@@ -92,13 +102,13 @@ Checks godocs start with the corresponding symbol name:
 // This is a constant.  // (Bad)
 const Foo = 0
 
-// foo is a constant.   // (Good)
+// Foo is a constant.   // (Good)
 const Foo = 0
 ```
 
 It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `start-with-name/pattern` is set to empty, then all godocs have to start with the symbol names. 
 
-By default, unexported symbols are skipped. To include them the `start-with-name/include-unexported` option should be set to `true`. Also test files are skipped. To enable the rule for test files, the `start-with-name/include-tests` option should be set to `true`.
+By default, unexported symbols are skipped. To include them the `start-with-name/include-unexported` option should be set to `true`. Test files are also skipped. To enable the rule for test files, the `start-with-name/include-tests` option should be set to `true`.
 
 ### `require-doc`
 
@@ -109,11 +119,11 @@ Ensures all exported and/or (optionally) unexported symbols have godocs. By defa
 Limits maximum line length for godocs. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens):
 
 ```go
-// This is a super loooooooooooooooooooooooooooooooooooooooooong godoc.  // (Bad)
-const foo = 0
+// Foo has a super loooooooooooooooooooooooooooooooooooooooooooooooooooong godoc.  // (Bad)
+const Foo = 0
 
-// This is not a super long godoc.   // (Good)
-const foo = 0
+// Foo has a reasonably long godoc.  // (Good)
+const Foo = 0
 ```
 
 The pre-formatted sections (e.g., codes), or link definitions are ignored.
@@ -135,15 +145,15 @@ The maximum line length can be configured via the `max-len/length` option. The r
 Checks for unused links in the godoc text:
 
 ```go
-// This is a godoc with an unused link.  // (Bad)
+// Foo godoc has an unused link.     // (Bad)
 //
-// [docs]: https://foo.com/docs
-const foo = 0
+// [link]: https://foo.com/docs
+const Foo = 0
 
-// Check [docs] here.                    // (Good)
+// Foo godoc uses a defined [link].  // (Good)
 //
-// [docs]: https://foo.com/docs
-const foo = 0
+// [link]: https://foo.com/docs
+const Foo = 0
 ```
 
 The rule skips test files by default. To include them, the `no-unused-link/include-tests` option should be set to `true`.
