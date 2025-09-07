@@ -134,10 +134,10 @@ The maximum line length can be configured via the `max-len/length` option. The r
 > A long hyperlink in the godoc text can break this rule. In such cases, it is best to define the link at the end of the godoc and use the reference in the text:
 >
 > ```go
-> // Check this [link].
+> // Foo is a const. Check this [link].
 > //
 > // [link]: https://foo.com/super/loooooooooooooooooooooooooooooooooooooooong/link
-> const foo = 0
+> const Foo = 0
 > ```
 
 ### `no-unused-link`
