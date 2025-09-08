@@ -117,13 +117,13 @@ func checkSinglePkgDocRule(actx *model.AnalysisContext) {
 		documentedPkgs[pkg] = append(documentedPkgs[pkg], f)
 	}
 
-	for _, fs := range documentedPkgs {
+	for pkg, fs := range documentedPkgs {
 		if len(fs) < 2 {
 			continue
 		}
 		for _, f := range fs {
 			ir := actx.InspectorResult.Files[f]
-			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package should have a single godoc (%d found)", len(fs))
+			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package has more than one godoc (%q)", pkg)
 		}
 	}
 }
@@ -145,7 +145,7 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 		pkgFiles[pkg] = append(pkgFiles[pkg], f)
 	}
 
-	for _, fs := range pkgFiles {
+	for pkg, fs := range pkgFiles {
 		pkgHasGodoc := false
 		for _, f := range fs {
 			ir := actx.InspectorResult.Files[f]
@@ -167,6 +167,6 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		// Add a diagnostic message to the first file of the package.
-		actx.Pass.Reportf(fs[0].Name.Pos(), "package should have a godoc")
+		actx.Pass.Reportf(fs[0].Name.Pos(), "package should have a godoc (%q)", pkg)
 	}
 }

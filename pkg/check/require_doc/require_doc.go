@@ -162,5 +162,5 @@ func (r *RequireDocChecker) Apply(actx *model.AnalysisContext) error {
 }
 
 func reportRange(pass *analysis.Pass, ident *ast.Ident) {
-	pass.ReportRangef(ident, "symbol should have a godoc (%v)", ident.Name)
+	pass.ReportRangef(ident, "symbol should have a godoc (%q)", ident.Name)
 }

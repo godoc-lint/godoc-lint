@@ -29,26 +29,26 @@ type TFooNG string
 
 func (*TFooNG) TFooBarNG() {}
 
-const singleSingleFooNG = 0 //foo:bar // want `symbol should have a godoc \(singleSingleFooNG\)`
+const singleSingleFooNG = 0 //foo:bar // want `symbol should have a godoc \("singleSingleFooNG"\)`
 
-const singleMultiFooNG, singleMultiBarNG = 0, 0 //foo:bar // want `symbol should have a godoc \(singleMultiFooNG\)` `symbol should have a godoc \(singleMultiBarNG\)`
+const singleMultiFooNG, singleMultiBarNG = 0, 0 //foo:bar // want `symbol should have a godoc \("singleMultiFooNG"\)` `symbol should have a godoc \("singleMultiBarNG"\)`
 
 const (
-	multiSingleFooNG = 0 //foo:bar // want `symbol should have a godoc \(multiSingleFooNG\)`
+	multiSingleFooNG = 0 //foo:bar // want `symbol should have a godoc \("multiSingleFooNG"\)`
 )
 
 const (
-	multiMultiFooNG, multiMultiBarNG = 0, 0 //foo:bar // want `symbol should have a godoc \(multiMultiFooNG\)` `symbol should have a godoc \(multiMultiBarNG\)`
+	multiMultiFooNG, multiMultiBarNG = 0, 0 //foo:bar // want `symbol should have a godoc \("multiMultiFooNG"\)` `symbol should have a godoc \("multiMultiBarNG"\)`
 )
 
-type singleTFooNG int //foo:bar // want `symbol should have a godoc \(singleTFooNG\)`
+type singleTFooNG int //foo:bar // want `symbol should have a godoc \("singleTFooNG"\)`
 
 type (
-	multiTFooNG int //foo:bar // want `symbol should have a godoc \(multiTFooNG\)`
+	multiTFooNG int //foo:bar // want `symbol should have a godoc \("multiTFooNG"\)`
 )
 
-func funcFooNG() {} //foo:bar // want `symbol should have a godoc \(funcFooNG\)`
+func funcFooNG() {} //foo:bar // want `symbol should have a godoc \("funcFooNG"\)`
 
-type tFooNG string //foo:bar // want `symbol should have a godoc \(tFooNG\)`
+type tFooNG string //foo:bar // want `symbol should have a godoc \("tFooNG"\)`
 
-func (*tFooNG) tFooBarNG() {} //foo:bar // want `symbol should have a godoc \(tFooBarNG\)`
+func (*tFooNG) tFooBarNG() {} //foo:bar // want `symbol should have a godoc \("tFooBarNG"\)`

@@ -70,7 +70,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 				continue
 			}
 
-			actx.Pass.ReportRangef(&decl.Doc.CG, "godoc should start with symbol name (pattern %q)", startPattern)
+			actx.Pass.ReportRangef(&decl.Doc.CG, "godoc should start with symbol name (%q)", decl.Name)
 		}
 	}
 	return nil

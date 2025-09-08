@@ -64,6 +64,6 @@ func checkNoUnusedLink(actx *model.AnalysisContext, doc *model.CommentGroup) {
 		if linkDef.Used {
 			continue
 		}
-		actx.Pass.ReportRangef(&doc.CG, "godoc has unused link (%s)", linkDef.Text)
+		actx.Pass.ReportRangef(&doc.CG, "godoc has unused link (%q)", linkDef.Text)
 	}
 }
