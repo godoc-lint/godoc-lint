@@ -84,7 +84,7 @@ func checkMaxLen(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen in
 		if len(l) <= maxLen {
 			continue
 		}
-		actx.Pass.ReportRangef(&doc.CG, "godoc exceeds max length (%d > %d)", len(l), maxLen)
+		actx.Pass.ReportRangef(&doc.CG, "godoc line is too long (%d > %d)", len(l), maxLen)
 		break
 	}
 }
