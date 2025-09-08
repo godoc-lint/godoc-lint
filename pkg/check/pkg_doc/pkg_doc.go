@@ -145,7 +145,7 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 		pkgFiles[pkg] = append(pkgFiles[pkg], f)
 	}
 
-	for _, fs := range pkgFiles {
+	for pkg, fs := range pkgFiles {
 		pkgHasGodoc := false
 		for _, f := range fs {
 			ir := actx.InspectorResult.Files[f]
@@ -167,6 +167,6 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 		}
 
 		// Add a diagnostic message to the first file of the package.
-		actx.Pass.Reportf(fs[0].Name.Pos(), "package should have a godoc")
+		actx.Pass.Reportf(fs[0].Name.Pos(), "package should have a godoc (%q)", pkg)
 	}
 }
