@@ -117,13 +117,13 @@ func checkSinglePkgDocRule(actx *model.AnalysisContext) {
 		documentedPkgs[pkg] = append(documentedPkgs[pkg], f)
 	}
 
-	for _, fs := range documentedPkgs {
+	for pkg, fs := range documentedPkgs {
 		if len(fs) < 2 {
 			continue
 		}
 		for _, f := range fs {
 			ir := actx.InspectorResult.Files[f]
-			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package should have a single godoc (%d found)", len(fs))
+			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package has more than one godoc (%q)", pkg)
 		}
 	}
 }
