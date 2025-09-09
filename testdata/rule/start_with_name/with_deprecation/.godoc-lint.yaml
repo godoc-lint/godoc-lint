@@ -1,0 +1,6 @@
+enable:
+  - start-with-name
+options:
+  start-with-name/include-tests: false
+  start-with-name/include-unexported: true
+  start-with-name/pattern: ""
