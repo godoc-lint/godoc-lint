@@ -1,5 +1,9 @@
 package strict
 
+// (NG: no godoc)
+
+const SingleSingleFooNG = 0
+
 // SingleSingleFoo has a godoc.
 const SingleSingleFoo = 0
 
