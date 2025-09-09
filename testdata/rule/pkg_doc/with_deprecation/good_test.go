@@ -1,6 +1,6 @@
 // some header
 
-// bad godoc
+// bad godoc but okay due to the valid deprecation marker
 //
-// Deprecated:with whitespace
+// Deprecated: valid deprecation
 package with_deprecation

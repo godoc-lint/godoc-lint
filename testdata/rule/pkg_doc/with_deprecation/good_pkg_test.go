@@ -1,4 +1,4 @@
 // some header
 
-// Deprecated:with whitespace
+// Deprecated: valid deprecation
 package with_deprecation_test

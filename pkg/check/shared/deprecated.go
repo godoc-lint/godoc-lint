@@ -15,7 +15,10 @@ func HasDeprecatedParagraph(blocks []comment.Block) bool {
 		if !ok {
 			continue
 		}
-		if strings.HasPrefix(string(text), "Deprecated:") {
+
+		// Only an exact match (casing and the trailing whitespace) is considered
+		// a valid deprecation marker.
+		if strings.HasPrefix(string(text), "Deprecated: ") {
 			return true
 		}
 	}

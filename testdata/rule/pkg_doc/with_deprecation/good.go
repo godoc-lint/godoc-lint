@@ -1,6 +1,6 @@
 // some header
 
-// Deprecated: with whitespace
+// Deprecated: valid deprecation
 //
 // bad godoc
 package with_deprecation

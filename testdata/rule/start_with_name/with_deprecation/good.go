@@ -2,74 +2,80 @@ package strict
 
 // (BG: bad godoc)
 
-// Here a number of combinations of godocs and deprecations are tested.
+// Here, combinations of godocs and deprecations are tested on various declaration kinds.
 
-// Deprecated: with whitespace
-//
-// godoc
+// Deprecated: valid deprecation
 const SingleSingleFooBG = 0
 
 const (
-	// Deprecated:with no whitespace
+	// Deprecated: valid deprecation
 	//
-	// godoc
+	// bad godoc but okay due to the valid deprecation marker
 	MultiSingleFooBG = 0
 )
 
-// Deprecated: with whitespace
+// bad godoc but okay due to the valid deprecation marker
 //
-// Deprecated:with no whitespace
-//
-// godoc
+// Deprecated: valid deprecation
 const SingleSingleFooVarBG = 0
 
 var (
-	// Deprecated: with whitespace
+	// Deprecated: valid deprecation
 	//
-	// godoc
+	// bad godoc but okay due to the valid deprecation marker
 	//
-	// Deprecated:with no whitespace
+	// Deprecated: valid deprecation
 	MultiSingleFooVarBG = 0
 )
 
-// Deprecated:with no whitespace
+// bad godoc but okay due to the valid deprecation marker
 //
-// godoc
+// Deprecated: valid deprecation
 //
-// Deprecated: with whitespace
+// Deprecated: valid deprecation
 type TSingleFooBG int
 
 type (
-	// godoc
+	// Deprecated: valid deprecation
 	//
-	// Deprecated: with whitespace
+	// Deprecated: valid deprecation
+	//
+	// bad godoc but okay due to the valid deprecation marker
 	TMultiFooBG int
 
-	// godoc
+	// Deprecated: valid deprecation
 	//
-	// Deprecated:with no whitespace
+	// Deprecated:invalid deprecation
+	//
+	// bad godoc but okay due to the valid deprecation marker
 	TMultiBarBG int
 )
 
-// Deprecated: with whitespace
+// Deprecated:invalid deprecation
 //
-// Deprecated:with no whitespace
+// bad godoc but okay due to the valid deprecation marker
+//
+// Deprecated: valid deprecation
 func FooFuncBG() {}
 
-// Deprecated: with whitespace
+// Deprecated:invalid deprecation
 //
-// Deprecated:with no whitespace
+// Deprecated:invalid deprecation
 //
-// Deprecated: with whitespace
+// bad godoc but okay due to the valid deprecation marker
 //
-// godoc
+// Deprecated: valid deprecation
+//
+// Deprecated:invalid deprecation
 type TFooBG int
 
-// godoc
+// Deprecated:invalid deprecation
 //
-// Deprecated: with whitespace
+// Deprecated:invalid deprecation
 //
-// Deprecated:with no whitespace
+// bad godoc but okay due to the valid deprecation marker
 //
-// Deprecated: with whitespace
+// Deprecated:invalid deprecation
+//
+// Deprecated: valid deprecation
 func (*TFooBG) FooFuncBG() {}
