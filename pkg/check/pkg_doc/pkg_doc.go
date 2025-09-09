@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"strings"
 
+	"github.com/godoc-lint/godoc-lint/pkg/check/shared"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 	"github.com/godoc-lint/godoc-lint/pkg/util"
 )
@@ -68,6 +69,39 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 			// See for more details:
 			//   - https://github.com/godoc-lint/godoc-lint/issues/10
 			//   - https://go.dev/doc/comment#cmd
+			continue
+		}
+
+		if shared.HasDeprecatedParagraph(ir.PackageDoc.Parsed.Content) {
+			// If there's a paragraph starting with "Deprecated:", we skip the
+			// entire godoc. The reason is a deprecated symbol will not appear
+			// when docs are rendered.
+			//
+			// Another reason is that we cannot just skip those paragraphs and
+			// look for the symbol in the remaining text. To do that, we need
+			// to iterate over all comment.Block nodes, and check if a block
+			// is a paragraph AND starts with the deprecation marker. This is
+			// simple, but the challenge appears when we get to the first block
+			// that does not have the marker and we want to check if it starts
+			// with the symbol name. We'd expect that to be a paragraph, but
+			// that is not always the case. For example, take this decl:
+			//
+			//    // Deprecated: blah blah
+			//    //
+			//    // Foo is integer
+			//    //
+			//    // Deprecation: blah blah
+			//    type Foo int
+			//
+			// The first block is a paragraph which we can easily skip due to
+			// the "Deprecated:" marker. However, the second block is actually
+			// parsed as a heading. One can verify this by copy/pasting it in
+			// a Go file and check the gopls hover.
+			//
+			// There might be a workaround for this, but this also means the
+			// godoc parser behaves in unexpected ways, and until we don't
+			// really know the extent of its quirks, it's safer to just skip
+			// further checks on such godocs.
 			continue
 		}
 
