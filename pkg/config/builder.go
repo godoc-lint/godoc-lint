@@ -268,6 +268,8 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		result.rulesToApply = result.rulesToApply.Remove(disabledRules.List()...)
 	}
 
+	// To avoid being too strict, we don't complain if a rule is enabled and disabled at the same time.
+
 	resolvedOptions := &model.RuleOptions{}
 	transferOptions(resolvedOptions, def.Options) // def.Options is never nil
 	if pcfg.Options != nil {

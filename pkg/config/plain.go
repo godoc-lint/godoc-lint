@@ -88,19 +88,7 @@ func (pcfg *PlainConfig) Validate() error {
 		errs = errors.Join(errs, fmt.Errorf("invalid rule name(s) to disable: %q", invalids))
 	}
 
-	if len(pcfg.Enable) > 0 && len(pcfg.Disable) > 0 {
-		commons := []string{}
-		for _, e := range pcfg.Enable {
-			for _, d := range pcfg.Disable {
-				if e == d {
-					commons = append(commons, e)
-				}
-			}
-		}
-		if len(commons) > 0 {
-			errs = errors.Join(errs, fmt.Errorf("rule name(s) are both enabled and disabled: %q", commons))
-		}
-	}
+	// To avoid being too strict, we don't complain if a rule is enabled and disabled at the same time.
 
 	if invalids := getInvalidRegexps(pcfg.Include); len(invalids) > 0 {
 		errs = errors.Join(errs, fmt.Errorf("invalid inclusion pattern(s): %q", invalids))

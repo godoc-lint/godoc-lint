@@ -37,7 +37,11 @@ var DefaultSetToRules = map[DefaultSet]RuleSet{
 	}(),
 }
 
-var DefaultSetValues = slices.Collect(maps.Keys(DefaultSetToRules))
+var DefaultSetValues = func() []DefaultSet {
+	values := slices.Collect(maps.Keys(DefaultSetToRules))
+	slices.Sort(values)
+	return values
+}()
 
 // ConfigOverride represents a configuration override.
 //
