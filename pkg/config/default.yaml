@@ -7,7 +7,6 @@ enable:
 options:
   max-len/length: 77
   max-len/include-tests: false
-  pkg-doc/start-with: Package
   pkg-doc/include-tests: false
   single-pkg-doc/include-tests: false
   require-pkg-doc/include-tests: false

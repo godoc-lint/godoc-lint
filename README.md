@@ -79,7 +79,7 @@ package foo
 package foo
 ```
 
-The "Package" word can be configured to any other value via the `pkg-doc/start-with` option. Test files are skipped by default. To enable the rule for them, the `pkg-doc/include-tests` option should be set to `true`.
+Test files are skipped by default. To enable the rule for them, the `pkg-doc/include-tests` option should be set to `true`.
 
 > [!NOTE]
 > As of [*Go Doc Comments*][godoc-cmd-ref], command packages (i.e., packages named `main`) are exceptions to this rule. So, Godoc-Lint ignores them and their test packages (i.e., `main_test`) by default.

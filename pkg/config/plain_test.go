@@ -57,7 +57,6 @@ func TestTransferOptions(t *testing.T) {
 		expected: &model.RuleOptions{
 			MaxLenLength:                   77,
 			MaxLenIncludeTests:             false,
-			PkgDocStartWith:                "Package",
 			PkgDocIncludeTests:             false,
 			SinglePkgDocIncludeTests:       false,
 			RequirePkgDocIncludeTests:      false,
