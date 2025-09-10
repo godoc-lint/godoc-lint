@@ -1,5 +1,4 @@
 enable:
   - pkg-doc
 options:
-  pkg-doc/start-with: Package
   pkg-doc/include-tests: true

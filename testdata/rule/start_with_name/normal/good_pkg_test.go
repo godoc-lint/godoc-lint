@@ -1,4 +1,4 @@
-package strict
+package normal_test
 
 // (BG: bad godoc)
 

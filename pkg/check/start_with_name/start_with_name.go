@@ -1,7 +1,6 @@
 package start_with_name
 
 import (
-	"fmt"
 	"go/ast"
 	"regexp"
 	"strings"
@@ -37,11 +36,6 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 
 	includeTests := actx.Config.GetRuleOptions().StartWithNameIncludeTests
 	includePrivate := actx.Config.GetRuleOptions().StartWithNameIncludeUnexported
-	startPattern := actx.Config.GetRuleOptions().StartWithNamePattern
-	_, matcher, err := getStartMatcher(startPattern)
-	if err != nil {
-		return err
-	}
 
 	for _, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(StartWithNameRule)) {
 		for _, decl := range ir.SymbolDecl {
@@ -99,8 +93,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 				continue
 			}
 
-			symbolNameFromDoc := matcher(decl.Doc.Text)
-			if symbolNameFromDoc == decl.Name {
+			if matchSymbolName(decl.Doc.Text, decl.Name) {
 				continue
 			}
 
@@ -110,39 +103,22 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 	return nil
 }
 
-const symbolNameSubmatch = "symbol_name"
+var startPattern = regexp.MustCompile(`^(?:(A|a|AN|An|an|THE|The|the) )?(?P<symbol_name>.+?)\b`)
+var startPatternSymbolNameIndex = startPattern.SubexpIndex("symbol_name")
 
-var symbolNameSubmatchPattern = fmt.Sprintf(`(?P<%s>.+?)\b`, symbolNameSubmatch)
+func matchSymbolName(text string, symbol string) bool {
+	head := strings.SplitN(text, "\n", 2)[0]
+	head, _ = strings.CutPrefix(head, "\r")
+	head = strings.SplitN(head, " ", 2)[0]
+	head = strings.SplitN(head, "\t", 2)[0]
 
-func getStartMatcher(startPattern string) (string, func(string) string, error) {
-	var replaced string
-	if strings.Contains(startPattern, "%") {
-		replaced = strings.ReplaceAll(startPattern, "%", symbolNameSubmatchPattern)
-	} else {
-		if startPattern == "" || strings.HasSuffix(startPattern, " ") {
-			replaced = startPattern + symbolNameSubmatchPattern
-		} else {
-			replaced = startPattern + " " + symbolNameSubmatchPattern
-		}
-	}
-	if !strings.HasPrefix(replaced, "^") {
-		replaced = "^" + replaced
+	if head == symbol {
+		return true
 	}
 
-	re, err := regexp.Compile(replaced)
-	if err != nil {
-		return "", nil, fmt.Errorf("invalid start pattern: %w", err)
+	match := startPattern.FindStringSubmatch(text)
+	if match == nil {
+		return false
 	}
-
-	ix := re.SubexpIndex(symbolNameSubmatch)
-	if ix == -1 {
-		return "", nil, fmt.Errorf("cannot find named group %q in pattern: %q", symbolNameSubmatch, re.String())
-	}
-	return replaced, func(s string) string {
-		match := re.FindStringSubmatch(s)
-		if len(match) == 0 {
-			return ""
-		}
-		return match[ix]
-	}, nil
+	return match[startPatternSymbolNameIndex] == symbol
 }
