@@ -73,7 +73,6 @@ type RuleOptions struct {
 	RequireDocIncludeTests         bool   `option:"require-doc/include-tests"`
 	RequireDocIgnoreExported       bool   `option:"require-doc/ignore-exported"`
 	RequireDocIgnoreUnexported     bool   `option:"require-doc/ignore-unexported"`
-	StartWithNamePattern           string `option:"start-with-name/pattern"`
 	StartWithNameIncludeTests      bool   `option:"start-with-name/include-tests"`
 	StartWithNameIncludeUnexported bool   `option:"start-with-name/include-unexported"`
 	NoUnusedLinkIncludeTests       bool   `option:"no-unused-link/include-tests"`

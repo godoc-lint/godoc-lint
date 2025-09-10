@@ -27,7 +27,6 @@ type PlainRuleOptions struct {
 	RequireDocIncludeTests         *bool   `option:"require-doc/include-tests" yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`
 	RequireDocIgnoreExported       *bool   `option:"require-doc/ignore-exported" yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`
 	RequireDocIgnoreUnexported     *bool   `option:"require-doc/ignore-unexported" yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
-	StartWithNamePattern           *string `option:"start-with-name/pattern" yaml:"start-with-name/pattern" mapstructure:"start-with-name/pattern"`
 	StartWithNameIncludeTests      *bool   `option:"start-with-name/include-tests" yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
 	StartWithNameIncludeUnexported *bool   `option:"start-with-name/include-unexported" yaml:"start-with-name/include-unexported" mapstructure:"start-with-name/include-unexported"`
 	NoUnusedLinkIncludeTests       *bool   `option:"no-unused-link/include-tests" yaml:"no-unused-link/include-tests" mapstructure:"no-unused-link/include-tests"`
