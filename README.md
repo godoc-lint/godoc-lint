@@ -106,7 +106,7 @@ const Foo = 0
 const Foo = 0
 ```
 
-It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs. The `start-with-name/pattern` option can be used to customize the starting pattern. If the `start-with-name/pattern` is set to empty, then all godocs have to start with the symbol names. 
+It allows English articles (i.e., *a*, *an*, and *the*) at the beginning of godocs.
 
 By default, unexported symbols are skipped. To include them the `start-with-name/include-unexported` option should be set to `true`. Test files are also skipped. To enable the rule for test files, the `start-with-name/include-tests` option should be set to `true`.
 
