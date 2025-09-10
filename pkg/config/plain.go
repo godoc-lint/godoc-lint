@@ -74,32 +74,32 @@ func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {
 }
 
 func (pcfg *PlainConfig) Validate() error {
-	var errs error
+	var errs []error
 
 	if pcfg.Default != nil && !slices.Contains(model.DefaultSetValues, model.DefaultSet(*pcfg.Default)) {
-		errs = errors.Join(errs, fmt.Errorf("invalid default set %q; must be one of %q", *pcfg.Default, model.DefaultSetValues))
+		errs = append(errs, fmt.Errorf("invalid default set %q; must be one of %q", *pcfg.Default, model.DefaultSetValues))
 	}
 
 	if invalids := getInvalidRules(pcfg.Enable); len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid rule name(s) to enable: %q", invalids))
+		errs = append(errs, fmt.Errorf("invalid rule name(s) to enable: %q", invalids))
 	}
 
 	if invalids := getInvalidRules(pcfg.Disable); len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid rule name(s) to disable: %q", invalids))
+		errs = append(errs, fmt.Errorf("invalid rule name(s) to disable: %q", invalids))
 	}
 
 	// To avoid being too strict, we don't complain if a rule is enabled and disabled at the same time.
 
 	if invalids := getInvalidRegexps(pcfg.Include); len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid inclusion pattern(s): %q", invalids))
+		errs = append(errs, fmt.Errorf("invalid inclusion pattern(s): %q", invalids))
 	}
 
 	if invalids := getInvalidRegexps(pcfg.Exclude); len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid exclusion pattern(s): %q", invalids))
+		errs = append(errs, fmt.Errorf("invalid exclusion pattern(s): %q", invalids))
 	}
 
-	if errs != nil {
-		return errs
+	if len(errs) > 0 {
+		return errors.Join(errs...)
 	}
 	return nil
 }

@@ -173,7 +173,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		return regexps, invalids
 	}
 
-	var errs error
+	var errs []error
 
 	result := &config{
 		cwd:            configCWD,
@@ -190,7 +190,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		}
 		rs, invalids := toValidRuleSet(raw)
 		if len(invalids) > 0 {
-			errs = errors.Join(errs, fmt.Errorf("invalid rule(s) name to enable: %q", invalids))
+			errs = append(errs, fmt.Errorf("invalid rule(s) name to enable: %q", invalids))
 		} else {
 			enabledRules = rs
 		}
@@ -206,7 +206,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		}
 		rs, invalids := toValidRuleSet(raw)
 		if len(invalids) > 0 {
-			errs = errors.Join(errs, fmt.Errorf("invalid rule(s) name to disable: %q", invalids))
+			errs = append(errs, fmt.Errorf("invalid rule(s) name to disable: %q", invalids))
 		} else {
 			disabledRules = rs
 		}
@@ -221,7 +221,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		}
 		rs, invalids := toValidRegexpSlice(raw)
 		if len(invalids) > 0 {
-			errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to include: %q", invalids))
+			errs = append(errs, fmt.Errorf("invalid path pattern(s) to include: %q", invalids))
 		} else {
 			result.includeAsRegexp = rs
 		}
@@ -236,7 +236,7 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		}
 		rs, invalids := toValidRegexpSlice(raw)
 		if len(invalids) > 0 {
-			errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to exclude: %q", invalids))
+			errs = append(errs, fmt.Errorf("invalid path pattern(s) to exclude: %q", invalids))
 		} else {
 			result.excludeAsRegexp = rs
 		}
@@ -251,14 +251,14 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		}
 
 		if !slices.Contains(model.DefaultSetValues, model.DefaultSet(*raw)) {
-			errs = errors.Join(errs, fmt.Errorf("invalid default set %q; must be one of %q", *raw, model.DefaultSetValues))
+			errs = append(errs, fmt.Errorf("invalid default set %q; must be one of %q", *raw, model.DefaultSetValues))
 		} else {
 			result.rulesToApply = model.DefaultSetToRules[model.DefaultSet(*raw)]
 		}
 	}
 
 	if errs != nil {
-		return nil, errs
+		return nil, errors.Join(errs...)
 	}
 
 	if enabledRules != nil {
