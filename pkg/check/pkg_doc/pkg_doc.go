@@ -51,7 +51,6 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 	}
 
 	includeTests := actx.Config.GetRuleOptions().PkgDocIncludeTests
-	startWith := strings.TrimSpace(actx.Config.GetRuleOptions().PkgDocStartWith)
 
 	for f, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(PkgDocRule)) {
 		if ir.PackageDoc == nil {
@@ -69,6 +68,10 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 			// See for more details:
 			//   - https://github.com/godoc-lint/godoc-lint/issues/10
 			//   - https://go.dev/doc/comment#cmd
+			continue
+		}
+
+		if ir.PackageDoc.Text == "" {
 			continue
 		}
 
@@ -105,20 +108,14 @@ func checkPkgDocRule(actx *model.AnalysisContext) {
 			continue
 		}
 
-		if expectedPrefix, ok := checkPkgDocPrefix(ir.PackageDoc.Text, startWith, f.Name.Name); !ok {
+		if expectedPrefix, ok := checkPkgDocPrefix(ir.PackageDoc.Text, f.Name.Name); !ok {
 			actx.Pass.Reportf(ir.PackageDoc.CG.Pos(), "package godoc should start with %q", expectedPrefix+" ")
 		}
 	}
 }
 
-func checkPkgDocPrefix(text string, startWith string, packageName string) (string, bool) {
-	if text == "" {
-		return "", true
-	}
-	expectedPrefix := packageName
-	if startWith != "" {
-		expectedPrefix = startWith + " " + packageName
-	}
+func checkPkgDocPrefix(text string, packageName string) (string, bool) {
+	expectedPrefix := "Package " + packageName
 	if !strings.HasPrefix(text, expectedPrefix) {
 		return expectedPrefix, false
 	}

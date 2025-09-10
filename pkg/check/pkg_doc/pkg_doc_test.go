@@ -9,72 +9,32 @@ import (
 )
 
 func TestCheckPkgDocPrefix(t *testing.T) {
-	assert := assert.New(t)
-
-	const packageName = "foo"
-
 	tests := []struct {
-		name           string
-		text           string
-		startWith      string
-		expectedPrefix string
-		expectedOK     bool
-	}{{
-		name:           "empty",
-		text:           "",
-		startWith:      "Package",
-		expectedPrefix: "",
-		expectedOK:     true,
-	}, {
-		name:           "good: empty startWith, empty rest",
-		text:           "foo",
-		startWith:      "",
-		expectedPrefix: "foo",
-		expectedOK:     true,
-	}, {
-		name:           "good: empty startWith",
-		text:           "foo is a package",
-		startWith:      "",
-		expectedPrefix: "foo",
-		expectedOK:     true,
-	}, {
-		name:           "bad: empty startWith, bad rest",
-		text:           "foo-is-a-package",
-		startWith:      "",
-		expectedPrefix: "foo",
-	}, {
-		name:           "bad: empty startWith, bad start",
-		text:           " foo",
-		startWith:      "",
-		expectedPrefix: "foo",
-	}, {
-		name:           "good: empty rest",
-		text:           "Package foo",
-		startWith:      "Package",
-		expectedPrefix: "Package foo",
-		expectedOK:     true,
-	}, {
-		name:           "good",
-		text:           "Package foo is a package",
-		startWith:      "Package",
-		expectedPrefix: "Package foo",
-		expectedOK:     true,
-	}, {
-		name:           "bad rest",
-		text:           "Package foo-is-a-package",
-		startWith:      "Package",
-		expectedPrefix: "Package foo",
-	}, {
-		name:           "bad start",
-		text:           " Package foo",
-		startWith:      "Package",
-		expectedPrefix: "Package foo",
-	},
+		want        bool
+		doc         string
+		packageName string
+		expected    string
+	}{
+		{false, "", "", "Package "},
+		{false, "foo", "foo", "Package foo"},
+		{false, "Package", "foo", "Package foo"},
+		{false, "Package foofoo", "foo", "Package foo"},
+		{false, "Package foobar", "foo", "Package foo"},
+		{false, "Package\nfoo", "foo", "Package foo"},
+		{false, " Package foo", "foo", "Package foo"},
+		{false, "\nPackage foo", "foo", "Package foo"},
+		{false, "\tPackage foo", "foo", "Package foo"},
+		{false, "Package\tfoo", "foo", "Package foo"},
+
+		{true, "Package foo", "foo", "Package foo"},
+		{true, "Package foo does nothing", "foo", "Package foo"},
+		{true, "Package foo\ndoes nothing", "foo", "Package foo"},
+		{true, "Package foo\r\ndoes nothing", "foo", "Package foo"},
 	}
 
 	for _, tt := range tests {
-		prefix, ok := pkg_doc.CheckPkgDocPrefix(tt.text, tt.startWith, packageName)
-		assert.Equal(tt.expectedOK, ok, "case: %q", tt.name)
-		assert.Equal(tt.expectedPrefix, prefix, "case: %q", tt.name)
+		prefix, got := pkg_doc.CheckPkgDocPrefix(tt.doc, tt.packageName)
+		assert.Equal(t, tt.expected, prefix, "doc: %q", tt.doc)
+		assert.Equal(t, tt.want, got, "doc: %q", tt.doc)
 	}
 }
