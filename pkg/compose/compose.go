@@ -35,7 +35,7 @@ func Compose(c CompositionConfig) *Composition {
 	}
 
 	reg := check.NewPopulatedRegistry()
-	cb := config.NewConfigBuilder(c.BaseDir, reg.GetCoveredRules()).WithBaseDirPlainConfig(c.BaseDirPlainConfig)
+	cb := config.NewConfigBuilder(c.BaseDir).WithBaseDirPlainConfig(c.BaseDirPlainConfig)
 	ocb := config.NewOnceConfigBuilder(cb)
 	inspector := inspect.NewInspector(ocb, c.ExitFunc)
 	analyzer := analysis.NewAnalyzer(c.BaseDir, ocb, reg, inspector, c.ExitFunc)

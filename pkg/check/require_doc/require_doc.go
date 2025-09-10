@@ -10,7 +10,7 @@ import (
 )
 
 // RequireDocRule is the corresponding rule name.
-const RequireDocRule = "require-doc"
+const RequireDocRule = model.RequireDocRule
 
 var ruleSet = model.RuleSet{}.Add(RequireDocRule)
 

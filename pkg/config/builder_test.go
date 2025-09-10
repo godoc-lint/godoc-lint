@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/godoc-lint/godoc-lint/pkg/check"
 	"github.com/godoc-lint/godoc-lint/pkg/config"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
@@ -303,7 +302,6 @@ func TestConfigResolution(t *testing.T) {
 	},
 	}
 
-	allRules := check.NewPopulatedRegistry().GetCoveredRules()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			baseDir := t.TempDir()
@@ -311,7 +309,7 @@ func TestConfigResolution(t *testing.T) {
 			err := setupFS(tt.fs, baseDir)
 			require.NoError(t, err)
 
-			cb := config.NewConfigBuilder(baseDir, allRules)
+			cb := config.NewConfigBuilder(baseDir)
 			if tt.populatePlainConfig {
 				cb = cb.WithBaseDirPlainConfig(&config.PlainConfig{})
 			}

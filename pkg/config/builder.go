@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 	"github.com/godoc-lint/godoc-lint/pkg/util"
@@ -13,9 +14,8 @@ import (
 
 // ConfigBuilder implements a configuration builder.
 type ConfigBuilder struct {
-	baseDir      string
-	coveredRules model.RuleSet
-	override     *model.ConfigOverride
+	baseDir  string
+	override *model.ConfigOverride
 
 	// baseDirPlainConfig holds the plain config for the base directory.
 	//
@@ -26,10 +26,9 @@ type ConfigBuilder struct {
 }
 
 // NewConfigBuilder crates a new instance of the corresponding struct.
-func NewConfigBuilder(baseDir string, coveredRules model.RuleSet) *ConfigBuilder {
+func NewConfigBuilder(baseDir string) *ConfigBuilder {
 	return &ConfigBuilder{
-		baseDir:      baseDir,
-		coveredRules: coveredRules,
+		baseDir: baseDir,
 	}
 }
 
@@ -136,18 +135,22 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 		return nil, err
 	}
 
+	if err := pcfg.Validate(); err != nil {
+		return nil, fmt.Errorf("invalid config at %q: %w", configFilePath, err)
+	}
+
 	toValidRuleSet := func(s []string) (*model.RuleSet, []string) {
 		if s == nil {
 			return nil, nil
 		}
 		invalids := make([]string, 0, len(s))
-		rules := make([]string, 0, len(s))
+		rules := make([]model.Rule, 0, len(s))
 		for _, v := range s {
-			if !cb.coveredRules.Has(v) {
+			if !model.AllRules.Has(model.Rule(v)) {
 				invalids = append(invalids, v)
 				continue
 			}
-			rules = append(rules, v)
+			rules = append(rules, model.Rule(v))
 		}
 		set := model.RuleSet{}.Add(rules...)
 		return &set, invalids
@@ -172,56 +175,97 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 
 	var errs error
 
-	resolvedEnable := pcfg.Enable
+	result := &config{
+		cwd:            configCWD,
+		configFilePath: configFilePath,
+	}
+
+	var enabledRules *model.RuleSet
 	if cb.override != nil && cb.override.Enable != nil {
-		resolvedEnable = cb.override.Enable
-	}
-	if resolvedEnable == nil {
-		resolvedEnable = def.Enable
-	}
-	resolvedEnabledRuleSet, invalids := toValidRuleSet(resolvedEnable)
-	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid rule(s) name to enable: %q", invalids))
+		enabledRules = cb.override.Enable
+	} else {
+		raw := pcfg.Enable
+		if raw == nil {
+			raw = def.Enable
+		}
+		rs, invalids := toValidRuleSet(raw)
+		if len(invalids) > 0 {
+			errs = errors.Join(errs, fmt.Errorf("invalid rule(s) name to enable: %q", invalids))
+		} else {
+			enabledRules = rs
+		}
 	}
 
-	resolvedDisable := pcfg.Disable
+	var disabledRules *model.RuleSet
 	if cb.override != nil && cb.override.Disable != nil {
-		resolvedDisable = cb.override.Disable
-	}
-	if resolvedDisable == nil {
-		resolvedDisable = def.Disable
-	}
-	resolvedDisabledRuleSet, invalids := toValidRuleSet(resolvedDisable)
-	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid rule(s) to disable: %q", invalids))
+		disabledRules = cb.override.Disable
+	} else {
+		raw := pcfg.Disable
+		if raw == nil {
+			raw = def.Disable
+		}
+		rs, invalids := toValidRuleSet(raw)
+		if len(invalids) > 0 {
+			errs = errors.Join(errs, fmt.Errorf("invalid rule(s) name to disable: %q", invalids))
+		} else {
+			disabledRules = rs
+		}
 	}
 
-	resolvedInclude := pcfg.Include
 	if cb.override != nil && cb.override.Include != nil {
-		resolvedInclude = cb.override.Include
-	}
-	if resolvedInclude == nil {
-		resolvedInclude = def.Include
-	}
-	resolvedIncludeAsRegexp, invalids := toValidRegexpSlice(resolvedInclude)
-	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to include: %q", invalids))
+		result.includeAsRegexp = cb.override.Include
+	} else {
+		raw := pcfg.Include
+		if raw == nil {
+			raw = def.Include
+		}
+		rs, invalids := toValidRegexpSlice(raw)
+		if len(invalids) > 0 {
+			errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to include: %q", invalids))
+		} else {
+			result.includeAsRegexp = rs
+		}
 	}
 
-	resolvedExclude := pcfg.Exclude
 	if cb.override != nil && cb.override.Exclude != nil {
-		resolvedExclude = cb.override.Exclude
+		result.excludeAsRegexp = cb.override.Exclude
+	} else {
+		raw := pcfg.Exclude
+		if raw == nil {
+			raw = def.Exclude
+		}
+		rs, invalids := toValidRegexpSlice(raw)
+		if len(invalids) > 0 {
+			errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to exclude: %q", invalids))
+		} else {
+			result.excludeAsRegexp = rs
+		}
 	}
-	if resolvedExclude == nil {
-		resolvedExclude = def.Exclude
-	}
-	resolvedExcludeAsRegexp, invalids := toValidRegexpSlice(resolvedExclude)
-	if len(invalids) > 0 {
-		errs = errors.Join(errs, fmt.Errorf("invalid path pattern(s) to exclude: %q", invalids))
+
+	if cb.override != nil && cb.override.Default != nil {
+		result.rulesToApply = model.DefaultSetToRules[*cb.override.Default]
+	} else {
+		raw := pcfg.Default
+		if raw == nil {
+			raw = def.Default // never nil
+		}
+
+		if !slices.Contains(model.DefaultSetValues, model.DefaultSet(*raw)) {
+			errs = errors.Join(errs, fmt.Errorf("invalid default set %q; must be one of %q", *raw, model.DefaultSetValues))
+		} else {
+			result.rulesToApply = model.DefaultSetToRules[model.DefaultSet(*raw)]
+		}
 	}
 
 	if errs != nil {
 		return nil, errs
+	}
+
+	if enabledRules != nil {
+		result.rulesToApply = result.rulesToApply.Merge(*enabledRules)
+	}
+	if disabledRules != nil {
+		result.rulesToApply = result.rulesToApply.Remove(disabledRules.List()...)
 	}
 
 	resolvedOptions := &model.RuleOptions{}
@@ -229,17 +273,9 @@ func (cb *ConfigBuilder) build(cwd string) (*config, error) {
 	if pcfg.Options != nil {
 		transferOptions(resolvedOptions, pcfg.Options)
 	}
+	result.options = resolvedOptions
 
-	return &config{
-		cwd:            configCWD,
-		configFilePath: configFilePath,
-
-		enabledRules:    resolvedEnabledRuleSet,
-		disabledRules:   resolvedDisabledRuleSet,
-		includeAsRegexp: resolvedIncludeAsRegexp,
-		excludeAsRegexp: resolvedExcludeAsRegexp,
-		options:         resolvedOptions,
-	}, nil
+	return result, nil
 }
 
 // SetOverride implements the corresponding interface method.

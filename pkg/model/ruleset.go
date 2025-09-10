@@ -6,14 +6,14 @@ import "slices"
 //
 // A zero rule set represents an empty set.
 type RuleSet struct {
-	m map[string]struct{}
+	m map[Rule]struct{}
 }
 
 // Merge combines the rules in the current and the given rule sets into a new
 // set.
 func (rs RuleSet) Merge(another RuleSet) RuleSet {
 	result := RuleSet{
-		m: make(map[string]struct{}, len(rs.m)+len(another.m)),
+		m: make(map[Rule]struct{}, len(rs.m)+len(another.m)),
 	}
 	for r := range rs.m {
 		result.m[r] = struct{}{}
@@ -26,9 +26,9 @@ func (rs RuleSet) Merge(another RuleSet) RuleSet {
 
 // Add returns a new rule set containing the rules in the current set and the
 // rules provided as arguments.
-func (rs RuleSet) Add(rules ...string) RuleSet {
+func (rs RuleSet) Add(rules ...Rule) RuleSet {
 	result := RuleSet{
-		m: make(map[string]struct{}, len(rs.m)+len(rules)),
+		m: make(map[Rule]struct{}, len(rs.m)+len(rules)),
 	}
 	for r := range rs.m {
 		result.m[r] = struct{}{}
@@ -39,8 +39,23 @@ func (rs RuleSet) Add(rules ...string) RuleSet {
 	return result
 }
 
+// Remove returns a new rule set containing the rules in the current set
+// excluding those provided as arguments.
+func (rs RuleSet) Remove(rules ...Rule) RuleSet {
+	result := RuleSet{
+		m: make(map[Rule]struct{}, len(rs.m)),
+	}
+	for r := range rs.m {
+		result.m[r] = struct{}{}
+	}
+	for _, r := range rules {
+		delete(result.m, r)
+	}
+	return result
+}
+
 // Has determines whether the given rule is in the set.
-func (rs RuleSet) Has(rule string) bool {
+func (rs RuleSet) Has(rule Rule) bool {
 	_, ok := rs.m[rule]
 	return ok
 }
@@ -72,8 +87,8 @@ func (rs RuleSet) IsSupersetOf(another RuleSet) bool {
 }
 
 // List returns a slice of the rules in the set.
-func (rs RuleSet) List() []string {
-	rules := make([]string, 0, len(rs.m))
+func (rs RuleSet) List() []Rule {
+	rules := make([]Rule, 0, len(rs.m))
 	for r := range rs.m {
 		rules = append(rules, r)
 	}

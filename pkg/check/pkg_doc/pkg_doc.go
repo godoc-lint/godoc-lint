@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	PkgDocRule        = "pkg-doc"
-	SinglePkgDocRule  = "single-pkg-doc"
-	RequirePkgDocRule = "require-pkg-doc"
+	PkgDocRule        = model.PkgDocRule
+	SinglePkgDocRule  = model.SinglePkgDocRule
+	RequirePkgDocRule = model.RequirePkgDocRule
 )
 
 var ruleSet = model.RuleSet{}.Add(

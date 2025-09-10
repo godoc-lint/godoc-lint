@@ -21,8 +21,7 @@ type config struct {
 
 	includeAsRegexp []*regexp.Regexp
 	excludeAsRegexp []*regexp.Regexp
-	enabledRules    *model.RuleSet
-	disabledRules   *model.RuleSet
+	rulesToApply    model.RuleSet
 	options         *model.RuleOptions
 }
 
@@ -38,10 +37,7 @@ func (c *config) GetCWD() string {
 
 // IsAnyRuleApplicable implements the corresponding interface method.
 func (c *config) IsAnyRuleApplicable(rs model.RuleSet) bool {
-	if c.disabledRules != nil && c.disabledRules.IsSupersetOf(rs) {
-		return false
-	}
-	return c.enabledRules == nil || c.enabledRules.HasCommonsWith(rs)
+	return c.rulesToApply.HasCommonsWith(rs)
 }
 
 // IsPathApplicable implements the corresponding interface method.
