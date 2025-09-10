@@ -1,3 +1,4 @@
+default: none
 enable:
   - require-pkg-doc
 options:

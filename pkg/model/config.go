@@ -1,5 +1,11 @@
 package model
 
+import (
+	"maps"
+	"regexp"
+	"slices"
+)
+
 // ConfigBuilder defines a configuration builder.
 type ConfigBuilder interface {
 	// SetOverride sets the configuration override.
@@ -8,6 +14,34 @@ type ConfigBuilder interface {
 	// GetConfig builds and returns the configuration object for the given path.
 	GetConfig(cwd string) (Config, error)
 }
+
+type DefaultSet string
+
+const (
+	DefaultSetAll   DefaultSet = "all"
+	DefaultSetNone  DefaultSet = "none"
+	DefaultSetBasic DefaultSet = "basic"
+
+	DefaultDefaultSet = DefaultSetBasic
+)
+
+var DefaultSetToRules = map[DefaultSet]RuleSet{
+	DefaultSetAll:  AllRules,
+	DefaultSetNone: {},
+	DefaultSetBasic: func() RuleSet {
+		return RuleSet{}.Add(
+			PkgDocRule,
+			SinglePkgDocRule,
+			StartWithNameRule,
+		)
+	}(),
+}
+
+var DefaultSetValues = func() []DefaultSet {
+	values := slices.Collect(maps.Keys(DefaultSetToRules))
+	slices.Sort(values)
+	return values
+}()
 
 // ConfigOverride represents a configuration override.
 //
@@ -19,17 +53,20 @@ type ConfigOverride struct {
 
 	// Include is the overridden list of regexp patterns matching the files that
 	// the linter should include.
-	Include []string
+	Include []*regexp.Regexp
 
 	// Exclude is the overridden list of regexp patterns matching the files that
 	// the linter should exclude.
-	Exclude []string
+	Exclude []*regexp.Regexp
+
+	// Default is the default set of rules to enable.
+	Default *DefaultSet
 
 	// Enable is the overridden list of rules to enable.
-	Enable []string
+	Enable *RuleSet
 
 	// Disable is the overridden list of rules to disable.
-	Disable []string
+	Disable *RuleSet
 }
 
 // NewConfigOverride returns a new config override instance.

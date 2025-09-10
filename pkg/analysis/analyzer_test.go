@@ -28,7 +28,7 @@ func TestRules(t *testing.T) {
 	testdir := filepath.Join(wd, "../../testdata/rule")
 
 	reg := check.NewPopulatedRegistry()
-	cb := config.NewConfigBuilder(testdir, reg.GetCoveredRules())
+	cb := config.NewConfigBuilder(testdir)
 	ocb := config.NewOnceConfigBuilder(cb)
 	inspector := inspect.NewInspector(ocb, exitFunc)
 	analyzer := analysis.NewAnalyzer(testdir, ocb, reg, inspector, exitFunc)

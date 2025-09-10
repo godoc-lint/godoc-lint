@@ -11,7 +11,7 @@ import (
 )
 
 // StartWithNameRule is the corresponding rule name.
-const StartWithNameRule = "start-with-name"
+const StartWithNameRule = model.StartWithNameRule
 
 var ruleSet = model.RuleSet{}.Add(StartWithNameRule)
 

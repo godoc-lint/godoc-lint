@@ -10,7 +10,7 @@ import (
 )
 
 // MaxLenRule is the corresponding rule name.
-const MaxLenRule = "max-len"
+const MaxLenRule = model.MaxLenRule
 
 var ruleSet = model.RuleSet{}.Add(MaxLenRule)
 

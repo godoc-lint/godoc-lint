@@ -43,12 +43,13 @@ Godoc-Lint looks for `.godoc-lint.yaml` file in the working directory for config
 
 Although it is best to set the configuration parameters in a file, there are a number of CLI options to modify linter parameters:
 
-| Option       | Description                                                          |
-| ------------ | -------------------------------------------------------------------- |
-| `-enable`    | Comma-separated list of rules to enable (multiple usage allowed)     |
-| `-disable`   | Comma-separated list of rules to disable (multiple usage allowed)    |
-| `-include`\* | Regexp pattern of relative paths to include (multiple usage allowed) |
-| `-exclude`\* | Regexp pattern of relative paths to exclude (multiple usage allowed) |
+| Option       | Description                                                               |
+| ------------ | ------------------------------------------------------------------------- |
+| `-default`   | Default set of rules to enable, one of `basic` (default), `all` or `none` |
+| `-enable`    | Comma-separated list of rules to *also* enable (multiple usage allowed)          |
+| `-disable`   | Comma-separated list of rules to disable (multiple usage allowed)         |
+| `-include`\* | Regexp pattern of relative paths to include (multiple usage allowed)      |
+| `-exclude`\* | Regexp pattern of relative paths to exclude (multiple usage allowed)      |
 
 > [!WARNING]
 > **(\*)** The path patterns supplied via `-include` or `-exclude` options should assume Unix-like paths (i.e. separated by forward slashes, `/`). This is to ensure a consistent behavior across different platforms.

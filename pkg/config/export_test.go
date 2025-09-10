@@ -3,6 +3,7 @@ package config
 type Config = config
 
 var (
-	DefaultConfigYAML = defaultConfigYAML
-	TransferOptions   = transferOptions
+	DefaultConfigYAML     = defaultConfigYAML
+	GetDefaultPlainConfig = getDefaultPlainConfig
+	TransferOptions       = transferOptions
 )

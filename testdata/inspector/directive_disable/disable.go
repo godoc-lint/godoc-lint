@@ -1,25 +1,25 @@
 // some header
 
 //godoclint:disable
-//godoclint:disable foo bar
+//godoclint:disable pkg-doc require-pkg-doc
 package directive_disable
 
 //godoclint:disable
 
-//godoclint:disable foo bar baz
+//godoclint:disable pkg-doc require-pkg-doc single-pkg-doc
 
-//godoclint:disable yolo
+//godoclint:disable start-with-name
 var Foo string
 
 // some godoc
 //
-//godoclint:disable yolo
+//godoclint:disable start-with-name
 var Bar string
 
 // some godoc
 //
 //godoclint:disable
-//godoclint:disable yolo
+//godoclint:disable start-with-name
 var Baz string
 
 // parent godoc
@@ -28,10 +28,10 @@ var Baz string
 var (
 	// first godoc
 	//
-	//godoclint:disable foo
+	//godoclint:disable pkg-doc
 	MultiFoo = 0
 	// second godoc
 	MultiBar = 0
 )
 
-//godoclint:disable foo-at-end
+//godoclint:disable max-len

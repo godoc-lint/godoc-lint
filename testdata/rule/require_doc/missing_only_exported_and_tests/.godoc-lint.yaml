@@ -1,3 +1,4 @@
+default: none
 enable:
   - require-doc
 options:

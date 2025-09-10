@@ -1,9 +1,6 @@
 # Default configuration
 version: "1.0"
-enable:
-  - pkg-doc
-  - single-pkg-doc
-  - start-with-name
+default: basic
 options:
   max-len/length: 77
   max-len/include-tests: false

@@ -300,7 +300,13 @@ func extractDisableDirectivesInComment(s string) model.InspectorResultDisableRul
 			result.All = true
 			continue
 		}
-		result.Rules = result.Rules.Add(strings.Split(strings.TrimSpace(args), " ")...)
+
+		names := strings.Split(strings.TrimSpace(args), " ")
+		for _, name := range names {
+			if model.AllRules.Has(model.Rule(name)) {
+				result.Rules = result.Rules.Add(model.Rule(name))
+			}
+		}
 	}
 	return result
 }

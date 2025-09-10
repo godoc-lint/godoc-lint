@@ -1,7 +1,11 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"reflect"
+	"regexp"
+	"slices"
 
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
@@ -12,6 +16,7 @@ type PlainConfig struct {
 	Version *string           `yaml:"version" mapstructure:"version"`
 	Exclude []string          `yaml:"exclude" mapstructure:"exclude"`
 	Include []string          `yaml:"include" mapstructure:"include"`
+	Default *string           `yaml:"default" mapstructure:"default"`
 	Enable  []string          `yaml:"enable" mapstructure:"enable"`
 	Disable []string          `yaml:"disable" mapstructure:"disable"`
 	Options *PlainRuleOptions `yaml:"options" mapstructure:"options"`
@@ -66,4 +71,55 @@ func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {
 		}
 		resV.FieldByName(resFieldName).Set(f.Elem())
 	}
+}
+
+func (pcfg *PlainConfig) Validate() error {
+	var errs []error
+
+	if pcfg.Default != nil && !slices.Contains(model.DefaultSetValues, model.DefaultSet(*pcfg.Default)) {
+		errs = append(errs, fmt.Errorf("invalid default set %q; must be one of %q", *pcfg.Default, model.DefaultSetValues))
+	}
+
+	if invalids := getInvalidRules(pcfg.Enable); len(invalids) > 0 {
+		errs = append(errs, fmt.Errorf("invalid rule name(s) to enable: %q", invalids))
+	}
+
+	if invalids := getInvalidRules(pcfg.Disable); len(invalids) > 0 {
+		errs = append(errs, fmt.Errorf("invalid rule name(s) to disable: %q", invalids))
+	}
+
+	// To avoid being too strict, we don't complain if a rule is enabled and disabled at the same time.
+
+	if invalids := getInvalidRegexps(pcfg.Include); len(invalids) > 0 {
+		errs = append(errs, fmt.Errorf("invalid inclusion pattern(s): %q", invalids))
+	}
+
+	if invalids := getInvalidRegexps(pcfg.Exclude); len(invalids) > 0 {
+		errs = append(errs, fmt.Errorf("invalid exclusion pattern(s): %q", invalids))
+	}
+
+	if len(errs) > 0 {
+		return errors.Join(errs...)
+	}
+	return nil
+}
+
+func getInvalidRules(names []string) []string {
+	invalids := make([]string, 0, len(names))
+	for _, element := range names {
+		if !model.AllRules.Has(model.Rule(element)) {
+			invalids = append(invalids, element)
+		}
+	}
+	return invalids
+}
+
+func getInvalidRegexps(values []string) []string {
+	invalids := make([]string, 0, len(values))
+	for _, element := range values {
+		if _, err := regexp.Compile(element); err != nil {
+			invalids = append(invalids, element)
+		}
+	}
+	return invalids
 }

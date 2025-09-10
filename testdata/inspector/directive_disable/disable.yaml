@@ -1,27 +1,27 @@
 disabled-rules:
   all: true
   rules:
-    - bar
-    - baz
-    - foo
-    - foo-at-end
+    - max-len
+    - pkg-doc
+    - require-pkg-doc
+    - single-pkg-doc
 package-doc:
   disabled-rules:
     all: true
     rules:
-      - bar
-      - foo
+      - pkg-doc
+      - require-pkg-doc
 symbol-decl:
   - doc:
       disabled-rules:
         rules:
-          - yolo
+          - start-with-name
     kind: var
     name: Foo
   - doc:
       disabled-rules:
         rules:
-          - yolo
+          - start-with-name
       text: |
         some godoc
     kind: var
@@ -30,7 +30,7 @@ symbol-decl:
       disabled-rules:
         all: true
         rules:
-          - yolo
+          - start-with-name
       text: |
         some godoc
     kind: var
@@ -38,7 +38,7 @@ symbol-decl:
   - doc:
       disabled-rules:
         rules:
-          - foo
+          - pkg-doc
       text: |
         first godoc
     kind: var

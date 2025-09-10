@@ -6,7 +6,7 @@ import (
 )
 
 // NoUnusedLinkRule is the corresponding rule name.
-const NoUnusedLinkRule = "no-unused-link"
+const NoUnusedLinkRule = model.NoUnusedLinkRule
 
 var ruleSet = model.RuleSet{}.Add(NoUnusedLinkRule)
 
