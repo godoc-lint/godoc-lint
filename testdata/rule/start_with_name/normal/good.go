@@ -1,4 +1,4 @@
-package strict
+package normal
 
 // (NG: no godoc)
 
