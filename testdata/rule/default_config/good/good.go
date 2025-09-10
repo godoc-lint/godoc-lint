@@ -1,5 +1,7 @@
 // some header
 
+// this file has no issues under the default configuration
+
 // package has no godoc and it's okay since `require-pkg-doc` is disabled by default
 
 package default_config
