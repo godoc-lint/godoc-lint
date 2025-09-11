@@ -1,6 +1,7 @@
 package check
 
 import (
+	"github.com/godoc-lint/godoc-lint/pkg/check/deprecated"
 	"github.com/godoc-lint/godoc-lint/pkg/check/max_len"
 	"github.com/godoc-lint/godoc-lint/pkg/check/no_unused_link"
 	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
@@ -34,6 +35,7 @@ func NewPopulatedRegistry() *Registry {
 		require_doc.NewRequireDocChecker(),
 		start_with_name.NewStartWithNameChecker(),
 		no_unused_link.NewNoUnusedLinkChecker(),
+		deprecated.NewDeprecatedChecker(),
 	)
 }
 
