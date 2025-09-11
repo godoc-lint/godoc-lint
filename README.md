@@ -58,11 +58,11 @@ Although it is best to set the configuration parameters in a file, there are a n
 
 The linter provides a number of rules that can be categorized as in this table:
 
-| Category          | Rules                                                    | Notes                                                              |
-| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------ |
-| Basic *(default)* | `pkg-doc` </br> `single-pkg-doc` </br> `start-with-name` | Recommended by [*Go Doc Comments*][godoc-ref], and **low-effort**  |
-| Strict            | `require-doc` </br> `require-pkg-doc`                    | Recommended by [*Go Doc Comments*][godoc-ref], and **high-effort** |
-| Extra             | `deprecated` </br> `max-len` </br> `no-unused-link`      | Extra but compatible with [*Go Doc Comments*][godoc-ref]           |
+| Category          | Rules                                                                       | Notes                                                              |
+| ----------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Basic *(default)* | `pkg-doc` </br> `single-pkg-doc` </br> `start-with-name` </br> `deprecated` | Recommended by [*Go Doc Comments*][godoc-ref], and **low-effort**  |
+| Strict            | `require-doc` </br> `require-pkg-doc`                                       | Recommended by [*Go Doc Comments*][godoc-ref], and **high-effort** |
+| Extra             | `max-len` </br> `no-unused-link`                                            | Extra but compatible with [*Go Doc Comments*][godoc-ref]           |
 
 **Rules under the *Basic* category are enabled by default** and do not need further configuration, unless, of course, one wants to tune their parameters. The rest has to be explicitly enabled via configuration.
 
