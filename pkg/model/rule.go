@@ -11,6 +11,7 @@ const (
 	RequireDocRule    Rule = "require-doc"
 	MaxLenRule        Rule = "max-len"
 	NoUnusedLinkRule  Rule = "no-unused-link"
+	DeprecatedRule    Rule = "deprecated"
 )
 
 // AllRules is the set of all supported rules.
@@ -23,5 +24,6 @@ var AllRules = func() RuleSet {
 		RequireDocRule,
 		MaxLenRule,
 		NoUnusedLinkRule,
+		DeprecatedRule,
 	)
 }()
