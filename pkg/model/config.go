@@ -33,6 +33,7 @@ var DefaultSetToRules = map[DefaultSet]RuleSet{
 			PkgDocRule,
 			SinglePkgDocRule,
 			StartWithNameRule,
+			DeprecatedRule,
 		)
 	}(),
 }
