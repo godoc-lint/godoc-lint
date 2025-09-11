@@ -1,6 +1,7 @@
 package deprecated
 
 import (
+	"go/ast"
 	"go/doc/comment"
 	"regexp"
 
@@ -36,6 +37,11 @@ func (r *DeprecatedChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		for _, sd := range ir.SymbolDecl {
+			isExported := ast.IsExported(sd.Name)
+			if !isExported {
+				continue
+			}
+
 			if sd.ParentDoc != nil {
 				docs[sd.ParentDoc] = struct{}{}
 			}

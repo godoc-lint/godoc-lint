@@ -59,3 +59,6 @@ func Echo() {}
 // this is a symbol
 // deprecated: do not use
 func Foxtrot() {}
+
+// DEPRECATED: bad deprecation note but okay since the symbol is unexported
+func golf() {}
