@@ -45,9 +45,19 @@ exclude: null
 # - `none`:  no rule is enabled by default; the `enable` key can be used to enable specific rules.
 default: basic
 
-# List of rules to enable in addition to the default set.
+# List of rules to enable *in addition to* the default set.
 #
-# See the linter docs for the list of supported rules.
+# See the linter docs for more on supported rules.
+#
+# Example:
+#   - pkg-doc
+#   - single-pkg-doc
+#   - require-pkg-doc
+#   - start-with-name
+#   - require-doc
+#   - deprecated
+#   - max-len
+#   - no-unused-link
 enable: null
 
 # List of rules to disable.
