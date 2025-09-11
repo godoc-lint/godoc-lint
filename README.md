@@ -46,7 +46,7 @@ Although it is best to set the configuration parameters in a file, there are a n
 | Option       | Description                                                               |
 | ------------ | ------------------------------------------------------------------------- |
 | `-default`   | Default set of rules to enable, one of `basic` (default), `all` or `none` |
-| `-enable`    | Comma-separated list of rules to *also* enable (multiple usage allowed)          |
+| `-enable`    | Comma-separated list of rules to *also* enable (multiple usage allowed)   |
 | `-disable`   | Comma-separated list of rules to disable (multiple usage allowed)         |
 | `-include`\* | Regexp pattern of relative paths to include (multiple usage allowed)      |
 | `-exclude`\* | Regexp pattern of relative paths to exclude (multiple usage allowed)      |
@@ -62,7 +62,7 @@ The linter provides a number of rules that can be categorized as in this table:
 | ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------ |
 | Basic *(default)* | `pkg-doc` </br> `single-pkg-doc` </br> `start-with-name` | Recommended by [*Go Doc Comments*][godoc-ref], and **low-effort**  |
 | Strict            | `require-doc` </br> `require-pkg-doc`                    | Recommended by [*Go Doc Comments*][godoc-ref], and **high-effort** |
-| Extra             | `max-len` </br> `no-unused-link`                         | Extra but compatible with [*Go Doc Comments*][godoc-ref]           |
+| Extra             | `deprecated` </br> `max-len` </br> `no-unused-link`      | Extra but compatible with [*Go Doc Comments*][godoc-ref]           |
 
 **Rules under the *Basic* category are enabled by default** and do not need further configuration, unless, of course, one wants to tune their parameters. The rest has to be explicitly enabled via configuration.
 
@@ -114,6 +114,22 @@ By default, unexported symbols are skipped. To include them the `start-with-name
 ### `require-doc`
 
 Ensures all exported and/or (optionally) unexported symbols have godocs. By default, symbols declared in test files, together with any unexported symbols are ignored. To include test files, the `require-doc/include-tests` option should be set to `true`. Unexported symbols can be included in the check if the `require-doc/ignore-unexported` options is set to `false`. Although it is a rare scenario but one may want to ignore exported symbols, for which the `require-doc/ignore-exported` should be set to `true`.
+
+### `deprecated`
+
+Checks if deprecation notes are formatted correctly. This rule only applies to exported symbols.
+
+```go
+// Foo is a symbol.
+//
+// DEPRECATED: do not use  // (Bad)
+const Foo = 0
+
+// Foo is a symbol.
+//
+// Deprecated: do not use  // (Good)
+const Foo = 0
+```
 
 ### `max-len`
 
