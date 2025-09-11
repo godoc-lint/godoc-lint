@@ -5,3 +5,8 @@ package default_config
 
 // bad godoc // want `godoc should start with symbol name \("Foo"\)`
 const Foo = 0
+
+// Bar is a symbol. // want `deprecation note should be formatted as "Deprecated: "`
+//
+// DEPRECATED: invalid deprecation note
+type Bar int
