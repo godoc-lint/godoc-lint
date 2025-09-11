@@ -1,0 +1,3 @@
+default: none
+enable:
+  - deprecated
