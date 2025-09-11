@@ -7,7 +7,7 @@ var Current = Version{
 	Major:  0,
 	Minor:  10,
 	Patch:  0,
-	Suffix: "dev",
+	Suffix: "",
 }
 
 // Version represents module version (in semver format).
