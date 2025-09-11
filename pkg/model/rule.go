@@ -9,9 +9,9 @@ const (
 	RequirePkgDocRule Rule = "require-pkg-doc"
 	StartWithNameRule Rule = "start-with-name"
 	RequireDocRule    Rule = "require-doc"
+	DeprecatedRule    Rule = "deprecated"
 	MaxLenRule        Rule = "max-len"
 	NoUnusedLinkRule  Rule = "no-unused-link"
-	DeprecatedRule    Rule = "deprecated"
 )
 
 // AllRules is the set of all supported rules.
@@ -22,8 +22,8 @@ var AllRules = func() RuleSet {
 		RequirePkgDocRule,
 		StartWithNameRule,
 		RequireDocRule,
+		DeprecatedRule,
 		MaxLenRule,
 		NoUnusedLinkRule,
-		DeprecatedRule,
 	)
 }()

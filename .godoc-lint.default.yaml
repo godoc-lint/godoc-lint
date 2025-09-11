@@ -40,7 +40,7 @@ include: null
 exclude: null
 
 # Default set of rules to enable. Possible values are:
-# - `basic`: enables basic rules which are: `pkg-doc`, `single-pkg-doc` and `start-with-name`.
+# - `basic`: enables basic rules which are: `pkg-doc`, `single-pkg-doc`, `start-with-name` and `deprecated`.
 # - `all`:   all rules are enabled by default; the `disable` key can be used to disable specific rules.
 # - `none`:  no rule is enabled by default; the `enable` key can be used to enable specific rules.
 default: basic
