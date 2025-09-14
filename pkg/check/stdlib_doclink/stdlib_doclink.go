@@ -20,7 +20,7 @@ var ruleSet = model.RuleSet{}.Add(StdlibDoclinkRule)
 // StdlibDoclinkChecker checks for proper doc links to stdlib symbols.
 type StdlibDoclinkChecker struct{}
 
-// NewMaxLenChecker returns a new instance of the corresponding checker.
+// NewStdlibDoclinkChecker returns a new instance of the corresponding checker.
 func NewStdlibDoclinkChecker() *StdlibDoclinkChecker {
 	return &StdlibDoclinkChecker{}
 }
