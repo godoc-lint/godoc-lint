@@ -33,6 +33,7 @@ type PlainRuleOptions struct {
 	RequireDocIgnoreUnexported     *bool `option:"require-doc/ignore-unexported" yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
 	StartWithNameIncludeTests      *bool `option:"start-with-name/include-tests" yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
 	StartWithNameIncludeUnexported *bool `option:"start-with-name/include-unexported" yaml:"start-with-name/include-unexported" mapstructure:"start-with-name/include-unexported"`
+	StdlibDoclinkIncludeTests      *bool `option:"stdlib-doclink/include-tests" yaml:"stdlib-doclink/include-tests" mapstructure:"stdlib-doclink/include-tests"`
 	NoUnusedLinkIncludeTests       *bool `option:"no-unused-link/include-tests" yaml:"no-unused-link/include-tests" mapstructure:"no-unused-link/include-tests"`
 }
 

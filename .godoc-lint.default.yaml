@@ -56,6 +56,7 @@ default: basic
 #   - start-with-name
 #   - require-doc
 #   - deprecated
+#   - stdlib-doclink
 #   - max-len
 #   - no-unused-link
 enable: null
@@ -102,6 +103,9 @@ options:
 
   # Include unexported (private) symbols when applying the `start-with-name` rule.
   start-with-name/include-unexported: false
+
+  # Include test files when applying the `stdlib-doclink` rule.
+  stdlib-doclink/include-tests: false
 
   # Include test files when applying the `no-unused-link` rule.
   no-unused-link/include-tests: false

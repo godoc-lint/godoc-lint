@@ -12,4 +12,5 @@ options:
   require-doc/ignore-unexported: true
   start-with-name/include-tests: false
   start-with-name/include-unexported: false
+  stdlib-doclink/include-tests: false
   no-unused-link/include-tests: false

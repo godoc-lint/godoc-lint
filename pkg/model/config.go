@@ -112,5 +112,6 @@ type RuleOptions struct {
 	RequireDocIgnoreUnexported     bool `option:"require-doc/ignore-unexported"`
 	StartWithNameIncludeTests      bool `option:"start-with-name/include-tests"`
 	StartWithNameIncludeUnexported bool `option:"start-with-name/include-unexported"`
+	StdlibDoclinkIncludeTests      bool `option:"stdlib-doclink/include-tests"`
 	NoUnusedLinkIncludeTests       bool `option:"no-unused-link/include-tests"`
 }

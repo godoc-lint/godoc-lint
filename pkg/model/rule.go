@@ -10,6 +10,7 @@ const (
 	StartWithNameRule Rule = "start-with-name"
 	RequireDocRule    Rule = "require-doc"
 	DeprecatedRule    Rule = "deprecated"
+	StdlibDoclinkRule Rule = "stdlib-doclink"
 	MaxLenRule        Rule = "max-len"
 	NoUnusedLinkRule  Rule = "no-unused-link"
 )
@@ -23,6 +24,7 @@ var AllRules = func() RuleSet {
 		StartWithNameRule,
 		RequireDocRule,
 		DeprecatedRule,
+		StdlibDoclinkRule,
 		MaxLenRule,
 		NoUnusedLinkRule,
 	)

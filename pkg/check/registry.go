@@ -7,6 +7,7 @@ import (
 	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/check/require_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/check/start_with_name"
+	"github.com/godoc-lint/godoc-lint/pkg/check/stdlib_doclink"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
 
@@ -36,6 +37,7 @@ func NewPopulatedRegistry() *Registry {
 		start_with_name.NewStartWithNameChecker(),
 		no_unused_link.NewNoUnusedLinkChecker(),
 		deprecated.NewDeprecatedChecker(),
+		stdlib_doclink.NewStdlibDoclinkChecker(),
 	)
 }
 
