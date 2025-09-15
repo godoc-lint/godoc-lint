@@ -5,7 +5,12 @@ import (
 
 	"github.com/godoc-lint/godoc-lint/pkg/check/stdlib_doclink/internal"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
+
+func TestValidPotentialDoclinkRE(t *testing.T) {
+	require.NotNil(t, potentialDoclinkRE())
+}
 
 func TestFindPotentialDoclinks(t *testing.T) {
 	tests := []struct {

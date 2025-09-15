@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/godoc-lint/godoc-lint/pkg/check/stdlib_doclink/internal"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
@@ -116,9 +117,7 @@ type potentialDoclink struct {
 	kind     internal.SymbolKind
 }
 
-func findPotentialDoclinks(text string) []potentialDoclink {
-	m := make(map[string]*potentialDoclink, 5)
-
+var potentialDoclinkRE = sync.OnceValue(func() *regexp.Regexp {
 	quotedPkgPaths := make([]string, 0, len(stdlib()))
 	for _, s := range stdlib() {
 		quotedPkgPaths = append(quotedPkgPaths, regexp.QuoteMeta(s.Path))
@@ -126,12 +125,15 @@ func findPotentialDoclinks(text string) []potentialDoclink {
 
 	// The package-only case is not a match due to potential false positives matching
 	// common words like "bytes", or "time".
-	stdlibPkgRE, err := regexp.Compile(fmt.Sprintf(`(?m)(?:^| )(%s)\.([a-zA-Z0-9_]+)(?:\.([a-zA-Z0-9_]+))?\b`, strings.Join(quotedPkgPaths, "|")))
-	if err != nil {
-		return nil
-	}
+	stdlibPkgRE, _ := regexp.Compile(fmt.Sprintf(`(?m)(?:^| )(%s)\.([a-zA-Z0-9_]+)(?:\.([a-zA-Z0-9_]+))?\b`, strings.Join(quotedPkgPaths, "|")))
+	// Error is never nil due to tests.
+	return stdlibPkgRE
+})
 
-	matches := stdlibPkgRE.FindAllStringSubmatch(text, -1)
+func findPotentialDoclinks(text string) []potentialDoclink {
+	m := make(map[string]*potentialDoclink, 5)
+
+	matches := potentialDoclinkRE().FindAllStringSubmatch(text, -1)
 	for _, match := range matches {
 		pkg := match[1]
 		name1 := match[2]
