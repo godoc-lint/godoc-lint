@@ -34,6 +34,7 @@ func (r *StdlibDoclinkChecker) GetCoveredRules() model.RuleSet {
 // Apply implements the corresponding interface method.
 func (r *StdlibDoclinkChecker) Apply(actx *model.AnalysisContext) error {
 	includeTests := actx.Config.GetRuleOptions().StdlibDoclinkIncludeTests
+	enforceRepeats := actx.Config.GetRuleOptions().StdlibDoclinkEnforceRepeats
 
 	docs := make(map[*model.CommentGroup]struct{}, 10*len(actx.InspectorResult.Files))
 
@@ -54,14 +55,78 @@ func (r *StdlibDoclinkChecker) Apply(actx *model.AnalysisContext) error {
 	}
 
 	for doc := range docs {
-		checkStdlibDoclink(actx, doc)
+		checkStdlibDoclink(actx, doc, enforceRepeats)
 	}
 	return nil
 }
 
-func checkStdlibDoclink(actx *model.AnalysisContext, doc *model.CommentGroup) {
+func walkBlocks(blocks []gdc.Block, fn func(node any) bool) {
+	var walk func(node any)
+	walk = func(node any) {
+		if !fn(node) {
+			return
+		}
+
+		switch n := node.(type) {
+		case *gdc.Code:
+			// Do nothing.
+		case *gdc.Heading:
+			for _, t := range n.Text {
+				walk(t)
+			}
+		case *gdc.List:
+			for _, i := range n.Items {
+				walk(i)
+			}
+		case *gdc.ListItem:
+			for _, i := range n.Content {
+				walk(i)
+			}
+		case *gdc.Paragraph:
+			for _, t := range n.Text {
+				walk(t)
+			}
+		case *gdc.Link:
+			for _, t := range n.Text {
+				walk(t)
+			}
+		case *gdc.DocLink:
+			for _, t := range n.Text {
+				walk(t)
+			}
+		}
+	}
+
+	for _, b := range blocks {
+		walk(b)
+	}
+}
+
+func checkStdlibDoclink(actx *model.AnalysisContext, doc *model.CommentGroup, enforceRepeats bool) {
 	if doc.DisabledRules.All || doc.DisabledRules.Rules.Has(StdlibDoclinkRule) {
 		return
+	}
+
+	var doclinks map[string]struct{}
+	if !enforceRepeats {
+		doclinks = make(map[string]struct{}, 5)
+		walkBlocks(doc.Parsed.Content, func(node any) bool {
+			dc, ok := node.(*gdc.DocLink)
+			if !ok {
+				return true
+			}
+
+			if dc.Recv != "" && dc.Name != "" {
+				// pkg.name.name
+				k := fmt.Sprintf("%s.%s.%s", dc.ImportPath, dc.Recv, dc.Name)
+				doclinks[k] = struct{}{}
+			} else if dc.Name != "" {
+				// pkg.name
+				k := fmt.Sprintf("%s.%s", dc.ImportPath, dc.Name)
+				doclinks[k] = struct{}{}
+			}
+			return false
+		})
 	}
 
 	applicableBlocks := make([]gdc.Block, 0, len(doc.Parsed.Content))
@@ -80,7 +145,23 @@ func checkStdlibDoclink(actx *model.AnalysisContext, doc *model.CommentGroup) {
 	}
 	text := string((&gdc.Printer{}).Comment(strippedCodeAndLinks))
 
-	for _, pd := range findPotentialDoclinks(text) {
+	pds := findPotentialDoclinks(text)
+	if len(pds) == 0 {
+		return
+	}
+
+	if !enforceRepeats {
+		refined := make([]potentialDoclink, 0, len(pds))
+		for _, pd := range pds {
+			if _, ok := doclinks[pd.originalNoStar]; ok {
+				continue
+			}
+			refined = append(refined, pd)
+		}
+		pds = refined
+	}
+
+	for _, pd := range pds {
 		var founds string
 		if pd.count > 1 {
 			founds = fmt.Sprintf(" (%d instances)", pd.count)
@@ -111,10 +192,11 @@ func kindTitle(kind internal.SymbolKind) string {
 }
 
 type potentialDoclink struct {
-	original string
-	count    int
-	doclink  string
-	kind     internal.SymbolKind
+	original       string
+	originalNoStar string
+	count          int
+	doclink        string
+	kind           internal.SymbolKind
 }
 
 var potentialDoclinkRE = sync.OnceValue(func() *regexp.Regexp {
@@ -124,9 +206,12 @@ var potentialDoclinkRE = sync.OnceValue(func() *regexp.Regexp {
 	}
 
 	// The package-only case is not a match due to potential false positives matching
-	// common words like "bytes", or "time".
-	stdlibPkgRE, _ := regexp.Compile(fmt.Sprintf(`(?m)(?:^| )(%s)\.([a-zA-Z0-9_]+)(?:\.([a-zA-Z0-9_]+))?\b`, strings.Join(quotedPkgPaths, "|")))
-	// Error is never nil due to tests.
+	// common words like "bytes", or "time". Even cases like "net/http" can be used
+	// in a legitimate godoc text.
+	//
+	// The error is never non-nil due to tests.
+	stdlibPkgRE, _ := regexp.Compile(fmt.Sprintf(`(?m)(?:^|[^\n[*])(\*?)\b(\*?)(%s)\.([a-zA-Z0-9_]+)(?:\.([a-zA-Z0-9_]+))?\b`, strings.Join(quotedPkgPaths, "|")))
+
 	return stdlibPkgRE
 })
 
@@ -135,30 +220,33 @@ func findPotentialDoclinks(text string) []potentialDoclink {
 
 	matches := potentialDoclinkRE().FindAllStringSubmatch(text, -1)
 	for _, match := range matches {
-		pkg := match[1]
-		name1 := match[2]
-		name2 := match[3]
+		star := match[1]
+		pkg := match[2]
+		name1 := match[3]
+		name2 := match[4]
 
 		if pkg != "" && name1 != "" && name2 != "" {
-			// pkg/name1.name2
+			// pkg.name1.name2
 			if s, ok := stdlib()[pkg]; ok {
 				if kind, ok := s.Symbols[name1+"."+name2]; ok {
-					original := fmt.Sprintf("%s.%s.%s", pkg, name1, name2)
-					if _, ok := m[original]; !ok {
+					originalNoStar := fmt.Sprintf("%s.%s.%s", pkg, name1, name2)
+					original := star + originalNoStar
+					if _, ok := m[originalNoStar]; !ok {
 						doclink := fmt.Sprintf("[%s]", original)
-						m[original] = &potentialDoclink{original: original, doclink: doclink, kind: kind}
+						m[original] = &potentialDoclink{original: original, originalNoStar: originalNoStar, doclink: doclink, kind: kind}
 					}
 					m[original].count = m[original].count + 1
 				}
 			}
 		} else if pkg != "" && name1 != "" && name2 == "" {
-			// pkg/name1
+			// pkg.name1
 			if s, ok := stdlib()[pkg]; ok {
 				if kind, ok := s.Symbols[name1]; ok {
-					original := fmt.Sprintf("%s.%s", pkg, name1)
-					if _, ok := m[original]; !ok {
+					originalNoStar := fmt.Sprintf("%s.%s", pkg, name1)
+					original := star + originalNoStar
+					if _, ok := m[originalNoStar]; !ok {
 						doclink := fmt.Sprintf("[%s]", original)
-						m[original] = &potentialDoclink{original: original, doclink: doclink, kind: kind}
+						m[original] = &potentialDoclink{original: original, originalNoStar: originalNoStar, doclink: doclink, kind: kind}
 					}
 					m[original].count = m[original].count + 1
 				}

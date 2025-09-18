@@ -34,6 +34,9 @@ func TestFindPotentialDoclinks(t *testing.T) {
 			name: "ignore package-only",
 			texts: []string{
 				"fmt",
+				"bytes",
+				"encoding/json",
+				"net/http",
 				"works like fmt package",
 				"works like fmt and bytes packages",
 			},
@@ -51,7 +54,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nfmt.Printf\nas expected",
 			},
 			want: []potentialDoclink{
-				{original: "fmt.Printf", doclink: "[fmt.Printf]", kind: internal.SymbolKindFunc, count: 1},
+				{original: "fmt.Printf", originalNoStar: "fmt.Printf", doclink: "[fmt.Printf]", kind: internal.SymbolKindFunc, count: 1},
 			},
 		},
 		{
@@ -67,7 +70,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nfmt.Printf\nas expected\nfmt.Printf\n",
 			},
 			want: []potentialDoclink{
-				{original: "fmt.Printf", doclink: "[fmt.Printf]", kind: internal.SymbolKindFunc, count: 2},
+				{original: "fmt.Printf", originalNoStar: "fmt.Printf", doclink: "[fmt.Printf]", kind: internal.SymbolKindFunc, count: 2},
 			},
 		},
 		{
@@ -84,8 +87,8 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nfmt.Printf\nas expected\nio.Reader\n",
 			},
 			want: []potentialDoclink{
-				{original: "fmt.Printf", doclink: "[fmt.Printf]", kind: internal.SymbolKindFunc, count: 1},
-				{original: "io.Reader", doclink: "[io.Reader]", kind: internal.SymbolKindType, count: 1},
+				{original: "fmt.Printf", originalNoStar: "fmt.Printf", doclink: "[fmt.Printf]", kind: internal.SymbolKindFunc, count: 1},
+				{original: "io.Reader", originalNoStar: "io.Reader", doclink: "[io.Reader]", kind: internal.SymbolKindType, count: 1},
 			},
 		},
 	}

@@ -66,6 +66,8 @@ func TestTransferOptions(t *testing.T) {
 			RequireDocIgnoreUnexported:     true,
 			StartWithNameIncludeTests:      false,
 			StartWithNameIncludeUnexported: false,
+			StdlibDoclinkIncludeTests:      false,
+			StdlibDoclinkEnforceRepeats:    false,
 			NoUnusedLinkIncludeTests:       false,
 		},
 	},

@@ -113,5 +113,6 @@ type RuleOptions struct {
 	StartWithNameIncludeTests      bool `option:"start-with-name/include-tests"`
 	StartWithNameIncludeUnexported bool `option:"start-with-name/include-unexported"`
 	StdlibDoclinkIncludeTests      bool `option:"stdlib-doclink/include-tests"`
+	StdlibDoclinkEnforceRepeats    bool `option:"stdlib-doclink/enforce-repeats"`
 	NoUnusedLinkIncludeTests       bool `option:"no-unused-link/include-tests"`
 }

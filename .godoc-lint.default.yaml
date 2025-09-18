@@ -107,5 +107,9 @@ options:
   # Include test files when applying the `stdlib-doclink` rule.
   stdlib-doclink/include-tests: false
 
+  # Enforce repeated doc links even if there is at least one existing doc link
+  # to the same symbol.
+  stdlib-doclink/enforce-repeats: false
+
   # Include test files when applying the `no-unused-link` rule.
   no-unused-link/include-tests: false
