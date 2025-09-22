@@ -12,14 +12,60 @@ While `gofmt` handles formatting and correct usage of godocs, still it does not 
 > [!IMPORTANT]
 > Godoc-Lint is still under development (`v0.x.x`). So, the Go API (for using the linter as a dependency) is not fully stable until `v1.x.x` has been released. However, the CLI experience is stable enough at this stage.
 
+## Using via [Golangci-lint][golangci-lint]
+
+Godoc-Lint is now available as part of [Golangci-lint][golangci-lint] suite of linters (since `v2.5.0`). To enable the linter, it should be added to the `.golangci.yml` file:
+
+```yaml
+version: "2"
+linters:
+  enable:
+    - godoclint
+```
+
+When used via Golangci-lint, the linter's configuration will be different from what is covered in this document. Users should consult Golangci-lint [docs][golangci-lint-config] for more details.
+
+> [!TIP]
+> In most cases, it is best to exclude Go test files (i.e., `*_test.go`) from the analysis. This can be done by adding the following lines to `.golangci.yml`:
+>
+> ```yaml
+> linters:
+>   exclusions:
+>     rules:
+>       - path: '(.+)_test\.go'
+>         linters:
+>           - godoclint
+> ```
+>
+> More about exclusion methods is available [here][golangci-lint-fp].
+
+
+[golangci-lint]: https://golangci-lint.run
+[golangci-lint-config]: https://golangci-lint.run/docs/linters/configuration/#godoclint
+[golangci-lint-fp]: https://golangci-lint.run/docs/linters/false-positives/
+
 ## Installation
 
-Godoc-Lint binaries are available in the repository's [Releases][releases] page. This is the recommended method to get the stable versions.
+Godoc-Lint binaries are available in the repository's [Releases][releases] page.
 
-However, users can also install Godoc-Lint from source:
+Users can also install Godoc-Lint binary from source code by using any of these commands:
 
 ```sh
-go install github.com/godoc-lint/godoc-lint/cmd/godoclint
+# Latest version
+go install github.com/godoc-lint/godoc-lint/cmd/godoclint@latest
+
+# Specific version
+go install github.com/godoc-lint/godoc-lint/cmd/godoclint@v0.10.0
+```
+
+Additionally, the linter can be run from source code via the following command:
+
+```sh
+# Latest version
+go run github.com/godoc-lint/godoc-lint/cmd/godoclint@latest ./...
+
+# Specific version
+go run github.com/godoc-lint/godoc-lint/cmd/godoclint@v0.10.0 ./...
 ```
 
 [releases]: https://github.com/godoc-lint/godoc-lint/releases
@@ -244,6 +290,9 @@ godoclint -config the-config-file.yaml ./...
 Godoc-Lint comes with a sensible default configuration that will be used when there is no configuration file. Check out [`.godoc-lint.default.yaml`](./.godoc-lint.default.yaml) for more details.
 
 ### Overriding configuration
+
+> [!WARNING]
+> When used via Golangci-lint, the linter's configuration will be different from what is covered here. Users should consult Golangci-lint [docs][golangci-lint-config] for more details.
 
 In addition to the root directory, Godoc-Lint allows configuration files in sub-directories. When a package is being processed, the configuration file in the package's directory, if any, will be used by the linter. If there is no such file, the linter looks for it in the directory's parents, up until the root where the linter was invoked.
 
