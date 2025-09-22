@@ -52,7 +52,7 @@ Although it is best to set the configuration parameters in a file, there are a n
 | `-exclude`\* | Regexp pattern of relative paths to exclude (multiple usage allowed)      |
 
 > [!WARNING]
-> **(\*)** The path patterns supplied via `-include` or `-exclude` options should assume Unix-like paths (i.e. separated by forward slashes, `/`). This is to ensure a consistent behavior across different platforms.
+> **(\*)** The path patterns supplied via `-include` or `-exclude` options should assume Unix-like paths (i.e., separated by forward slashes, `/`). This is to ensure a consistent behavior across different platforms.
 
 ## Rules
 
