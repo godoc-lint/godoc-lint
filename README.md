@@ -1,16 +1,13 @@
 # What's Godoc-Lint?
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/godoc-lint/godoc-lint.svg)](https://pkg.go.dev/github.com/godoc-lint/godoc-lint)
+[![Release](https://img.shields.io/github/v/release/godoc-lint/godoc-lint)](https://github.com/godoc-lint/godoc-lint/releases)
+[![License](https://img.shields.io/github/license/godoc-lint/godoc-lint)](/LICENSE)
 [![CI](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml/badge.svg)](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml)
 
-*Godoc-Lint* is a *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc*. Godocs are well explained in this official Golang document, titled [*Go Doc Comments*][godoc-ref].
+*Godoc-Lint* is a *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc* (See [*Go Doc Comments*][godoc-ref]), ready to be used **out of the box** without further configuration. It is highly recommended to be used when developing **reusable Go modules, like SDKs, API clients, or special-purpose libraries,** which need consistent/standard DevEx in IDEs, as well as on [pkg.go.dev](https://pkg.go.dev) docs.
 
 [godoc-ref]: https://go.dev/doc/comment
-
-While `gofmt` handles formatting and correct usage of godocs, still it does not enforce particular restrictions/stylings to godocs. Here is where Godoc-Lint comes into play by adding a set of extra rules to enhance readability, consistency, and developer experience.
-
-> [!IMPORTANT]
-> Godoc-Lint is still under development (`v0.x.x`). So, the Go API (for using the linter as a dependency) is not fully stable until `v1.x.x` has been released. However, the CLI experience is stable enough at this stage.
 
 ## Using via [Golangci-lint][golangci-lint]
 
