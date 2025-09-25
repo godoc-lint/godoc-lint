@@ -10,7 +10,7 @@
 [godoc-ref]: https://go.dev/doc/comment
 
 > [!IMPORTANT]
-> Godoc-Lint is still under development (`v0.x.x`). So, the Go API (for using the linter as a dependency) is not fully stable until `v1.x.x` has been released. However, the CLI experience is stable enough at this stage.
+> Godoc-Lint is still under development (`v0.x.x`). So, the Go API (for using the linter as a dependency) is not fully stable until `v1.x.x` has been released. **It is recommended to use the linter via [Golangci-lint][golangci-lint-config].**
 
 ## Using via [Golangci-lint][golangci-lint]
 
