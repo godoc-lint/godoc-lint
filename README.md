@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/godoc-lint/godoc-lint)](/LICENSE)
 [![CI](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml/badge.svg)](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml)
 
-*Godoc-Lint* is a *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc* (See [*Go Doc Comments*][godoc-ref]), ready to be used **out of the box** without further configuration. It is highly recommended to be used when developing **reusable Go modules, like SDKs, API clients, or special-purpose libraries,** which need consistent/standard DevEx in IDEs or on [pkg.go.dev](https://pkg.go.dev).
+*Godoc-Lint* is a *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc* (See [*Go Doc Comments*][godoc-ref]), ready to be used **out of the box** without further configuration. It is highly recommended to be used when developing **reusable Go modules, like SDKs, API clients, or special-purpose libraries,** which need consistent/standard DevEx in IDEs, as well as on [pkg.go.dev](https://pkg.go.dev) docs.
 
 [godoc-ref]: https://go.dev/doc/comment
 
