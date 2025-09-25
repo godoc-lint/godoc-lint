@@ -9,9 +9,6 @@
 
 [godoc-ref]: https://go.dev/doc/comment
 
-> [!IMPORTANT]
-> Godoc-Lint is still under development (`v0.x.x`). So, the Go API (for using the linter as a dependency) is not fully stable until `v1.x.x` has been released. **It is recommended to use the linter via [Golangci-lint][golangci-lint-config].**
-
 ## Using via [Golangci-lint][golangci-lint]
 
 Godoc-Lint is now available as part of [Golangci-lint][golangci-lint] suite of linters (since `v2.5.0`). To enable the linter, it should be added to the `.golangci.yml` file:
