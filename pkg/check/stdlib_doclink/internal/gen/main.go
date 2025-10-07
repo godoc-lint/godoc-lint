@@ -1,3 +1,8 @@
+// gen is a command package that extracts information about stdlib's top-level
+// declarations and generates a JSON.
+//
+// This package should be compiled into a binary (using the same or newer Go
+// compiler) and then invoked in the root of the Go stdlib source tree.
 package main
 
 import (
