@@ -29,7 +29,6 @@ go.work.sum
 # goreleaser
 dist/
 
-/.vscode/*
-!/.vscode/*.example
+/.vscode
 
 /testdata/**/*.got.yaml
