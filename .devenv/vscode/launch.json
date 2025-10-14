@@ -9,12 +9,14 @@
             "program": "${workspaceFolder}/cmd/godoclint",
             "args": [
                 // "-config", "config.yaml",
+                // "-default", "basic",
                 // "-include", "/foo/",
                 // "-exclude", "/bar/",
                 // "-enable", "max-len",
                 // "-disable", "max-len",
                 "./..."
             ],
+            "cwd": "${workspaceFolder}"
         },
     ]
 }
