@@ -5,11 +5,11 @@
 [![License](https://img.shields.io/github/license/godoc-lint/godoc-lint)](/LICENSE)
 [![CI](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml/badge.svg)](https://github.com/godoc-lint/godoc-lint/actions/workflows/ci.yaml)
 
-*Godoc-Lint* is a *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc* (See [*Go Doc Comments*][godoc-ref]), ready to be used **out of the box** without further configuration. It is highly recommended to be used when developing **reusable Go modules, like SDKs, API clients, or special-purpose libraries,** which need consistent/standard DevEx in IDEs, as well as on [pkg.go.dev](https://pkg.go.dev) docs.
+*Godoc-Lint* is a fast, *little* opinionated linter for Go documentation practice, also known as *Go Doc* or *godoc* (See [*Go Doc Comments*][godoc-ref]), ready to be used **out of the box** without further configuration. It is highly recommended to be used when developing **reusable Go modules, like SDKs, API clients, or special-purpose libraries,** which need consistent/standard developer experience in IDEs, as well as on [pkg.go.dev](https://pkg.go.dev) docs.
 
 [godoc-ref]: https://go.dev/doc/comment
 
-## Using via [Golangci-lint][golangci-lint]
+## Using via Golangci-lint
 
 Godoc-Lint is now available as part of [Golangci-lint][golangci-lint] suite of linters (since `v2.5.0`). To enable the linter, it should be added to the `.golangci.yml` file:
 
@@ -29,7 +29,7 @@ When used via Golangci-lint, the linter's configuration will be different from w
 > linters:
 >   exclusions:
 >     rules:
->       - path: '(.+)_test\.go'
+>       - path: _test\.go$
 >         linters:
 >           - godoclint
 > ```
@@ -219,6 +219,11 @@ const Foo = 0
 The rule skips test files by default. To include them, the `no-unused-link/include-tests` option should be set to `true`.
 
 ## Disabling rules
+
+> [!TIP]
+> Users who run the linter via Golangci-lint can also use the `//nolint:godoclint` directive to disable the linter. The `//nolint` directive usage is explained in the Golangci-lint's official [docs][golangci-nolint].
+
+[golangci-nolint]: https://golangci-lint.run/docs/linters/false-positives/#nolint-directive
 
 Godoc-Lint supports inline directives to temporarily skip enforcing given set of rules. The directive must be formatted as:
 
