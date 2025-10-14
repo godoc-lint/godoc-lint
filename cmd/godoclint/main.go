@@ -1,3 +1,4 @@
+// Godoc-Lint command package.
 package main
 
 import (
