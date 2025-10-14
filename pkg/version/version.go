@@ -1,3 +1,4 @@
+// Package version provides versioning information for the module.
 package version
 
 import "fmt"
