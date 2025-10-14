@@ -1,4 +1,14 @@
 version: "2"
 linters:
+  default: standard
   enable:
-    - staticcheck
+    - godoclint
+    - godot
+  settings:
+    godoclint:
+      default: all
+  exclusions:
+    rules:
+      - path: _test\.go$
+        linters:
+          - godoclint
