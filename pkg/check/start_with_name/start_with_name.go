@@ -40,7 +40,7 @@ func (r *StartWithNameChecker) Apply(actx *model.AnalysisContext) error {
 
 	for _, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(startWithNameRule)) {
 		for _, decl := range ir.SymbolDecl {
-			isExported := ast.IsExported(decl.Name)
+			isExported := ast.IsExported(decl.Name) && !util.IsMethodOnUnexportedReceiver(decl.Decl)
 			if !isExported && !includePrivate {
 				continue
 			}

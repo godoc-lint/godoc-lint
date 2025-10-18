@@ -39,7 +39,7 @@ func (r *RequireDocChecker) Apply(actx *model.AnalysisContext) error {
 
 	for _, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(requireDocRule)) {
 		for _, decl := range ir.SymbolDecl {
-			isExported := ast.IsExported(decl.Name)
+			isExported := ast.IsExported(decl.Name) && !util.IsMethodOnUnexportedReceiver(decl.Decl)
 			if isExported && !requirePublic || !isExported && !requirePrivate {
 				continue
 			}
