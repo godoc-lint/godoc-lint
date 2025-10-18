@@ -112,3 +112,14 @@ func funcFooNG() {}
 type tFooNG string
 
 func (*tFooNG) tFooBarNG() {}
+
+type tBar struct{}
+
+func (*tBar) BarBaz() {}
+
+type tBarGeneric[A any, B any] struct {
+	a A
+	b B
+}
+
+func (*tBarGeneric[A, B]) BarBazGeneric() {}

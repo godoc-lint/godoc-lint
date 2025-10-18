@@ -38,7 +38,7 @@ func (r *DeprecatedChecker) Apply(actx *model.AnalysisContext) error {
 		}
 
 		for _, sd := range ir.SymbolDecl {
-			isExported := ast.IsExported(sd.Name)
+			isExported := ast.IsExported(sd.Name) && !util.IsMethodOnUnexportedReceiver(sd.Decl)
 			if !isExported {
 				continue
 			}
