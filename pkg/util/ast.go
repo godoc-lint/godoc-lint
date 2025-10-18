@@ -90,8 +90,20 @@ func IsMethodOnUnexportedReceiver(decl ast.Decl) bool {
 		typeIdent = t
 	case *ast.StarExpr:
 		// Pointer receiver: func (r *MyType) Method()
-		if ident, ok := t.X.(*ast.Ident); ok {
-			typeIdent = ident
+		// Also handles pointer to generic types: func (r *MyType[T]) Method() or func (r *MyType[T, U]) Method()
+		switch x := t.X.(type) {
+		case *ast.Ident:
+			typeIdent = x
+		case *ast.IndexExpr:
+			// Pointer to generic type with one parameter: func (r *MyType[T]) Method()
+			if ident, ok := x.X.(*ast.Ident); ok {
+				typeIdent = ident
+			}
+		case *ast.IndexListExpr:
+			// Pointer to generic type with multiple parameters: func (r *MyType[T, U]) Method()
+			if ident, ok := x.X.(*ast.Ident); ok {
+				typeIdent = ident
+			}
 		}
 	case *ast.IndexExpr:
 		// Generic type with one parameter: func (r MyType[T]) Method()
