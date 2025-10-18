@@ -1,11 +1,13 @@
 package config_test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/config"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
@@ -61,6 +63,8 @@ func TestTransferOptions(t *testing.T) {
 			PkgDocIncludeTests:             false,
 			SinglePkgDocIncludeTests:       false,
 			RequirePkgDocIncludeTests:      false,
+			SpecificFilePkgDocIncludeTests: false,
+			SpecificFilePkgDocFilePattern:  pkg_doc.FilePatternDoc,
 			RequireDocIncludeTests:         false,
 			RequireDocIgnoreExported:       false,
 			RequireDocIgnoreUnexported:     true,
@@ -107,6 +111,9 @@ func TestValidate(t *testing.T) {
 				Disable: []string{"foo", "bar", "baz"},
 				Include: []string{"(", ")"},
 				Exclude: []string{"(", ")"},
+				Options: &config.PlainRuleOptions{
+					SpecificFilePkgDocFilePattern: ptr("foo"),
+				},
 			},
 			wantErr: []string{
 				`invalid default set "foo"; must be one of ["all" "basic" "none"]`,
@@ -114,6 +121,7 @@ func TestValidate(t *testing.T) {
 				`invalid rule name(s) to disable: ["foo" "bar" "baz"]`,
 				`invalid inclusion pattern(s): ["(" ")"]`,
 				`invalid exclusion pattern(s): ["(" ")"]`,
+				fmt.Sprintf(`invalid file-pattern: "foo" (must be one of %q)`, strings.Join(pkg_doc.AllFilePatterns, ",")),
 			},
 		},
 	}
@@ -121,10 +129,12 @@ func TestValidate(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			err := tt.pcfg.Validate()
-			if tt.wantErr == nil {
+			if len(tt.wantErr) == 0 {
 				require.NoError(t, err)
 			} else {
-				require.ErrorContains(t, err, strings.Join(tt.wantErr, "\n"))
+				for _, value := range tt.wantErr {
+					require.ErrorContains(t, err, value)
+				}
 			}
 		})
 	}

@@ -53,6 +53,7 @@ default: basic
 #   - pkg-doc
 #   - single-pkg-doc
 #   - require-pkg-doc
+#   - specific-file-pkg-doc
 #   - start-with-name
 #   - require-doc
 #   - deprecated
@@ -87,6 +88,19 @@ options:
 
   # Include test files when applying the `require-pkg-doc` rule.
   require-pkg-doc/include-tests: false
+
+  # Include test files when applying the `specific-file-pkg-doc` rule.
+  specific-file-pkg-doc/include-tests: false
+
+  # The file pattern to indicate which file should contain the package-level godoc when
+  # applying the `specific-file-pkg-doc` rule.
+  #
+  # Valid values are:
+  #
+  #   - "doc": The godoc should be in a file named doc.go
+  #   - "package-name": The godoc should be in a file named after the package. For example, if a package
+  #     is named "foobar", the godoc should be in a file named "foobar.go".
+  specific-file-pkg-doc/file-pattern: "doc"
 
   # Include test files when applying the `require-doc` rule.
   require-doc/include-tests: false

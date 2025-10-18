@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"slices"
 
+	"github.com/godoc-lint/godoc-lint/pkg/check/pkg_doc"
 	"github.com/godoc-lint/godoc-lint/pkg/model"
 )
 
@@ -25,17 +26,19 @@ type PlainConfig struct {
 // PlainRuleOptions represents the plain rule options as users would provide via
 // a config file (e.g., a YAML file).
 type PlainRuleOptions struct {
-	MaxLenLength                   *uint `option:"max-len/length" yaml:"max-len/length" mapstructure:"max-len/length"`
-	MaxLenIncludeTests             *bool `option:"max-len/include-tests" yaml:"max-len/include-tests" mapstructure:"max-len/include-tests"`
-	PkgDocIncludeTests             *bool `option:"pkg-doc/include-tests" yaml:"pkg-doc/include-tests" mapstructure:"pkg-doc/include-tests"`
-	SinglePkgDocIncludeTests       *bool `option:"single-pkg-doc/include-tests" yaml:"single-pkg-doc/include-tests" mapstructure:"single-pkg-doc/include-tests"`
-	RequirePkgDocIncludeTests      *bool `option:"require-pkg-doc/include-tests" yaml:"require-pkg-doc/include-tests" mapstructure:"require-pkg-doc/include-tests"`
-	RequireDocIncludeTests         *bool `option:"require-doc/include-tests" yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`
-	RequireDocIgnoreExported       *bool `option:"require-doc/ignore-exported" yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`
-	RequireDocIgnoreUnexported     *bool `option:"require-doc/ignore-unexported" yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
-	StartWithNameIncludeTests      *bool `option:"start-with-name/include-tests" yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
-	StartWithNameIncludeUnexported *bool `option:"start-with-name/include-unexported" yaml:"start-with-name/include-unexported" mapstructure:"start-with-name/include-unexported"`
-	NoUnusedLinkIncludeTests       *bool `option:"no-unused-link/include-tests" yaml:"no-unused-link/include-tests" mapstructure:"no-unused-link/include-tests"`
+	MaxLenLength                   *uint   `option:"max-len/length" yaml:"max-len/length" mapstructure:"max-len/length"`
+	MaxLenIncludeTests             *bool   `option:"max-len/include-tests" yaml:"max-len/include-tests" mapstructure:"max-len/include-tests"`
+	PkgDocIncludeTests             *bool   `option:"pkg-doc/include-tests" yaml:"pkg-doc/include-tests" mapstructure:"pkg-doc/include-tests"`
+	SinglePkgDocIncludeTests       *bool   `option:"single-pkg-doc/include-tests" yaml:"single-pkg-doc/include-tests" mapstructure:"single-pkg-doc/include-tests"`
+	RequirePkgDocIncludeTests      *bool   `option:"require-pkg-doc/include-tests" yaml:"require-pkg-doc/include-tests" mapstructure:"require-pkg-doc/include-tests"`
+	SpecificFilePkgDocIncludeTests *bool   `option:"specific-file-pkg-doc/include-tests" yaml:"specific-file-pkg-doc/include-tests" mapstructure:"specific-file-pkg-doc/include-tests"`
+	SpecificFilePkgDocFilePattern  *string `option:"specific-file-pkg-doc/file-pattern" yaml:"specific-file-pkg-doc/file-pattern" mapstructure:"specific-file-pkg-doc/file-pattern"`
+	RequireDocIncludeTests         *bool   `option:"require-doc/include-tests" yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`
+	RequireDocIgnoreExported       *bool   `option:"require-doc/ignore-exported" yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`
+	RequireDocIgnoreUnexported     *bool   `option:"require-doc/ignore-unexported" yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
+	StartWithNameIncludeTests      *bool   `option:"start-with-name/include-tests" yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
+	StartWithNameIncludeUnexported *bool   `option:"start-with-name/include-unexported" yaml:"start-with-name/include-unexported" mapstructure:"start-with-name/include-unexported"`
+	NoUnusedLinkIncludeTests       *bool   `option:"no-unused-link/include-tests" yaml:"no-unused-link/include-tests" mapstructure:"no-unused-link/include-tests"`
 }
 
 func transferOptions(target *model.RuleOptions, source *PlainRuleOptions) {
@@ -99,6 +102,14 @@ func (pcfg *PlainConfig) Validate() error {
 
 	if invalids := getInvalidRegexps(pcfg.Exclude); len(invalids) > 0 {
 		errs = append(errs, fmt.Errorf("invalid exclusion pattern(s): %q", invalids))
+	}
+
+	if options := pcfg.Options; options != nil {
+		if filePattern := options.SpecificFilePkgDocFilePattern; filePattern != nil {
+			if err := pkg_doc.CheckFilePattern(*filePattern); err != nil {
+				errs = append(errs, err)
+			}
+		}
 	}
 
 	if len(errs) > 0 {

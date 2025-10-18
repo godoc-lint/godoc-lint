@@ -10,6 +10,8 @@ const (
 	SinglePkgDocRule Rule = "single-pkg-doc"
 	// RequirePkgDocRule represents the "require-pkg-doc" rule.
 	RequirePkgDocRule Rule = "require-pkg-doc"
+	// SpecificFilePkgDocRule represents the "specific-file-pkg-doc" rule.
+	SpecificFilePkgDocRule Rule = "specific-file-pkg-doc"
 	// StartWithNameRule represents the "start-with-name" rule.
 	StartWithNameRule Rule = "start-with-name"
 	// RequireDocRule represents the "require-doc" rule.
@@ -28,6 +30,7 @@ var AllRules = func() RuleSet {
 		PkgDocRule,
 		SinglePkgDocRule,
 		RequirePkgDocRule,
+		SpecificFilePkgDocRule,
 		StartWithNameRule,
 		RequireDocRule,
 		DeprecatedRule,

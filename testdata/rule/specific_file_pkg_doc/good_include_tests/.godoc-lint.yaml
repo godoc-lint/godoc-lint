@@ -1,0 +1,6 @@
+default: none
+enable:
+  - specific-file-pkg-doc
+options:
+  specific-file-pkg-doc/include-tests: true
+  specific-file-pkg-doc/file-pattern: package-name

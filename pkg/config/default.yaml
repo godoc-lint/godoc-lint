@@ -7,6 +7,8 @@ options:
   pkg-doc/include-tests: false
   single-pkg-doc/include-tests: false
   require-pkg-doc/include-tests: false
+  specific-file-pkg-doc/include-tests: false
+  specific-file-pkg-doc/file-pattern: "doc"
   require-doc/include-tests: false
   require-doc/ignore-exported: false
   require-doc/ignore-unexported: true

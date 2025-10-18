@@ -138,6 +138,17 @@ Technically, every Go file in a package can have a godoc above the `package` sta
 
 Ensures that every Go package has godoc(s). By default, test files (i.e., `*_test.go`) and therefore test packages (i.e., `*_test`) are ignored. To include them in the check, the `require-pkg-doc/include-tests` should be set to `true`.
 
+### `specific-file-pkg-doc`
+
+Ensures that if there is godoc for a given package, it must be in a specific file as determined by the `specific-file-pkg-doc/file-pattern` configuration value. The valid options:
+
+- `doc`: Package-level godoc must be in a file named "doc.go".
+- `package-name`: Package-level godoc must be in a file named after the package. For example, the package "foobar" must have its Godoc in a file named "foobar.go".
+
+By default, `doc` is used.
+
+Note that this does not enforce that godoc is present, this is the job of the `require-pkg-doc` rule. If `require-pkg-doc` is not enabled but `specigic-file-pkg-doc` is enabled, an error will not appear if there is no package-level godoc, but an error will still appear if package-level godoc is in the wrong location.
+
 ### `start-with-name`
 
 Checks godocs start with the corresponding symbol name:
