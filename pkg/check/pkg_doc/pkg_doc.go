@@ -2,7 +2,9 @@
 package pkg_doc
 
 import (
+	"fmt"
 	"go/ast"
+	"path/filepath"
 	"strings"
 
 	"github.com/godoc-lint/godoc-lint/pkg/check/shared"
@@ -11,16 +13,46 @@ import (
 )
 
 const (
-	pkgDocRule        = model.PkgDocRule
-	singlePkgDocRule  = model.SinglePkgDocRule
-	requirePkgDocRule = model.RequirePkgDocRule
+	pkgDocRule             = model.PkgDocRule
+	singlePkgDocRule       = model.SinglePkgDocRule
+	requirePkgDocRule      = model.RequirePkgDocRule
+	specificFilePkgDocRule = model.SpecificFilePkgDocRule
 )
 
-var ruleSet = model.RuleSet{}.Add(
-	pkgDocRule,
-	singlePkgDocRule,
-	requirePkgDocRule,
+var (
+	// AllFilePatterns are all valid FilePatterns.
+	AllFilePatterns = []string{
+		FilePatternDoc,
+		FilePatternPackageName,
+	}
+
+	// FilePatternDoc represents that package Godoc must be in a file named
+	// "doc.go".
+	FilePatternDoc = "doc"
+	// FilePatternPackageName represents that package Godoc must be in a
+	// file named after the package. For example, if the package name is
+	// "foobar", the Godoc should be in "foobar.go".
+	FilePatternPackageName = "package-name"
+
+	ruleSet = model.RuleSet{}.Add(
+		pkgDocRule,
+		singlePkgDocRule,
+		requirePkgDocRule,
+		specificFilePkgDocRule,
+	)
 )
+
+// CheckFilePattern checks that the input is a valid file pattern.
+func CheckFilePattern(filePattern string) error {
+	switch filePattern {
+	case FilePatternDoc:
+		return nil
+	case FilePatternPackageName:
+		return nil
+	default:
+		return fmt.Errorf("invalid file-pattern: %q (must be one of %q)", filePattern, strings.Join(AllFilePatterns, ","))
+	}
+}
 
 // PkgDocChecker checks package godocs.
 type PkgDocChecker struct{}
@@ -40,6 +72,7 @@ func (r *PkgDocChecker) Apply(actx *model.AnalysisContext) error {
 	checkPkgDocRule(actx)
 	checkSinglePkgDocRule(actx)
 	checkRequirePkgDocRule(actx)
+	checkSpecificFilePkgDocRule(actx)
 	return nil
 }
 
@@ -200,5 +233,62 @@ func checkRequirePkgDocRule(actx *model.AnalysisContext) {
 
 		// Add a diagnostic message to the first file of the package.
 		actx.Pass.Reportf(fs[0].Name.Pos(), "package should have a godoc (%q)", pkg)
+	}
+}
+
+func checkSpecificFilePkgDocRule(actx *model.AnalysisContext) {
+	if !actx.Config.IsAnyRuleApplicable(model.RuleSet{}.Add(specificFilePkgDocRule)) {
+		return
+	}
+
+	includeTests := actx.Config.GetRuleOptions().SpecificFilePkgDocIncludeTests
+	filePattern := actx.Config.GetRuleOptions().SpecificFilePkgDocFilePattern
+	if filePattern == "" {
+		// This should probably be done at a higher-level, and we should just validate here
+		// that this is set, and if not, return error. However, this function/architecture doesn't
+		// allow returning errors here.
+		filePattern = FilePatternDoc
+	}
+
+	documentedPkgs := make(map[string][]*ast.File, 2)
+
+	for f, ir := range util.AnalysisApplicableFiles(actx, includeTests, model.RuleSet{}.Add(specificFilePkgDocRule)) {
+		if ir.PackageDoc == nil || ir.PackageDoc.Text == "" {
+			continue
+		}
+
+		if ir.PackageDoc.DisabledRules.All || ir.PackageDoc.DisabledRules.Rules.Has(specificFilePkgDocRule) {
+			continue
+		}
+
+		pkg := f.Name.Name
+		if _, ok := documentedPkgs[pkg]; !ok {
+			documentedPkgs[pkg] = make([]*ast.File, 0, 1)
+		}
+		documentedPkgs[pkg] = append(documentedPkgs[pkg], f)
+	}
+
+	for pkg, fs := range documentedPkgs {
+		for _, f := range fs {
+			ft := util.GetPassFileToken(f, actx.Pass)
+			if ft == nil {
+				continue
+			}
+			// We're assuming this has already been validated.
+			// We can't return an error here.
+			expectedFileName := ""
+			switch filePattern {
+			case FilePatternDoc:
+				expectedFileName = "doc.go"
+			case FilePatternPackageName:
+				expectedFileName = pkg + ".go"
+			}
+			baseFileName := filepath.Base(ft.Name())
+			if baseFileName != expectedFileName {
+				ir := actx.InspectorResult.Files[f]
+				actx.Pass.Reportf(ir.PackageDoc.CG.Pos(),
+					"package-level godoc must be in file named %q but was in %q", expectedFileName, baseFileName)
+			}
+		}
 	}
 }
