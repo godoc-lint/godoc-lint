@@ -34,7 +34,7 @@ func TestDefaultConfigYAMLIsValid(t *testing.T) {
 		tagMapstructure := ft.Tag.Get("mapstructure")
 		require.NotEmpty(tagMapstructure, `"mapstructure" tag is required for field %q`, ft.Name)
 
-		require.YAMLEq(tagOption, tagYAML, `"option" and "yaml" tag values must be equal`)
+		require.Equal(tagOption, tagYAML, `"option" and "yaml" tag values must be equal`)
 		require.Equal(tagOption, tagMapstructure, `"option" and "mapstructure" tag values must be equal`)
 
 		require.NotContains(visitedOptions, tagOption, "duplicate option tag values: %q", tagOption)
