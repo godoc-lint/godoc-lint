@@ -13,7 +13,7 @@ func TestDefaultConfigYAMLIsValid(t *testing.T) {
 	require := require.New(t)
 
 	def, err := config.FromYAML(config.DefaultConfigYAML)
-	require.Nil(err)
+	require.NoError(err)
 
 	// The default rule options must be non-nil for the default.
 	require.NotNil(def.Options, "default rule options must be non-nil")
@@ -34,7 +34,7 @@ func TestDefaultConfigYAMLIsValid(t *testing.T) {
 		tagMapstructure := ft.Tag.Get("mapstructure")
 		require.NotEmpty(tagMapstructure, `"mapstructure" tag is required for field %q`, ft.Name)
 
-		require.Equal(tagOption, tagYAML, `"option" and "yaml" tag values must be equal`)
+		require.YAMLEq(tagOption, tagYAML, `"option" and "yaml" tag values must be equal`)
 		require.Equal(tagOption, tagMapstructure, `"option" and "mapstructure" tag values must be equal`)
 
 		require.NotContains(visitedOptions, tagOption, "duplicate option tag values: %q", tagOption)
@@ -49,10 +49,10 @@ func TestDefaultConfigYAMLEqualsTheExample(t *testing.T) {
 	require := require.New(t)
 
 	def, err := config.FromYAML(config.DefaultConfigYAML)
-	require.Nil(err)
+	require.NoError(err)
 
 	example, err := config.FromYAMLFile("../../.godoc-lint.default.yaml")
-	require.Nil(err)
+	require.NoError(err)
 
 	require.Equal(def, example, "default config does not match the example file")
 }

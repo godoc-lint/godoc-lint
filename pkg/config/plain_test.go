@@ -16,7 +16,7 @@ func TestTransferOptions(t *testing.T) {
 	}
 
 	def, err := config.FromYAML(config.DefaultConfigYAML)
-	require.Nil(t, err)
+	require.NoError(t, err)
 
 	tests := []struct {
 		name     string

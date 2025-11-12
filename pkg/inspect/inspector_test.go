@@ -26,7 +26,7 @@ func TestInspector(t *testing.T) {
 	require := require.New(t)
 
 	wd, err := os.Getwd()
-	require.Nil(err, "failed to get wd")
+	require.NoError(err, "failed to get wd")
 
 	exitFunc := func(code int, err error) {
 		panic(fmt.Sprintf("exit code %d: %v", code, err))
@@ -63,18 +63,18 @@ func TestInspector(t *testing.T) {
 
 			got := simplifyResultEntry(resultEntry)
 			err := enc.Encode(got)
-			require.Nil(err, "cannot marshal got value: %v", err)
+			require.NoError(err, "cannot marshal got value: %v", err)
 			rawGot := buf.Bytes()
 
 			rawRef, err := os.ReadFile(refFile)
-			require.Nil(err, "cannot read ref file %q: %v", refFile, err)
+			require.NoError(err, "cannot read ref file %q: %v", refFile, err)
 
 			match := assert.YAMLEqf(string(rawRef), string(rawGot), "got and ref do not match for %q", refFile)
 			gotFile := strings.Replace(refFile, ".yaml", ".got.yaml", 1)
 			if !match {
 				t.Logf("writing got value to %q", gotFile)
 				err := os.WriteFile(gotFile, rawGot, os.ModePerm)
-				assert.Nil(err, "cannot write got value to file %q", gotFile)
+				assert.NoError(err, "cannot write got value to file %q", gotFile)
 			} else {
 				_ = os.Remove(gotFile)
 			}
