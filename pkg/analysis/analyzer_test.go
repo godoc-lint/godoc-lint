@@ -19,7 +19,7 @@ func TestRules(t *testing.T) {
 	require := require.New(t)
 
 	wd, err := os.Getwd()
-	require.Nil(err, "failed to get wd")
+	require.NoError(err, "failed to get wd")
 
 	exitFunc := func(code int, err error) {
 		panic(fmt.Sprintf("exit code %d: %v", code, err))

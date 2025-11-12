@@ -4,9 +4,14 @@ linters:
   enable:
     - godoclint
     - godot
+    - testifylint
   settings:
     godoclint:
       default: all
+    testifylint:
+      enable-all: true
+      disable:
+        - encoded-compare
   exclusions:
     rules:
       - path: _test\.go$

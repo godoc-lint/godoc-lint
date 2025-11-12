@@ -13,7 +13,7 @@ func TestDefaultConfigYAMLIsValid(t *testing.T) {
 	require := require.New(t)
 
 	def, err := config.FromYAML(config.DefaultConfigYAML)
-	require.Nil(err)
+	require.NoError(err)
 
 	// The default rule options must be non-nil for the default.
 	require.NotNil(def.Options, "default rule options must be non-nil")
@@ -49,10 +49,10 @@ func TestDefaultConfigYAMLEqualsTheExample(t *testing.T) {
 	require := require.New(t)
 
 	def, err := config.FromYAML(config.DefaultConfigYAML)
-	require.Nil(err)
+	require.NoError(err)
 
 	example, err := config.FromYAMLFile("../../.godoc-lint.default.yaml")
-	require.Nil(err)
+	require.NoError(err)
 
 	require.Equal(def, example, "default config does not match the example file")
 }
