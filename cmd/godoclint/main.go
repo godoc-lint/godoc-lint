@@ -61,8 +61,7 @@ func main() {
 
 	walkNonEmptyCSV := func(f func(string) error) func(string) error {
 		return func(value string) error {
-			values := strings.Split(strings.TrimSpace(value), ",")
-			for _, v := range values {
+			for v := range strings.SplitSeq(strings.TrimSpace(value), ",") {
 				if strings.TrimSpace(v) == "" {
 					return errors.New("empty element")
 				}

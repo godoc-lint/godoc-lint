@@ -21,8 +21,8 @@ func TestDefaultConfigYAMLIsValid(t *testing.T) {
 	visitedOptions := map[string]struct{}{}
 
 	v := reflect.ValueOf(*def.Options)
-	vt := reflect.TypeOf(*def.Options)
-	for i := 0; i < vt.NumField(); i++ {
+	vt := reflect.TypeFor[config.PlainRuleOptions]()
+	for i := range vt.NumField() {
 		ft := vt.Field(i)
 
 		require.Equal(reflect.Pointer, ft.Type.Kind(), `field type should be a pointer type for %q`, ft.Name)
