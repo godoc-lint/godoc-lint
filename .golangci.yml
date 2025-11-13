@@ -4,7 +4,10 @@ linters:
   enable:
     - godoclint
     - godot
+    - intrange
+    - modernize
     - testifylint
+    - unconvert
   settings:
     godoclint:
       default: all
