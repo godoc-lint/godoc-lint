@@ -13,3 +13,6 @@ type catBG int
 
 // godoc
 func yoloBG() {}
+
+// Bad godoc, but should be ignored due to blank identifier.
+var _ = 0

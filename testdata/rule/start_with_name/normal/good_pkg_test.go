@@ -37,3 +37,6 @@ type TestTFooBG int
 
 // godoc
 func (*TestTFooBG) TestFooFuncBG() {}
+
+// Bad godoc, but should be ignored due to blank identifier.
+var _ = 0

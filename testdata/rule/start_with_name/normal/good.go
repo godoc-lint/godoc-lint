@@ -49,3 +49,6 @@ type TFoo int
 
 // FooFunc has a godoc.
 func (*TFoo) FooFunc() {}
+
+// Bad godoc, but should be ignored due to blank identifier.
+var _ = 0

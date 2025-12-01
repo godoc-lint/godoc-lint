@@ -23,3 +23,6 @@ type testCat int
 
 // testYolo has a godoc.
 func testYolo() {}
+
+// Bad godoc, but should be ignored due to blank identifier.
+var _ = 0
