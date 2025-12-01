@@ -112,3 +112,7 @@ func funcFooNG() {}
 type tFooNG string
 
 func (*tFooNG) tFooBarNG() {}
+
+// Below blank declaration has no godoc, but it should be ignored.
+
+var _ = 0

@@ -25,3 +25,7 @@ func fFooTestNG() {}
 
 // godoc
 func (*ttFooTestNG) fooFooTestNG() {}
+
+// Below blank declaration has no godoc, but it should be ignored.
+
+var _ = 0
