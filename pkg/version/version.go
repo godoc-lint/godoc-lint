@@ -8,7 +8,7 @@ var Current = Version{
 	Major:  0,
 	Minor:  10,
 	Patch:  2,
-	Suffix: "",
+	Suffix: "post",
 }
 
 // Version represents module version (in semver format).
