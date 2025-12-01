@@ -112,3 +112,7 @@ type tFoo string
 
 // godoc
 func (*tFoo) tFooBar() {}
+
+// Below blank declaration has no godoc, but it should be ignored.
+
+var _ = 0
