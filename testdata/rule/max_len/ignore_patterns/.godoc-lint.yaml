@@ -1,0 +1,9 @@
+default: none
+enable:
+  - max-len
+options:
+  max-len/length: 40
+  max-len/include-tests: false
+  max-len/ignore-patterns:
+    - "^EXEMPT:"
+    - \[ALSO EXEMPT\]
