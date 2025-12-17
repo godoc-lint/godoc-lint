@@ -4,6 +4,7 @@ package max_len
 import (
 	"fmt"
 	gdc "go/doc/comment"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 
@@ -32,6 +33,7 @@ func (r *MaxLenChecker) GetCoveredRules() model.RuleSet {
 func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
 	includeTests := actx.Config.GetRuleOptions().MaxLenIncludeTests
 	maxLen := int(actx.Config.GetRuleOptions().MaxLenLength)
+	ignoreRegexps := actx.Config.GetRuleOptions().MaxLenIgnorePatterns
 
 	docs := make(map[*model.CommentGroup]struct{}, 10*len(actx.InspectorResult.Files))
 
@@ -52,12 +54,12 @@ func (r *MaxLenChecker) Apply(actx *model.AnalysisContext) error {
 	}
 
 	for doc := range docs {
-		checkMaxLen(actx, doc, maxLen)
+		checkMaxLen(actx, doc, maxLen, ignoreRegexps)
 	}
 	return nil
 }
 
-func checkMaxLen(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen int) {
+func checkMaxLen(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen int, ignoreRegexps []*regexp.Regexp) {
 	if doc.DisabledRules.All || doc.DisabledRules.Rules.Has(maxLenRule) {
 		return
 	}
@@ -86,9 +88,21 @@ func checkMaxLen(actx *model.AnalysisContext, doc *model.CommentGroup, maxLen in
 		if lineLen <= maxLen {
 			continue
 		}
+		if shouldIgnoreLine(l, ignoreRegexps) {
+			continue
+		}
 		actx.Pass.ReportRangef(&doc.CG, "godoc line is too long (%d > %d)", lineLen, maxLen)
 		break
 	}
+}
+
+func shouldIgnoreLine(line string, ignoreRegexps []*regexp.Regexp) bool {
+	for _, re := range ignoreRegexps {
+		if re.MatchString(line) {
+			return true
+		}
+	}
+	return false
 }
 
 func removeCarriageReturn(s string) string {
