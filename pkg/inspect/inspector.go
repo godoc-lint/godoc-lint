@@ -42,7 +42,7 @@ func NewInspector(cb model.ConfigBuilder, exitFunc func(int, error)) *Inspector 
 			Name:       metaName,
 			Doc:        metaDoc,
 			URL:        metaURL,
-			ResultType: reflect.TypeOf(new(model.InspectorResult)),
+			ResultType: reflect.TypeFor[*model.InspectorResult](),
 		},
 	}
 	result.analyzer.Run = result.run
