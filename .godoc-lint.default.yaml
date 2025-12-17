@@ -79,6 +79,14 @@ options:
   # Include test files when applying the `max-len` rule.
   max-len/include-tests: false
 
+  # List of regexp patterns matching lines to be excluded from `max-len` rule checks.
+  # The patterns should not include comment tokens like `// ` or `/*`.
+  #
+  # Example:
+  #   max-len/ignore-patterns:
+  #     - "^TODO:"
+  max-len/ignore-patterns: []
+
   # Include test files when applying the `pkg-doc` rule.
   pkg-doc/include-tests: false
 
