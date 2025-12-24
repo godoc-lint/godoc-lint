@@ -315,6 +315,7 @@ func transferPrimitiveOptions(target *model.RuleOptions, source *PlainRuleOption
 	transferIfNotNil(&target.RequireDocIgnoreUnexported, source.RequireDocIgnoreUnexported)
 	transferIfNotNil(&target.StartWithNameIncludeTests, source.StartWithNameIncludeTests)
 	transferIfNotNil(&target.StartWithNameIncludeUnexported, source.StartWithNameIncludeUnexported)
+	transferIfNotNil(&target.RequireStdlibDoclinkIncludeTests, source.RequireStdlibDoclinkIncludeTests)
 	transferIfNotNil(&target.NoUnusedLinkIncludeTests, source.NoUnusedLinkIncludeTests)
 }
 

@@ -109,16 +109,17 @@ type Config interface {
 
 // RuleOptions represents individual linter rule configurations.
 type RuleOptions struct {
-	MaxLenLength                   uint             `option:"max-len/length"`
-	MaxLenIncludeTests             bool             `option:"max-len/include-tests"`
-	MaxLenIgnorePatterns           []*regexp.Regexp `option:"max-len/ignore-patterns"`
-	PkgDocIncludeTests             bool             `option:"pkg-doc/include-tests"`
-	SinglePkgDocIncludeTests       bool             `option:"single-pkg-doc/include-tests"`
-	RequirePkgDocIncludeTests      bool             `option:"require-pkg-doc/include-tests"`
-	RequireDocIncludeTests         bool             `option:"require-doc/include-tests"`
-	RequireDocIgnoreExported       bool             `option:"require-doc/ignore-exported"`
-	RequireDocIgnoreUnexported     bool             `option:"require-doc/ignore-unexported"`
-	StartWithNameIncludeTests      bool             `option:"start-with-name/include-tests"`
-	StartWithNameIncludeUnexported bool             `option:"start-with-name/include-unexported"`
-	NoUnusedLinkIncludeTests       bool             `option:"no-unused-link/include-tests"`
+	MaxLenLength                     uint             `option:"max-len/length"`
+	MaxLenIncludeTests               bool             `option:"max-len/include-tests"`
+	MaxLenIgnorePatterns             []*regexp.Regexp `option:"max-len/ignore-patterns"`
+	PkgDocIncludeTests               bool             `option:"pkg-doc/include-tests"`
+	SinglePkgDocIncludeTests         bool             `option:"single-pkg-doc/include-tests"`
+	RequirePkgDocIncludeTests        bool             `option:"require-pkg-doc/include-tests"`
+	RequireDocIncludeTests           bool             `option:"require-doc/include-tests"`
+	RequireDocIgnoreExported         bool             `option:"require-doc/ignore-exported"`
+	RequireDocIgnoreUnexported       bool             `option:"require-doc/ignore-unexported"`
+	StartWithNameIncludeTests        bool             `option:"start-with-name/include-tests"`
+	StartWithNameIncludeUnexported   bool             `option:"start-with-name/include-unexported"`
+	RequireStdlibDoclinkIncludeTests bool             `option:"require-stdlib-doclink/include-tests"`
+	NoUnusedLinkIncludeTests         bool             `option:"no-unused-link/include-tests"`
 }

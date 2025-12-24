@@ -10,6 +10,6 @@ import (
 
 func TestPopulatedRegistryHasAllRules(t *testing.T) {
 	rules := check.NewPopulatedRegistry().GetCoveredRules()
-	assert.True(t, model.AllRules.IsSupersetOf(rules), "checker for rule is not registered")
-	assert.True(t, rules.IsSupersetOf(model.AllRules), "rule not defined in model")
+	assert.True(t, model.AllRules.IsSupersetOf(rules), "rule not defined in model")
+	assert.True(t, rules.IsSupersetOf(model.AllRules), "checker for rule is not registered")
 }
