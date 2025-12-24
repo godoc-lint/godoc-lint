@@ -1,0 +1,6 @@
+default: none
+enable:
+  - require-stdlib-doclink
+options:
+  require-stdlib-doclink/include-tests: true
+
