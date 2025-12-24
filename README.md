@@ -331,3 +331,4 @@ Godoc-Lint loves to see developers contributing to it. So, please feel free to s
 ## Links
 
 - [Go Doc Comments](https://go.dev/doc/comment)
+- [Golangci-lint configuration](https://golangci-lint.run/docs/linters/configuration/#godoclint)
