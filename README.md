@@ -101,11 +101,11 @@ Although it is best to set the configuration parameters in a file, there are a n
 
 The linter provides a number of rules that can be categorized as in this table:
 
-| Category          | Rules                                                                       | Notes                                                              |
-| ----------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Basic *(default)* | `pkg-doc` </br> `single-pkg-doc` </br> `start-with-name` </br> `deprecated` | Recommended by [*Go Doc Comments*][godoc-ref], and **low-effort**  |
-| Strict            | `require-doc` </br> `require-pkg-doc`                                       | Recommended by [*Go Doc Comments*][godoc-ref], and **high-effort** |
-| Extra             | `max-len` </br> `no-unused-link`                                            | Extra but compatible with [*Go Doc Comments*][godoc-ref]           |
+| Category          | Rules                                                                                  | Notes                                                              |
+| ----------------- |----------------------------------------------------------------------------------------| ------------------------------------------------------------------ |
+| Basic *(default)* | `pkg-doc` </br> `single-pkg-doc` </br> `start-with-name` </br> `deprecated`            | Recommended by [*Go Doc Comments*][godoc-ref], and **low-effort**  |
+| Strict            | `require-doc` </br> `require-pkg-doc`                                                  | Recommended by [*Go Doc Comments*][godoc-ref], and **high-effort** |
+| Extra             | `max-len` </br> `no-unused-link` </br> `require-stdlib-doclink`                        | Extra but compatible with [*Go Doc Comments*][godoc-ref]           |
 
 **Rules under the *Basic* category are enabled by default** and do not need further configuration, unless, of course, one wants to tune their parameters. The rest has to be explicitly enabled via configuration.
 
@@ -220,6 +220,20 @@ const Foo = 0
 
 The rule skips test files by default. To include them, the `no-unused-link/include-tests` option should be set to `true`.
 
+### `require-stdlib-doclink`
+
+Suggests turning plain-text mentions of standard-library identifiers into [*doc links*](https://go.dev/doc/comment#doclinks), when possible. For example, the text `encoding/json.Encoder` in a godoc can be turned into a doc link like `[encoding/json.Encoder]` so that it links to the corresponding stdlib symbol on [`pkg.go.dev`](https://pkg.go.dev/encoding/json#Encoder). To avoid false positives, the linter only detects potential doc links of longer forms like `pkg.name` or `pkg.recv.name`.
+
+```go
+// Println is the same as fmt.Println.    // (Bad)
+func Println(a ...any) (n int, err error) {}
+
+// Println is the same as [fmt.Println].  // (Good)
+func Println(a ...any) (n int, err error) {}
+```
+
+The rule skips test files by default. To include them, the `require-stdlib-doclink/include-tests` option should be set to `true`.
+
 ## Disabling rules
 
 > [!TIP]
@@ -317,3 +331,4 @@ Godoc-Lint loves to see developers contributing to it. So, please feel free to s
 ## Links
 
 - [Go Doc Comments](https://go.dev/doc/comment)
+- [Golangci-lint configuration](https://golangci-lint.run/docs/linters/configuration/#godoclint)

@@ -24,18 +24,19 @@ type PlainConfig struct {
 // PlainRuleOptions represents the plain rule options as users would provide via
 // a config file (e.g., a YAML file).
 type PlainRuleOptions struct {
-	MaxLenLength                   *uint    `yaml:"max-len/length" mapstructure:"max-len/length"`
-	MaxLenIncludeTests             *bool    `yaml:"max-len/include-tests" mapstructure:"max-len/include-tests"`
-	MaxLenIgnorePatterns           []string `yaml:"max-len/ignore-patterns" mapstructure:"max-len/ignore-patterns"`
-	PkgDocIncludeTests             *bool    `yaml:"pkg-doc/include-tests" mapstructure:"pkg-doc/include-tests"`
-	SinglePkgDocIncludeTests       *bool    `yaml:"single-pkg-doc/include-tests" mapstructure:"single-pkg-doc/include-tests"`
-	RequirePkgDocIncludeTests      *bool    `yaml:"require-pkg-doc/include-tests" mapstructure:"require-pkg-doc/include-tests"`
-	RequireDocIncludeTests         *bool    `yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`
-	RequireDocIgnoreExported       *bool    `yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`
-	RequireDocIgnoreUnexported     *bool    `yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
-	StartWithNameIncludeTests      *bool    `yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
-	StartWithNameIncludeUnexported *bool    `yaml:"start-with-name/include-unexported" mapstructure:"start-with-name/include-unexported"`
-	NoUnusedLinkIncludeTests       *bool    `yaml:"no-unused-link/include-tests" mapstructure:"no-unused-link/include-tests"`
+	MaxLenLength                     *uint    `yaml:"max-len/length" mapstructure:"max-len/length"`
+	MaxLenIncludeTests               *bool    `yaml:"max-len/include-tests" mapstructure:"max-len/include-tests"`
+	MaxLenIgnorePatterns             []string `yaml:"max-len/ignore-patterns" mapstructure:"max-len/ignore-patterns"`
+	PkgDocIncludeTests               *bool    `yaml:"pkg-doc/include-tests" mapstructure:"pkg-doc/include-tests"`
+	SinglePkgDocIncludeTests         *bool    `yaml:"single-pkg-doc/include-tests" mapstructure:"single-pkg-doc/include-tests"`
+	RequirePkgDocIncludeTests        *bool    `yaml:"require-pkg-doc/include-tests" mapstructure:"require-pkg-doc/include-tests"`
+	RequireDocIncludeTests           *bool    `yaml:"require-doc/include-tests" mapstructure:"require-doc/include-tests"`
+	RequireDocIgnoreExported         *bool    `yaml:"require-doc/ignore-exported" mapstructure:"require-doc/ignore-exported"`
+	RequireDocIgnoreUnexported       *bool    `yaml:"require-doc/ignore-unexported" mapstructure:"require-doc/ignore-unexported"`
+	StartWithNameIncludeTests        *bool    `yaml:"start-with-name/include-tests" mapstructure:"start-with-name/include-tests"`
+	StartWithNameIncludeUnexported   *bool    `yaml:"start-with-name/include-unexported" mapstructure:"start-with-name/include-unexported"`
+	RequireStdlibDoclinkIncludeTests *bool    `yaml:"require-stdlib-doclink/include-tests" mapstructure:"require-stdlib-doclink/include-tests"`
+	NoUnusedLinkIncludeTests         *bool    `yaml:"no-unused-link/include-tests" mapstructure:"no-unused-link/include-tests"`
 }
 
 // Validate validates the plain configuration.

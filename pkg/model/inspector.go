@@ -172,7 +172,7 @@ type SymbolDecl struct {
 	ParentDoc *CommentGroup
 }
 
-// CommentGroup represents an ast.CommentGroup and its parsed godoc instance.
+// CommentGroup represents an [ast.CommentGroup] and its parsed godoc instance.
 type CommentGroup struct {
 	// CG represents the AST comment group.
 	CG ast.CommentGroup
