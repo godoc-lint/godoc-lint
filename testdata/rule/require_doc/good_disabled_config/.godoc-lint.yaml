@@ -1,4 +1,6 @@
 default: none
+enable:
+  - require-doc
 disable:
   - require-doc
 

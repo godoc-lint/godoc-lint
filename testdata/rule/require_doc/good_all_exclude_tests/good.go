@@ -90,6 +90,9 @@ type TFoo string
 func (*TFoo) TFooBar() {}
 
 // godoc
+func (*TFoo) tFooBar() {}
+
+// godoc
 const singleSingleFooGD = 0
 
 // godoc
@@ -172,6 +175,9 @@ type tFoo string
 
 // godoc
 func (*tFoo) tFooBar() {}
+
+// godoc
+func (*tFoo) TFooBar() {}
 
 // Below blank declaration has no godoc, but it should be ignored.
 

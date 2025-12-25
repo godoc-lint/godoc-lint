@@ -10,6 +10,8 @@ func FFooTestNG() {}
 
 func (*TFooTestNG) FooFooTest() {}
 
+func (*TFooTestNG) fooFooTest() {}
+
 const fooTestNG = 0
 
 type ttFooTestNG int
@@ -17,6 +19,8 @@ type ttFooTestNG int
 func fFooTestNG() {}
 
 func (*ttFooTestNG) fooFooTestNG() {}
+
+func (*ttFooTestNG) FooFooTestNG() {}
 
 // Below blank declaration has no godoc, but it should be ignored.
 

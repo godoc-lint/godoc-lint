@@ -89,6 +89,8 @@ type TFoo string
 // godoc
 func (*TFoo) TFooBar() {}
 
+func (*TFoo) tFooBar() {}
+
 const singleSingleFooNG = 0
 
 const singleMultiFooNG, singleMultiBarNG = 0, 0
@@ -112,6 +114,9 @@ func funcFooNG() {}
 type tFooNG string
 
 func (*tFooNG) tFooBarNG() {}
+
+//foo:bar // unexported receiver
+func (*tFooNG) TFooBarNG() {}
 
 // Below blank declaration has no godoc, but it should be ignored.
 

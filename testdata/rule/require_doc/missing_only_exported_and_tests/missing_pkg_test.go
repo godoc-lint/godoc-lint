@@ -8,6 +8,8 @@ func FFooTest() {} //foo:bar // want `symbol should have a godoc \("FFooTest"\)`
 
 func (*TFooTest) FooFooTest() {} //foo:bar // want `symbol should have a godoc \("FooFooTest"\)`
 
+func (*TFooTest) fooFooTest() {}
+
 const fooTest = 0
 
 type tFooTest int
@@ -15,3 +17,6 @@ type tFooTest int
 func fFooTest() {}
 
 func (*tFooTest) fooFooTest() {}
+
+//foo:bar // unexported receiver
+func (*tFooTest) FooFooTest() {}

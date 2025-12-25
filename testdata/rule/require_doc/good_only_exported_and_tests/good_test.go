@@ -12,6 +12,8 @@ func FFooTest() {}
 // godoc
 func (*TFooTest) FooFooTest() {}
 
+func (*TFooTest) fooFooTest() {}
+
 const fooTest = 0
 
 type tFooTest int
@@ -19,6 +21,9 @@ type tFooTest int
 func fFooTest() {}
 
 func (*tFooTest) fooFooTest() {}
+
+//foo:bar // unexported receiver
+func (*tFooTest) FooFooTest() {}
 
 // Below blank declaration has no godoc, but it should be ignored.
 
