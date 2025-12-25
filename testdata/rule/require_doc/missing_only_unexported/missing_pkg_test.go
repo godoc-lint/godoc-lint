@@ -8,6 +8,8 @@ func FFooTest() {}
 
 func (*TFooTest) FooFooTest() {}
 
+func (*TFooTest) fooFooTest() {}
+
 const fooTest = 0
 
 type tFooTest int
@@ -15,3 +17,5 @@ type tFooTest int
 func fFooTest() {}
 
 func (*tFooTest) fooFooTest() {}
+
+func (*tFooTest) FooFooTest() {}

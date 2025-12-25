@@ -1,5 +1,5 @@
 default: none
-disable:
+enable:
   - require-doc
 options:
   require-doc/include-tests: true

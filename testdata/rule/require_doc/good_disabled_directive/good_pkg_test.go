@@ -14,6 +14,9 @@ func FFooTestNG() {}
 //godoclint:disable require-doc
 func (*TFooTestNG) FooFooTest() {}
 
+//godoclint:disable require-doc
+func (*TFooTestNG) fooFooTest() {}
+
 //godoclint:disable
 const fooTestNG = 0
 
@@ -25,3 +28,6 @@ func fFooTestNG() {}
 
 //godoclint:disable require-doc
 func (*ttFooTestNG) fooFooTestNG() {}
+
+//godoclint:disable require-doc
+func (*ttFooTestNG) FooFooTestNG() {}

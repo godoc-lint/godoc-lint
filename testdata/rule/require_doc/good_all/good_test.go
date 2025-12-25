@@ -15,6 +15,9 @@ func FFooTestNG() {}
 func (*TFooTestNG) FooFooTest() {}
 
 // godoc
+func (*TFooTestNG) fooFooTest() {}
+
+// godoc
 const fooTestNG = 0
 
 // godoc
@@ -25,6 +28,9 @@ func fFooTestNG() {}
 
 // godoc
 func (*ttFooTestNG) fooFooTestNG() {}
+
+// godoc
+func (*ttFooTestNG) FooFooTestNG() {}
 
 // Below blank declaration has no godoc, but it should be ignored.
 

@@ -35,6 +35,9 @@ type TFooDisabledNG string
 //godoclint:disable require-doc
 func (*TFooDisabledNG) TFooBarNG() {}
 
+//godoclint:disable require-doc
+func (*TFooDisabledNG) tFooBarNG() {}
+
 //godoclint:disable
 const singleSingleFooDisabledNG = 0
 
@@ -67,3 +70,6 @@ type tFooDisabledNG string
 
 //godoclint:disable require-doc
 func (*tFooDisabledNG) tFooBarNG() {}
+
+//godoclint:disable require-doc
+func (*tFooDisabledNG) TFooBarNG() {}

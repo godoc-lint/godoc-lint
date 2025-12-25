@@ -10,6 +10,8 @@ func FFooNG() {}
 
 func (*TFooNG) FooFooNG() {}
 
+func (*TFooNG) fooFooNG() {}
+
 const fooNG = 0
 
 type tFooNG int
@@ -17,3 +19,5 @@ type tFooNG int
 func fFooNG() {}
 
 func (*tFooNG) fooFooNG() {}
+
+func (*tFooNG) FooFooNG() {}

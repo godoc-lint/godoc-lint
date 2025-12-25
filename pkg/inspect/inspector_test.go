@@ -131,6 +131,12 @@ func simplifyResultEntry(entry *model.FileInspection) any {
 			if sd.IsTypeAlias {
 				item["is-type-alias"] = true
 			}
+			if sd.IsMethod {
+				item["is-method"] = true
+			}
+			if sd.MethodRecvBaseTypeName != "" {
+				item["method-recv-base-type-name"] = sd.MethodRecvBaseTypeName
+			}
 			if sd.MultiSpecDecl {
 				item["multi-spec-decl"] = true
 				item["multi-spec-index"] = sd.MultiSpecIndex

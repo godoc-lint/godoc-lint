@@ -29,6 +29,8 @@ type TFooNG string //foo:bar // want `symbol should have a godoc \("TFooNG"\)`
 
 func (*TFooNG) TFooBarNG() {} //foo:bar // want `symbol should have a godoc \("TFooBarNG"\)`
 
+func (*TFooNG) tFooBarNG() {} //foo:bar // want `symbol should have a godoc \("tFooBarNG"\)`
+
 const singleSingleFooNG = 0 //foo:bar // want `symbol should have a godoc \("singleSingleFooNG"\)`
 
 const singleMultiFooNG, singleMultiBarNG = 0, 0 //foo:bar // want `symbol should have a godoc \("singleMultiFooNG"\)` `symbol should have a godoc \("singleMultiBarNG"\)`
@@ -52,3 +54,5 @@ func funcFooNG() {} //foo:bar // want `symbol should have a godoc \("funcFooNG"\
 type tFooNG string //foo:bar // want `symbol should have a godoc \("tFooNG"\)`
 
 func (*tFooNG) tFooBarNG() {} //foo:bar // want `symbol should have a godoc \("tFooBarNG"\)`
+
+func (*tFooNG) TFooBarNG() {} //foo:bar // want `symbol should have a godoc \("TFooBarNG"\)`

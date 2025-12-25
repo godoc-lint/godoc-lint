@@ -12,6 +12,8 @@ func FFooTestFileNG() {}
 
 func (*TFooTestFileNG) FooFooTest() {}
 
+func (*TFooTestFileNG) fooFooTest() {}
+
 const fooTestFileNG = 0
 
 type ttFooTestFileNG int
@@ -19,3 +21,5 @@ type ttFooTestFileNG int
 func fFooTestFileNG() {}
 
 func (*ttFooTestFileNG) fooFooTestFileNG() {}
+
+func (*ttFooTestFileNG) FooFooTestFileNG() {}

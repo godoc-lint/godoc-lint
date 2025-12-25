@@ -29,6 +29,8 @@ type TFooNG string //foo:bar // want `symbol should have a godoc \("TFooNG"\)`
 
 func (*TFooNG) TFooBarNG() {} //foo:bar // want `symbol should have a godoc \("TFooBarNG"\)`
 
+func (*TFooNG) tFooBarNG() {}
+
 const singleSingleFooNG = 0
 
 const singleMultiFooNG, singleMultiBarNG = 0, 0
@@ -52,3 +54,6 @@ func funcFooNG() {}
 type tFooNG string
 
 func (*tFooNG) tFooBarNG() {}
+
+//foo:bar // unexported receiver
+func (*tFooNG) TFooBarNG() {}

@@ -8,17 +8,17 @@ func FFooTest() {}
 
 func (*TFooTest) FooFooTest() {}
 
-// godoc
+func (*TFooTest) fooFooTest() {}
+
 const fooTest = 0
 
-// godoc
 type tFooTest int
 
-// godoc
 func fFooTest() {}
 
-// godoc
 func (*tFooTest) fooFooTest() {}
+
+func (*tFooTest) FooFooTest() {}
 
 // Below blank declaration has no godoc, but it should be ignored.
 
