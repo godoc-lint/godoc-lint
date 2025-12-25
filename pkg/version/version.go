@@ -6,9 +6,9 @@ import "fmt"
 // Current represents the current version.
 var Current = Version{
 	Major:  0,
-	Minor:  10,
-	Patch:  2,
-	Suffix: "post",
+	Minor:  11,
+	Patch:  0,
+	Suffix: "",
 }
 
 // Version represents module version (in semver format).
