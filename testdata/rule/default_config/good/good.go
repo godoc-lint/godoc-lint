@@ -20,3 +20,6 @@ const Bar = 0
 //
 // [link]: https://foo.com
 const Baz = 0
+
+// Yolo godoc has a potential doc link to encoding/json.Encoder, but it's okay.
+const Yolo = 0
