@@ -113,6 +113,8 @@ Below is a brief description of the linter's rules. Some rules are configurable 
 
 ### `pkg-doc`
 
+> Since `v0.1.0`, Golangci-lint `v2.5.0`.
+
 Ensures all package godocs start with "Package \<NAME\>":
 
 ```go
@@ -132,13 +134,19 @@ Test files are skipped by default. To enable the rule for them, the `pkg-doc/inc
 
 ### `single-pkg-doc`
 
+> Since `v0.1.0`, Golangci-lint `v2.5.0`.
+
 Technically, every Go file in a package can have a godoc above the `package` statement. This rule enforces only one godoc, if any, for any package. Test files are skipped by default. To enable the rule for them, the `single-pkg-doc/include-tests` option should be set to `true`.
 
 ### `require-pkg-doc`
 
+> Since `v0.1.0`, Golangci-lint `v2.5.0`.
+
 Ensures that every Go package has godoc(s). By default, test files (i.e., `*_test.go`) and therefore test packages (i.e., `*_test`) are ignored. To include them in the check, the `require-pkg-doc/include-tests` should be set to `true`.
 
 ### `start-with-name`
+
+> Since `v0.1.0`, Golangci-lint `v2.5.0`.
 
 Checks godocs start with the corresponding symbol name:
 
@@ -156,9 +164,13 @@ By default, unexported symbols are skipped. To include them the `start-with-name
 
 ### `require-doc`
 
+> Since `v0.1.0`, Golangci-lint `v2.5.0`.
+
 Ensures all exported and/or (optionally) unexported symbols have godocs. By default, symbols declared in test files, together with any unexported symbols are ignored. To include test files, the `require-doc/include-tests` option should be set to `true`. Unexported symbols can be included in the check if the `require-doc/ignore-unexported` options is set to `false`. Although it is a rare scenario but one may want to ignore exported symbols, for which the `require-doc/ignore-exported` should be set to `true`.
 
 ### `deprecated`
+
+> Since `v0.9.0`, Golangci-lint `v2.5.0`.
 
 Checks if deprecation notes are formatted correctly. This rule only applies to exported symbols.
 
@@ -175,6 +187,8 @@ const Foo = 0
 ```
 
 ### `max-len`
+
+> Since `v0.1.0`, Golangci-lint `v2.5.0`.
 
 Limits maximum line length for godocs. The default length is 77 characters (not including the `// `, `/*`, or `*/` tokens):
 
@@ -204,6 +218,8 @@ Specific long lines (for example, ones matching known patterns) can be excluded 
 
 ### `no-unused-link`
 
+> Since `v0.2.0`, Golangci-lint `v2.5.0`.
+
 Checks for unused links in the godoc text:
 
 ```go
@@ -221,6 +237,8 @@ const Foo = 0
 The rule skips test files by default. To include them, the `no-unused-link/include-tests` option should be set to `true`.
 
 ### `require-stdlib-doclink`
+
+> Since `v0.11.0`.
 
 Suggests turning plain-text mentions of standard-library identifiers into [*doc links*](https://go.dev/doc/comment#doclinks), when possible. For example, the text `encoding/json.Encoder` in a godoc can be turned into a doc link like `[encoding/json.Encoder]` so that it links to the corresponding stdlib symbol on [`pkg.go.dev`](https://pkg.go.dev/encoding/json#Encoder). To avoid false positives, the linter only detects potential doc links of longer forms like `pkg.name` or `pkg.recv.name`.
 
