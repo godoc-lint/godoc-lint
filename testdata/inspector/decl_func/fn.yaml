@@ -9,5 +9,63 @@ symbol-decl:
   - doc:
       text: |
         godoc
+    is-method: true
     kind: func
+    method-recv-base-type-name: Bar
     name: BarFoo
+  - doc:
+      text: |
+        godoc
+    is-method: true
+    kind: func
+    method-recv-base-type-name: Bar
+    name: StarBarFoo
+  - kind: type
+    name: Baz
+  - doc:
+      text: |
+        godoc
+    is-method: true
+    kind: func
+    method-recv-base-type-name: Baz
+    name: BazFoo
+  - doc:
+      text: |
+        godoc
+    is-method: true
+    kind: func
+    method-recv-base-type-name: Baz
+    name: StarBazFoo
+  - kind: type
+    name: Yolo
+  - doc:
+      text: |
+        godoc
+    is-method: true
+    kind: func
+    method-recv-base-type-name: Yolo
+    name: YoloFoo
+  - doc:
+      text: |
+        godoc
+    is-method: true
+    kind: func
+    method-recv-base-type-name: Yolo
+    name: StarYoloFoo
+  - is-type-alias: true
+    kind: type
+    name: Zoo
+  - doc:
+      text: |
+        godoc
+    is-method: true
+    kind: func
+    method-recv-base-type-name: Zoo
+    name: ZooFoo
+  - doc:
+      text: |
+        godoc
+    is-method: true
+    kind: func
+    method-recv-base-type-name: Zoo
+    name: StarZooFoo
