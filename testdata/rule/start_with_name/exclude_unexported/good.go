@@ -16,3 +16,6 @@ func yoloBG() {}
 
 // Bad godoc, but should be ignored due to blank identifier.
 var _ = 0
+
+// Bad godoc but should be ignored since the receiver base type is unexported.
+func (catBG) Foo() {}
