@@ -204,7 +204,7 @@ The pre-formatted sections (e.g., codes), or link definitions are ignored.
 
 The maximum line length can be configured via the `max-len/length` option. The rule skips test files by default. To enable it the `max-len/include-tests` option should be set to `true`.
 
-Specific long lines (for example, ones matching known patterns) can be excluded from this rule by listing regexp patterns under the `max-len/ignore-patterns` option; any rendered godoc line matching at least one of these patterns is not checked for length.
+Specific long lines (for example, ones matching known patterns) can be excluded from this rule by listing regexp patterns under the `max-len/ignore-patterns` option; any rendered godoc line matching at least one of these patterns is not checked for length. Note that, when using Golangci-lint, pattern-based exclusions are available via [`source` text matching](https://golangci-lint.run/docs/linters/false-positives/#exclude-issue-by-text).
 
 > [!TIP]
 > A long hyperlink in the godoc text can break this rule. In such cases, it is best to define the link at the end of the godoc and use the reference in the text:
