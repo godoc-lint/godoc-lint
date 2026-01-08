@@ -20,3 +20,15 @@ linters:
       - path: _test\.go$
         linters:
           - godoclint
+formatters:
+  enable:
+    - gci
+    - gofumpt
+  settings:
+    gofumpt:
+      extra-rules: true
+    gci:
+      sections:
+        - standard
+        - default
+        - localmodule

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/godoc-lint/godoc-lint/pkg/version"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/godoc-lint/godoc-lint/pkg/version"
 )
 
 var _ fmt.Stringer = version.Version{}
@@ -15,18 +16,19 @@ func TestString(t *testing.T) {
 		name     string
 		value    version.Version
 		expected string
-	}{{
-		name:     "zero",
-		expected: "0.0.0",
-	}, {
-		name:     "no suffix",
-		value:    version.Version{1, 2, 3, ""},
-		expected: "1.2.3",
-	}, {
-		name:     "all",
-		value:    version.Version{1, 2, 3, "foo"},
-		expected: "1.2.3-foo",
-	},
+	}{
+		{
+			name:     "zero",
+			expected: "0.0.0",
+		}, {
+			name:     "no suffix",
+			value:    version.Version{1, 2, 3, ""},
+			expected: "1.2.3",
+		}, {
+			name:     "all",
+			value:    version.Version{1, 2, 3, "foo"},
+			expected: "1.2.3-foo",
+		},
 	}
 
 	for _, tt := range tests {
