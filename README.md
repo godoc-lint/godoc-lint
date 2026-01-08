@@ -238,7 +238,7 @@ The rule skips test files by default. To include them, the `no-unused-link/inclu
 
 ### `require-stdlib-doclink`
 
-> Since `v0.11.0`.
+> Since `v0.11.0`, Golangci-lint `v2.8.0`.
 
 Suggests turning plain-text mentions of standard-library identifiers into [*doc links*](https://go.dev/doc/comment#doclinks), when possible. For example, the text `encoding/json.Encoder` in a godoc can be turned into a doc link like `[encoding/json.Encoder]` so that it links to the corresponding stdlib symbol on [`pkg.go.dev`](https://pkg.go.dev/encoding/json#Encoder). To avoid false positives, the linter only detects potential doc links of longer forms like `pkg.name` or `pkg.recv.name`.
 
