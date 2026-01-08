@@ -18,62 +18,63 @@ func TestIsPathUnderBaseDir(t *testing.T) {
 		baseDir  string
 		path     string
 		expected bool
-	}{{
-		name:     "same",
-		baseDir:  "/foo",
-		path:     "/foo",
-		expected: true,
-	}, {
-		name:     "same, indirect",
-		baseDir:  "/foo",
-		path:     "/../foo",
-		expected: true,
-	}, {
-		name:     "under",
-		baseDir:  "/foo",
-		path:     "/foo/bar",
-		expected: true,
-	}, {
-		name:     "under, indirect",
-		baseDir:  "/foo",
-		path:     "/foo/../foo/bar",
-		expected: true,
-	}, {
-		name:     "under, indirect 2",
-		baseDir:  "/foo",
-		path:     "/foo/bar/../bar",
-		expected: true,
-	}, {
-		name:     "under, indirect 3",
-		baseDir:  "/foo",
-		path:     "/foo/../bar/baz/../../foo/bar",
-		expected: true,
-	}, {
-		name:     "under 2",
-		baseDir:  "/foo",
-		path:     "/foo/bar/baz/foo",
-		expected: true,
-	}, {
-		name:     "parent",
-		baseDir:  "/foo/bar",
-		path:     "/foo",
-		expected: false,
-	}, {
-		name:     "parent, indirect",
-		baseDir:  "/foo/bar",
-		path:     "/foo/bar/../..",
-		expected: false,
-	}, {
-		name:     "not under",
-		baseDir:  "/foo",
-		path:     "/bar",
-		expected: false,
-	}, {
-		name:     "not under, indirect",
-		baseDir:  "/foo",
-		path:     "/foo/../bar",
-		expected: false,
-	},
+	}{
+		{
+			name:     "same",
+			baseDir:  "/foo",
+			path:     "/foo",
+			expected: true,
+		}, {
+			name:     "same, indirect",
+			baseDir:  "/foo",
+			path:     "/../foo",
+			expected: true,
+		}, {
+			name:     "under",
+			baseDir:  "/foo",
+			path:     "/foo/bar",
+			expected: true,
+		}, {
+			name:     "under, indirect",
+			baseDir:  "/foo",
+			path:     "/foo/../foo/bar",
+			expected: true,
+		}, {
+			name:     "under, indirect 2",
+			baseDir:  "/foo",
+			path:     "/foo/bar/../bar",
+			expected: true,
+		}, {
+			name:     "under, indirect 3",
+			baseDir:  "/foo",
+			path:     "/foo/../bar/baz/../../foo/bar",
+			expected: true,
+		}, {
+			name:     "under 2",
+			baseDir:  "/foo",
+			path:     "/foo/bar/baz/foo",
+			expected: true,
+		}, {
+			name:     "parent",
+			baseDir:  "/foo/bar",
+			path:     "/foo",
+			expected: false,
+		}, {
+			name:     "parent, indirect",
+			baseDir:  "/foo/bar",
+			path:     "/foo/bar/../..",
+			expected: false,
+		}, {
+			name:     "not under",
+			baseDir:  "/foo",
+			path:     "/bar",
+			expected: false,
+		}, {
+			name:     "not under, indirect",
+			baseDir:  "/foo",
+			path:     "/foo/../bar",
+			expected: false,
+		},
 	}
 
 	for _, tt := range tests {

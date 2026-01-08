@@ -3,8 +3,9 @@ package stdlib_doclink
 import (
 	"testing"
 
-	"github.com/godoc-lint/godoc-lint/pkg/check/stdlib_doclink/internal"
 	"github.com/stretchr/testify/require"
+
+	"github.com/godoc-lint/godoc-lint/pkg/check/stdlib_doclink/internal"
 )
 
 func TestParseStdlib(t *testing.T) {
