@@ -34,10 +34,17 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
-      - name: golangci-lint
+      - name: tidy go.mod
+        run: go mod tidy -diff
+        shell: bash
+      - name: install golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
           version: latest
-      - name: tidy go.mod
-        run: go mod tidy -diff
+          install-only: true
+      - name: lint
+        run: golangci-lint run ./...
+        shell: bash
+      - name: check formatting
+        run: golangci-lint fmt --diff
         shell: bash
