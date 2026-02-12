@@ -13,7 +13,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 		name  string
 		texts []string
 		pi    packageImports
-		want  []potentialDoclink
+		want  []*potentialDoclink
 	}{
 		{
 			name:  "empty",
@@ -122,7 +122,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nencoding/json.Encoder\nas expected",
 				"works like\n*encoding/json.Encoder\nas expected",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "encoding/json.Encoder",
 					doclink:        "[encoding/json.Encoder]",
@@ -174,7 +174,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\n*encoding/json.Encoder\nas expected\nencoding/json.Encoder\n",
 				"works like\n*encoding/json.Encoder\nas expected\n*encoding/json.Encoder\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "encoding/json.Encoder",
 					doclink:        "[encoding/json.Encoder]",
@@ -213,7 +213,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nencoding/json.Encoder\nas expected\nbytes.Buffer\n",
 				"works like\nencoding/json.Encoder\nas expected\n*bytes.Buffer\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "bytes.Buffer",
 					doclink:        "[bytes.Buffer]",
@@ -240,7 +240,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nencoding/json.Encoder.Encode as expected",
 				"works like\nencoding/json.Encoder.Encode\nas expected",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "encoding/json.Encoder.Encode",
 					doclink:        "[encoding/json.Encoder.Encode]",
@@ -261,7 +261,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nencoding/json.Encoder.Encode as expected encoding/json.Encoder.Encode",
 				"works like\nencoding/json.Encoder.Encode\nas expected\nencoding/json.Encoder.Encode\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "encoding/json.Encoder.Encode",
 					doclink:        "[encoding/json.Encoder.Encode]",
@@ -283,7 +283,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nencoding/json.Encoder.Encode as expected bytes.Buffer",
 				"works like\nencoding/json.Encoder.Encode\nas expected\nbytes.Buffer\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "bytes.Buffer",
 					doclink:        "[bytes.Buffer]",
@@ -317,7 +317,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\njson.Encoder as expected bytes.Buffer",
 				"works like\njson.Encoder\nas expected\nbytes.Buffer\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "bytes.Buffer",
 					doclink:        "[bytes.Buffer]",
@@ -351,7 +351,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nfmt.Encoder as expected bytes.Buffer",
 				"works like\nfmt.Encoder\nas expected\nbytes.Buffer\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "bytes.Buffer",
 					doclink:        "[bytes.Buffer]",
@@ -386,7 +386,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\njson1.Encoder as expected bytes.Buffer",
 				"works like\njson1.Encoder\nas expected\nbytes.Buffer\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "bytes.Buffer",
 					doclink:        "[bytes.Buffer]",
@@ -423,7 +423,7 @@ func TestFindPotentialDoclinks(t *testing.T) {
 				"works like\nblah.Encoder as expected bytes.Buffer",
 				"works like\nblah.Encoder\nas expected\nbytes.Buffer\n",
 			},
-			want: []potentialDoclink{
+			want: []*potentialDoclink{
 				{
 					originalNoStar: "bytes.Buffer",
 					doclink:        "[bytes.Buffer]",
