@@ -7,8 +7,8 @@ import "fmt"
 var Current = Version{
 	Major:  0,
 	Minor:  11,
-	Patch:  1,
-	Suffix: "post",
+	Patch:  2,
+	Suffix: "",
 }
 
 // Version represents module version (in semver format).
