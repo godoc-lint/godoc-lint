@@ -43,7 +43,8 @@ When used via Golangci-lint, the linter's configuration will be different from w
 
 ## Installation
 
-Godoc-Lint binaries are available in the repository's [Releases][releases] page.
+> [!WARNING]
+> Since `v0.11.3`, executable binaries are not included in releases. Users are encouraged to use Golangci-lint, or use `go install`.
 
 Users can also install Godoc-Lint binary from source code by using any of these commands:
 
