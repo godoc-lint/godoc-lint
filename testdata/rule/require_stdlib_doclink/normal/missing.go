@@ -35,3 +35,6 @@ const JulietBG = 0
 
 // godoc with potential doclink to io.PipeWriter.Close and bytes.Buffer. // want `text "io\.PipeWriter\.Close" should be replaced with "\[io\.PipeWriter\.Close\]" to link to stdlib method` `text "bytes\.Buffer" should be replaced with "\[bytes\.Buffer\]" to link to stdlib type`
 const KiloBG = 0
+
+// godoc with potential doclink to encoding/json/v2.Marshal. // want `text "encoding/json/v2\.Marshal" should be replaced with "\[encoding/json/v2\.Marshal\]" to link to stdlib function`
+const LimaBG = 0
