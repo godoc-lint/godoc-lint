@@ -26,7 +26,7 @@ func TestValidate(t *testing.T) {
 		{
 			name: "invalid",
 			pcfg: &config.PlainConfig{
-				Default: ptr("foo"),
+				Default: new("foo"),
 				Enable:  []string{"foo", "bar", "baz"},
 				Disable: []string{"foo", "bar", "baz"},
 				Include: []string{"(", ")"},
@@ -56,8 +56,4 @@ func TestValidate(t *testing.T) {
 			}
 		})
 	}
-}
-
-func ptr[T any](v T) *T {
-	return &v
 }
