@@ -43,7 +43,8 @@ When used via Golangci-lint, the linter's configuration will be different from w
 
 ## Installation
 
-Godoc-Lint binaries are available in the repository's [Releases][releases] page.
+> [!WARNING]
+> Since `v0.11.3`, executable binaries are not included in releases. Users are encouraged to use Golangci-lint, or use `go install`.
 
 Users can also install Godoc-Lint binary from source code by using any of these commands:
 
@@ -52,7 +53,7 @@ Users can also install Godoc-Lint binary from source code by using any of these 
 go install github.com/godoc-lint/godoc-lint/cmd/godoclint@latest
 
 # Specific version
-go install github.com/godoc-lint/godoc-lint/cmd/godoclint@v0.10.0
+go install github.com/godoc-lint/godoc-lint/cmd/godoclint@v0.11.3
 ```
 
 Additionally, the linter can be run from source code via the following command:
@@ -62,7 +63,7 @@ Additionally, the linter can be run from source code via the following command:
 go run github.com/godoc-lint/godoc-lint/cmd/godoclint@latest ./...
 
 # Specific version
-go run github.com/godoc-lint/godoc-lint/cmd/godoclint@v0.10.0 ./...
+go run github.com/godoc-lint/godoc-lint/cmd/godoclint@v0.11.3 ./...
 ```
 
 [releases]: https://github.com/godoc-lint/godoc-lint/releases
